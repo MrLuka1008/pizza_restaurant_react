@@ -1,0 +1,11 @@
+.headerContainer {
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  background: #1f1f1f;
+}
+
+.logo {
+  width: 200px;
+  height: 100px;
+}
