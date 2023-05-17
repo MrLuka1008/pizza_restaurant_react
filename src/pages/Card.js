@@ -1,7 +1,7 @@
 import React from "react";
 import { Header } from "../components/Header/Header";
 
-const CreateYourPizza = () => {
+const Card = () => {
   return (
     <>
       <Header />
@@ -9,4 +9,4 @@ const CreateYourPizza = () => {
   );
 };
 
-export default CreateYourPizza;
+export default Card;
