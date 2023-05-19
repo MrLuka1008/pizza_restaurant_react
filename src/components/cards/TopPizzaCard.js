@@ -11,7 +11,25 @@ const BoxStyle = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  width: "150px",
+  flexShrink: "1",
+  flexBasis: "240px",
+  boxShadow: "0px 1px 50px -20px rgba(0,0,0,1)",
+  borderRadius: "40px",
+  width: "24%",
+  padding: "50px",
+  "&:hover": {
+    boxShadow: "0px 1px 50px -20px rgba(231, 91, 30, 1)",
+  },
+}));
+
+const AddBtn = styled(Button)(() => ({
+  position: "absolute",
+  bottom: "0",
+  right: "0",
+  borderRadius: "0 0  40px 0",
+  background: "#e75b1e",
+  padding: "3px 40px",
+  fontSize: "50px",
 }));
 
 const pizzaData = [
@@ -46,15 +64,15 @@ export default function TopPizzaCard() {
     <>
       {pizzaData.map((pizza, index) => (
         <BoxStyle key={index}>
-          <Typography fontSize={"25px"} fontWeight={"700"} color={"black"}>
+          <Typography fontSize={"25px"} fontWeight={"700"} color={"black"} fontFamily={"Italiana, serif"}>
             {pizza.name}
           </Typography>
           <img src={pizza.image} style={{ width: "auto", height: "200px" }} alt="Pizza" />
           <Typography variant="subtitle1">{pizza.description}</Typography>
           <Typography variant="h6">{pizza.price}</Typography>
-          <Button variant="contained" color="primary">
-            Add to Cart
-          </Button>
+          <AddBtn variant="contained" color="primary">
+            +
+          </AddBtn>
         </BoxStyle>
       ))}
     </>

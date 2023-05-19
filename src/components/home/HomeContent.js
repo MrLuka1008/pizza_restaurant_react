@@ -5,6 +5,7 @@ import "./homeContentStyle.css";
 import { Button } from "@mui/material";
 import styled from "@emotion/styled";
 import TopPizzaCard from "../cards/TopPizzaCard";
+// import { Padding } from "@mui/icons-material";
 
 const MainBtn = styled(Button)(() => ({
   color: "#fff",
@@ -25,7 +26,15 @@ const HomeContent = () => {
         <source src={videoFile} type="video/mp4" />
       </video>
       <div className="content">
-        <div style={{ display: "flex", flexDirection: "column", background: "white" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            background: "white",
+            padding: "50px",
+            alignItems: "center",
+          }}
+        >
           <div className="mainContent">
             <div className="leftContent">
               <h2 style={{ fontSize: "90px", fontWeight: "800", marginBottom: "50px" }}>
@@ -49,8 +58,11 @@ const HomeContent = () => {
             </div>
           </div>
 
-          <h1 style={{ margin: "50px auto" }}>Week Pizza</h1>
-          <div className="topPizzaCards">
+          <h1 style={{ margin: "30px auto" }}>Week Pizza</h1>
+          <div
+            className="topPizzaCards"
+            style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: "10px" }}
+          >
             <TopPizzaCard />
           </div>
         </div>

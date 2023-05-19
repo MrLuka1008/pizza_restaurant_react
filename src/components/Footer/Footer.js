@@ -22,9 +22,6 @@ const StyledDiv = styled.div(() => ({
   gap: "10px",
   fontSize: "20px",
   fontWeight: "600",
-  "&:hover": {
-    background: "green",
-  },
 }));
 
 const Footer = () => {
