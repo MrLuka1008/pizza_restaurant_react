@@ -3,7 +3,6 @@ import { Box, Button, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import StarIcon from "@mui/icons-material/Star";
 import AttachMoneyTwoToneIcon from "@mui/icons-material/AttachMoneyTwoTone";
-import peperoniImg from "../../assets/images/pepperoni.png";
 
 const BoxStyle = styled(Box)(() => ({
   position: "relative",
@@ -44,11 +43,9 @@ export default function TopPizzaCard() {
       try {
         const response = await fetch(API_URL);
         const listItems = await response.json();
-        console.log(listItems);
+
         setTopPizza(listItems);
-      } catch (err) {
-        console.log(err.stack);
-      }
+      } catch (err) {}
     };
 
     fetchItems();

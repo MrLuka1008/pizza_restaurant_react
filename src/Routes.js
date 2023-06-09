@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import Menu from "./pages/Menu";
 import { Header } from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import Register from "./pages/Register";
+import SingIn from "./components/register/SingIn";
 
 const RoutesComponent = () => {
   return (
@@ -12,6 +14,7 @@ const RoutesComponent = () => {
       <Routes>
         <Route index path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
+        <Route path="/signin" element={<SingIn />} />
       </Routes>
       <Footer />
     </>

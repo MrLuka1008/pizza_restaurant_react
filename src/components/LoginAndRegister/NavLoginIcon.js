@@ -1,8 +1,9 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
+import { Link } from "react-router-dom";
 
-const CustomButton = styled(Button)(({ theme }) => ({
+const CustomButton = styled(Button)(() => ({
   color: "#ffffff",
   background: "#e75b1e",
   marginLeft: "10px",
@@ -16,8 +17,9 @@ const CustomButton = styled(Button)(({ theme }) => ({
 const NavLoginIcon = () => {
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flex: "1" }}>
-      <CustomButton>Login in</CustomButton>
-      <CustomButton>Register</CustomButton>
+      <Link to="/signin">
+        <CustomButton>Sign in</CustomButton>
+      </Link>
     </div>
   );
 };
