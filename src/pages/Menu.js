@@ -6,9 +6,7 @@ import "./pagesStyle/menuStyle.css";
 const Menu = () => {
   return (
     <>
-      <Header />
       <div className="menuContainer">Menu</div>
-      <Footer />
     </>
   );
 };

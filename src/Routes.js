@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Menu from "./pages/Menu";
-import CreateYourPizza from "./pages/CreateYourPizza";
-import Card from "./pages/Card";
+import { Header } from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 
 const RoutesComponent = () => {
   return (
-    <div>
+    <>
+      <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route index path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/createpizza" element={<CreateYourPizza />} />
-        <Route path="/card" element={<Card />} />
       </Routes>
-    </div>
+      <Footer />
+    </>
   );
 };
 

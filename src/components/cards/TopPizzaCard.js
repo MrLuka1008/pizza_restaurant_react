@@ -1,12 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import styled from "@emotion/styled";
-import pepperoniImg from "../../assets/images/pepperoni.png";
-import cheeseImg from "../../assets/images/Cheese.png";
-import margheritaImg from "../../assets/images/margherita.png";
-import veggieImg from "../../assets/images/Veggie.png";
 import StarIcon from "@mui/icons-material/Star";
 import AttachMoneyTwoToneIcon from "@mui/icons-material/AttachMoneyTwoTone";
+import peperoniImg from "../../assets/images/pepperoni.png";
 
 const BoxStyle = styled(Box)(() => ({
   position: "relative",
@@ -38,42 +35,28 @@ const AddBtn = styled(Button)(() => ({
   },
 }));
 
-const pizzaData = [
-  {
-    name: "Pepperoni",
-    image: pepperoniImg,
-    description: "With pizza sauce, mozzarella cheese, and pepperoni.",
-    price: "20",
-    star: 5,
-  },
-  {
-    name: "Cheese",
-    image: cheeseImg,
-    description: "With pizza sauce, mozzarella cheese, and pepperoni.",
-    price: "16",
-    star: 4.5,
-  },
-  {
-    name: "Margherita",
-    image: margheritaImg,
-    description: "With pizza sauce, mozzarella cheese, and pepperoni.",
-    price: "18",
-    star: 4.2,
-  },
-  {
-    name: "Veggie",
-    image: veggieImg,
-    description: "With pizza sauce, mozzarella cheese, and pepperoni.",
-    price: "14",
-    star: 4.8,
-  },
-];
-
-/* <Typography variant="h6">{pizza.price}</Typography> */
 export default function TopPizzaCard() {
+  const API_URL = "http://localhost:3500/topPizza";
+  const [topPizza, setTopPizza] = useState([]);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await fetch(API_URL);
+        const listItems = await response.json();
+        console.log(listItems);
+        setTopPizza(listItems);
+      } catch (err) {
+        console.log(err.stack);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
   return (
     <>
-      {pizzaData.map((pizza, index) => (
+      {topPizza.map((pizza, index) => (
         <BoxStyle key={index}>
           <Typography
             fontSize={"25px"}
