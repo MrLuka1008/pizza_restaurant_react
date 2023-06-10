@@ -3,7 +3,6 @@ import apiRequest from "../../api/apiRequest";
 import { Button, TextField, Typography, styled } from "@mui/material";
 
 const CustomButton = styled(Button)(() => ({
-  marginLeft: "10px",
   fontSize: "16px",
   padding: "15px 15px",
   background: "#e75b1e",
@@ -52,12 +51,17 @@ const RegisterForm = () => {
   return (
     <div
       style={{
-        width: "50%",
+        minWidth: "50%",
         background: "rgba(255, 255, 255, 0.6)",
         borderRadius: " 16px",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(5px)",
         border: "1px solid rgba(255, 255, 255, 0.3)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "50px",
+        height: "70vh",
       }}
     >
       <form
@@ -65,17 +69,19 @@ const RegisterForm = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
+          // gap: "20px",
+          justifyContent: "space-around",
           alignItems: "center",
-          padding: "60px",
           height: "70vh",
+          padding: "50px",
         }}
       >
         <Typography
           variant="h3"
           color={"#e75b1e"}
           fontWeight={"700"}
-          marginBottom={"50px"}
+          // marginBottom={"30px"}
+          textAlign={"center"}
           sx={{ fontFamily: "Italiana, serif" }}
         >
           Create Account

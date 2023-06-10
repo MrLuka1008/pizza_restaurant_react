@@ -2,7 +2,6 @@ import { Button, TextField, Typography, styled } from "@mui/material";
 import React from "react";
 
 const CustomButton = styled(Button)(() => ({
-  marginLeft: "10px",
   fontSize: "14px",
   padding: "15px 15px",
   background: "#e75b1e",
@@ -17,7 +16,7 @@ const LoginIn = () => {
   return (
     <div
       style={{
-        width: "50%",
+        minWidth: "50%",
         background: "rgba(255, 255, 255, 0.6)",
         borderRadius: " 16px",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
@@ -30,9 +29,8 @@ const LoginIn = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "45px",
-          justifyContent: "center",
-
+          // gap: "45px",
+          justifyContent: "space-around",
           height: "70vh",
           padding: "50px",
         }}
@@ -41,7 +39,7 @@ const LoginIn = () => {
           variant="h3"
           color={"#e75b1e"}
           fontWeight={"700"}
-          marginBottom={"50px"}
+          // marginBottom={"50px"}
           sx={{ fontFamily: "Italiana, serif" }}
         >
           Sing In
