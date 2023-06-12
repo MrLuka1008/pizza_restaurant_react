@@ -46,6 +46,12 @@ const RegisterForm = () => {
 
     const result = await apiRequest(API_URL, postOptions);
     if (result) setFetchError(result);
+
+    setFormData({
+      name: "",
+      gmail: "",
+      password: "",
+    });
   };
 
   return (

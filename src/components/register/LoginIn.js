@@ -1,5 +1,5 @@
 import { Button, TextField, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 const CustomButton = styled(Button)(() => ({
   fontSize: "14px",
@@ -13,6 +13,39 @@ const CustomButton = styled(Button)(() => ({
 }));
 
 const LoginIn = () => {
+  const API_URL = "http://localhost:3500/registerAccount";
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("gmail");
+    const password = formData.get("password");
+
+    console.log(email);
+    console.log(password);
+
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error("Failed to fetch account data");
+      }
+      const data = await response.json();
+
+      const matchedAccount = data.find((account) => account.gmail === email && account.password === password);
+
+      if (matchedAccount) {
+        console.log("Login  successful");
+        // Perform necessary actions for successful login
+      } else {
+        setErrorMessage("Invalid email or password");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
   return (
     <div
       style={{
@@ -25,28 +58,27 @@ const LoginIn = () => {
       }}
     >
       <form
+        onSubmit={handleLogin}
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          // gap: "45px",
           justifyContent: "space-around",
           height: "70vh",
           padding: "50px",
         }}
       >
-        <Typography
-          variant="h3"
-          color={"#e75b1e"}
-          fontWeight={"700"}
-          // marginBottom={"50px"}
-          sx={{ fontFamily: "Italiana, serif" }}
-        >
-          Sing In
+        <Typography variant="h3" color={"#e75b1e"} fontWeight={"700"} sx={{ fontFamily: "Italiana, serif" }}>
+          Sign In
         </Typography>
-        <TextField type="email" name="gmail" placeholder="Gmail" />
-        <TextField type="text" name="password" placeholder="password" required />
-        <CustomButton type="submit">LoginIn</CustomButton>
+        <TextField type="email" name="gmail" placeholder="Email" required />
+        <TextField type="password" name="password" placeholder="Password" required />
+        <CustomButton type="submit">Login</CustomButton>
+        {errorMessage && (
+          <Typography variant="body1" color="error">
+            {errorMessage}
+          </Typography>
+        )}
       </form>
     </div>
   );

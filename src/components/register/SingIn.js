@@ -8,15 +8,12 @@ const CustomBox = styled(Box)(({ isLeft }) => ({
   flexDirection: "column",
   justifyContent: "space-around",
   alignItems: "center",
-  // left: isLeft ? "0" : "auto",
-  // right: isLeft ? "auto" : "0",
   right: isLeft ? "0" : "calc(100% - 50%)",
   width: "50%",
   background: "rgb(231, 91, 30)",
   position: "absolute",
   height: "70vh",
   zIndex: "2",
-  // transition: "left 0.5s ease, right 0.5s ease", // Add transition for smooth movement
   transition: "right 1s ease",
 }));
 
