@@ -3,12 +3,12 @@ import LoginIn from "./LoginIn";
 import RegisterForm from "./RegisterForm";
 import { Box, Button, Typography, styled } from "@mui/material";
 
-const CustomBox = styled(Box)(({ isLeft }) => ({
+const CustomBox = styled(Box)(({ isleft }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-around",
   alignItems: "center",
-  right: isLeft ? "0" : "calc(100% - 50%)",
+  right: isleft === "true" ? "0" : "calc(100% - 50%)",
   width: "50%",
   background: "rgb(231, 91, 30)",
   position: "absolute",
@@ -29,10 +29,10 @@ const CustomButton = styled(Button)(() => ({
 }));
 
 const SingIn = () => {
-  const [isLeft, setIsLeft] = useState(false);
+  const [isleft, setIsLeft] = useState("false");
 
   const handleToggleBox = () => {
-    setIsLeft(!isLeft);
+    setIsLeft(isleft === "true" ? "false" : "true");
   };
 
   return (
@@ -47,8 +47,8 @@ const SingIn = () => {
       }}
     >
       <RegisterForm />
-      <CustomBox isLeft={isLeft}>
-        {isLeft ? (
+      <CustomBox isleft={isleft}>
+        {isleft === "true" ? (
           <>
             <Typography color="white" sx={{ fontFamily: "Italiana, serif" }} variant="h3">
               Welcome Back!
@@ -68,7 +68,7 @@ const SingIn = () => {
           </>
         )}
 
-        <CustomButton onClick={handleToggleBox}>{isLeft ? "SIGN IN" : "Register"}</CustomButton>
+        <CustomButton onClick={handleToggleBox}>{isleft === "true" ? "SIGN IN" : "Register"}</CustomButton>
       </CustomBox>
       <LoginIn />
     </div>

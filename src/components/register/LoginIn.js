@@ -1,5 +1,6 @@
 import { Button, TextField, Typography, styled } from "@mui/material";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CustomButton = styled(Button)(() => ({
   fontSize: "14px",
@@ -15,6 +16,8 @@ const CustomButton = styled(Button)(() => ({
 const LoginIn = () => {
   const API_URL = "http://localhost:3500/registerAccount";
   const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -37,6 +40,9 @@ const LoginIn = () => {
 
       if (matchedAccount) {
         console.log("Login  successful");
+        localStorage.setItem("user_id", `${matchedAccount.id}`);
+        navigate("/");
+        window.location.reload();
         // Perform necessary actions for successful login
       } else {
         setErrorMessage("Invalid email or password");

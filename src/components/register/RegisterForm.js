@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import apiRequest from "../../api/apiRequest";
 import { Button, TextField, Typography, styled } from "@mui/material";
+import { v4 as uuid } from "uuid";
 
 const CustomButton = styled(Button)(() => ({
   fontSize: "16px",
@@ -16,12 +17,17 @@ const CustomButton = styled(Button)(() => ({
 const RegisterForm = () => {
   const API_URL = "http://localhost:3500/registerAccount";
 
+  const unique_id = uuid();
+  const id = unique_id.slice(0, 8);
+
   const [fetchError, setFetchError] = useState(null);
 
   const [formData, setFormData] = useState({
     name: "",
     gmail: "",
     password: "",
+    id,
+    unique_id,
   });
 
   const handleInputChange = (event) => {
@@ -34,7 +40,6 @@ const RegisterForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
 
     const postOptions = {
       method: "POST",
