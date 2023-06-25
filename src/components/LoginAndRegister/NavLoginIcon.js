@@ -16,35 +16,19 @@ const CustomButton = styled(Button)(() => ({
   },
 }));
 
+const CustomAvatar = styled(Avatar)(() => ({
+  color: "#ffffff",
+  background: "#e75b1e",
+  width: "50px",
+  height: "50px",
+}));
+
 const NavLoginIcon = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
     const checkUser = async () => {
-      // if (localStorage.getItem("user_id")) {
-      //   const API_URL = "http://localhost:3500/registerAccount";
-      //   console.log("User is logged in");
-
-      //   const postOptions = {
-      //     method: "GET",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   };
-
-      //   try {
-      //     const userResponse = await apiRequest(API_URL, postOptions);
-      //     console.log(userResponse);
-      //     const user = userResponse.find((account) => account.id === localStorage.getItem("user_id"));
-      //     if (user) {
-      //       setUserName(user.name);
-      //     }
-      //   } catch (error) {
-      //     console.log("Error fetching user data:", error);
-      //   }
-      // }
-
       const API_URL = "http://localhost:3500/registerAccount";
 
       try {
@@ -75,16 +59,15 @@ const NavLoginIcon = () => {
   };
 
   const handleLogout = () => {
-    // Perform logout actions
-    // Remove user ID from local storage, etc.
     localStorage.removeItem("user_id");
     handleClose();
+    window.location.reload();
   };
 
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flex: "1" }}>
       {localStorage.getItem("user_id") ? (
-        <Avatar onClick={handleAvatarClick}>{userName.charAt(0)}</Avatar>
+        <CustomAvatar onClick={handleAvatarClick}>{userName.charAt(0).toUpperCase()}</CustomAvatar>
       ) : (
         <Link to="/signin">
           <CustomButton>Sign in</CustomButton>

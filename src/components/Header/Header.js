@@ -5,6 +5,8 @@ import "./header.css";
 import NavLoginIcon from "../LoginAndRegister/NavLoginIcon";
 
 export const Header = () => {
+  const isUserLogginIn = localStorage.getItem("user_id");
+
   return (
     <div className="headerContainer">
       <Logo className="logo" />
@@ -24,11 +26,13 @@ export const Header = () => {
             CreatePizza
           </Link>
         </li>
-        <li>
-          <Link to="/card" className="NavLinks">
-            Card
-          </Link>
-        </li>
+        {isUserLogginIn && (
+          <li>
+            <Link to="/card" className="NavLinks">
+              Cart
+            </Link>
+          </li>
+        )}
       </nav>
 
       <NavLoginIcon />

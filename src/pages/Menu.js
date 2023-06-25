@@ -1,12 +1,11 @@
 import React from "react";
-import { Header } from "../components/Header/Header";
-import Footer from "../components/Footer/Footer";
+import MenuContent from "../components/menu/MenuContent";
 import "./pagesStyle/menuStyle.css";
 
 const Menu = () => {
   return (
     <>
-      <div className="menuContainer">Menu</div>
+      <MenuContent />
     </>
   );
 };
