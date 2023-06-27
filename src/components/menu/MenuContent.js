@@ -1,146 +1,203 @@
-import React, { useEffect, useState } from "react";
-import { Box, List, Typography, Button, TextField, ListItem } from "@mui/material";
+import React, { useState } from "react";
+import { Box, List, TextField, ListItem } from "@mui/material";
 import styled from "@emotion/styled";
-import StarIcon from "@mui/icons-material/Star";
-import AttachMoneyTwoToneIcon from "@mui/icons-material/AttachMoneyTwoTone";
 
-const BoxStyle = styled(Box)(() => ({
-  position: "relative",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  flexShrink: "1",
-  flexBasis: "240px",
-  boxShadow: "0px 1px 50px -20px rgba(0,0,0,1)",
-  borderRadius: "50px",
-  width: "27%",
-  padding: "30px 70px 100px 70px",
-  "&:hover": {
-    boxShadow: "0px 1px 50px -20px rgba(231, 91, 30, 1)",
-  },
-}));
-
-const AddBtn = styled(Button)(() => ({
-  position: "absolute",
-  bottom: "0",
-  right: "0",
-  borderRadius: "0 0 50px 0",
-  background: "#e75b1e",
-  padding: "3px 30px",
-  fontSize: "45px",
-  "&:hover": {
-    background: "#983d16",
-  },
-}));
+import { makeStyles } from "@mui/styles";
+import MenuPizzaCard from "../cards/MenuPizzaCard";
+import classicPizzasData from "../../data/classicPizzasData";
+import dessertsData from "../../data/dessertsData";
+import sodaDrinks from "../../data/sodaDrinksData";
+import pastaDishes from "../../data/pastaDishesData";
+import specialOffers from "../../data/specialOffersData";
+import specialtyPizzas from "../../data/specialtyPizzasData";
+import vegetarianPizza from "../../data/vegetarianPizza";
 
 const CustomBox = styled(Box)(() => ({
   width: "100%",
   display: "flex",
   justifyContent: "center",
-  alignItems: "center",
+  padding: "100px",
+  position: "relative",
 }));
 
 const CustomSmallBox = styled(Box)(() => ({
   display: "flex",
   flexWrap: "wrap",
-  width: "60%",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "70%",
+  gap: "30px",
+  padding: "50px",
+  background: "rgba(255, 255, 255, 0.6)",
+  borderRadius: " 16px",
+  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+  backdropFilter: "blur(5px)",
+  border: "1px solid rgba(255, 255, 255, 0.3)",
+}));
+
+const LeftBox = styled(Box)(() => ({
+  position: "sticky",
+  top: 0,
+  display: "flex",
+  flexDirection: "column",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  padding: "20px",
+  width: "30%",
+  borderRadius: "16px",
+  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+  backdropFilter: "blur(5px)",
+  border: "1px solid rgba(255, 255, 255, 0.3)",
+}));
+
+const useStyles = makeStyles((theme) => ({
+  listItem: {
+    marginTop: "20px",
+    fontSize: "22px",
+    fontWeight: "700",
+    cursor: "pointer",
+  },
+  emoji: {
+    fontSize: "24px",
+    marginRight: "8px",
+  },
+  box: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  active: {
+    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+    backdropFilter: "blur(5px)",
+    borderBottom: "2px solid #e75b1e",
+    border: "1px solid rgba(255, 255, 255, 0.3)",
+  },
 }));
 
 const MenuContent = () => {
-  const API_URL = "http://localhost:3500/topPizza";
-  const [topPizza, setTopPizza] = useState([]);
+  const classes = useStyles();
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await fetch(API_URL);
-        const listItems = await response.json();
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category);
+  };
 
-        setTopPizza(listItems);
-      } catch (err) {}
-    };
+  const getMenuItems = () => {
+    switch (activeCategory) {
+      case "All":
+        return (
+          <>
+            <MenuPizzaCard category={classicPizzasData} />
+            <MenuPizzaCard category={vegetarianPizza} />
+            <MenuPizzaCard category={specialtyPizzas} />
+            <MenuPizzaCard category={pastaDishes} />
+            <MenuPizzaCard category={dessertsData} />
+            <MenuPizzaCard category={sodaDrinks} />
+            <MenuPizzaCard category={specialOffers} />
+          </>
+        );
+      case "Classic Pizzas":
+        return <MenuPizzaCard category={classicPizzasData} />;
+      case "Vegetarian Pizzas":
+        return <MenuPizzaCard category={vegetarianPizza} />;
+      case "Specialty Pizzas":
+        return <MenuPizzaCard category={specialtyPizzas} />;
+      case "Pasta Dishes":
+        return <MenuPizzaCard category={pastaDishes} />;
+      case "Desserts":
+        return <MenuPizzaCard category={dessertsData} />;
+      case "Soda Drinks":
+        return <MenuPizzaCard category={sodaDrinks} />;
+      case "Special Offers":
+        return <MenuPizzaCard category={specialOffers} />;
+      default:
+        return null;
+    }
+  };
 
-    fetchItems();
-  }, []);
+  console.log(activeCategory);
 
   return (
     <CustomBox>
-      <Box>
+      <LeftBox>
         <TextField id="filled-search" label="Search field" type="search" variant="filled" />
-        <List>
-          <ListItem>
-            <span role="img" aria-label="Pizza Slice">
+        <List className={classes.list}>
+          <ListItem
+            className={`${classes.listItem} ${activeCategory === "All" ? classes.active : ""}`}
+            onClick={() => handleCategoryClick("All")}
+          >
+            <span role="img" aria-label="Pizza Slice" className={classes.emoji}>
+              🌍
+            </span>
+            All
+          </ListItem>
+          <ListItem
+            className={`${classes.listItem} ${activeCategory === "Classic Pizzas" ? classes.active : ""}`}
+            onClick={() => handleCategoryClick("Classic Pizzas")}
+          >
+            <span role="img" aria-label="Pizza Slice" className={classes.emoji}>
               🍕
-            </span>{" "}
+            </span>
             Classic Pizzas
           </ListItem>
-          <ListItem>
-            <span role="img" aria-label="Broccoli">
+          <ListItem
+            className={`${classes.listItem} ${activeCategory === "Vegetarian Pizzas" ? classes.active : ""}`}
+            onClick={() => handleCategoryClick("Vegetarian Pizzas")}
+          >
+            <span role="img" aria-label="Broccoli" className={classes.emoji}>
               🥦
-            </span>{" "}
+            </span>
             Vegetarian Pizzas
           </ListItem>
-          <ListItem>
-            <span role="img" aria-label="Sparkles">
+          <ListItem
+            className={`${classes.listItem} ${activeCategory === "Specialty Pizzas" ? classes.active : ""}`}
+            onClick={() => handleCategoryClick("Specialty Pizzas")}
+          >
+            <span role="img" aria-label="Sparkles" className={classes.emoji}>
               ✨
-            </span>{" "}
+            </span>
             Specialty Pizzas
           </ListItem>
-          <ListItem>
-            <span role="img" aria-label="Pasta">
+          <ListItem
+            className={`${classes.listItem} ${activeCategory === "Pasta Dishes" ? classes.active : ""}`}
+            onClick={() => handleCategoryClick("Pasta Dishes")}
+          >
+            <span role="img" aria-label="Pasta" className={classes.emoji}>
               🍝
-            </span>{" "}
+            </span>
             Pasta Dishes
           </ListItem>
-          <ListItem>
-            <span role="img" aria-label="Cake">
+          <ListItem
+            className={`${classes.listItem} ${activeCategory === "Desserts" ? classes.active : ""}`}
+            onClick={() => handleCategoryClick("Desserts")}
+          >
+            <span role="img" aria-label="Cake" className={classes.emoji}>
               🍰
-            </span>{" "}
+            </span>
             Desserts
           </ListItem>
-          <ListItem>
-            <span role="img" aria-label="Soda">
+          <ListItem
+            className={`${classes.listItem} ${activeCategory === "Soda Drinks" ? classes.active : ""}`}
+            onClick={() => handleCategoryClick("Soda Drinks")}
+          >
+            <span role="img" aria-label="Soda" className={classes.emoji}>
               🥤
-            </span>{" "}
+            </span>
             Soda Drinks
           </ListItem>
-          <ListItem>
-            <span role="img" aria-label="Fire">
+          <ListItem
+            className={`${classes.listItem} ${activeCategory === "Special Offers" ? classes.active : ""}`}
+            onClick={() => handleCategoryClick("Special Offers")}
+          >
+            <span role="img" aria-label="Fire" className={classes.emoji}>
               🔥
-            </span>{" "}
+            </span>
             Special Offers
           </ListItem>
         </List>
-      </Box>
-      <CustomSmallBox>
-        {topPizza.map((pizza, index) => (
-          <BoxStyle key={index}>
-            <Typography
-              fontSize={"25px"}
-              letterSpacing={"2px"}
-              fontWeight={"700"}
-              color={"black"}
-              fontFamily={"Italiana, serif"}
-            >
-              {pizza.name}
-            </Typography>
-            <img src={pizza.image} style={{ width: "auto", height: "200px" }} alt="Pizza" />
-            <Box sx={{ position: "absolute", left: "15px", bottom: "10px" }}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <StarIcon sx={{ fill: "#e75b1e", fontSize: "35px" }} />
-                <h1>{pizza.star}</h1>
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <AttachMoneyTwoToneIcon sx={{ fontSize: "30px" }} />
-                <h1>{pizza.price}</h1>
-              </Box>
-            </Box>
-            <AddBtn variant="contained" color="primary">
-              +
-            </AddBtn>
-          </BoxStyle>
-        ))}
-      </CustomSmallBox>
+      </LeftBox>
+      <CustomSmallBox>{getMenuItems()}</CustomSmallBox>
     </CustomBox>
   );
 };
