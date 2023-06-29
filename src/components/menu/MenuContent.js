@@ -6,11 +6,11 @@ import { makeStyles } from "@mui/styles";
 import MenuPizzaCard from "../cards/MenuPizzaCard";
 import classicPizzasData from "../../data/classicPizzasData";
 import dessertsData from "../../data/dessertsData";
-import sodaDrinks from "../../data/sodaDrinksData";
-import pastaDishes from "../../data/pastaDishesData";
-import specialOffers from "../../data/specialOffersData";
-import specialtyPizzas from "../../data/specialtyPizzasData";
-import vegetarianPizza from "../../data/vegetarianPizza";
+import sodaDrinksData from "../../data/sodaDrinksData";
+import pastaDishesData from "../../data/pastaDishesData";
+import specialOffersData from "../../data/specialOffersData";
+import specialtyPizzasData from "../../data/specialtyPizzasData";
+import vegetarianPizzaData from "../../data/vegetarianPizzaData";
 
 const CustomBox = styled(Box)(() => ({
   width: "100%",
@@ -40,7 +40,6 @@ const LeftBox = styled(Box)(() => ({
   top: 0,
   display: "flex",
   flexDirection: "column",
-  flexWrap: "wrap",
   justifyContent: "center",
   alignItems: "center",
   height: "100vh",
@@ -78,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
 const MenuContent = () => {
   const classes = useStyles();
   const [activeCategory, setActiveCategory] = useState("All");
+  const [searchInput, setSearchInput] = useState("");
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
@@ -86,43 +86,54 @@ const MenuContent = () => {
   const getMenuItems = () => {
     switch (activeCategory) {
       case "All":
-        return (
-          <>
-            <MenuPizzaCard category={classicPizzasData} />
-            <MenuPizzaCard category={vegetarianPizza} />
-            <MenuPizzaCard category={specialtyPizzas} />
-            <MenuPizzaCard category={pastaDishes} />
-            <MenuPizzaCard category={dessertsData} />
-            <MenuPizzaCard category={sodaDrinks} />
-            <MenuPizzaCard category={specialOffers} />
-          </>
-        );
+        return [
+          ...classicPizzasData,
+          ...vegetarianPizzaData,
+          ...specialtyPizzasData,
+          ...pastaDishesData,
+          ...dessertsData,
+          ...sodaDrinksData,
+          ...specialOffersData,
+        ];
       case "Classic Pizzas":
-        return <MenuPizzaCard category={classicPizzasData} />;
+        return classicPizzasData;
       case "Vegetarian Pizzas":
-        return <MenuPizzaCard category={vegetarianPizza} />;
+        return vegetarianPizzaData;
       case "Specialty Pizzas":
-        return <MenuPizzaCard category={specialtyPizzas} />;
+        return specialtyPizzasData;
       case "Pasta Dishes":
-        return <MenuPizzaCard category={pastaDishes} />;
+        return pastaDishesData;
       case "Desserts":
-        return <MenuPizzaCard category={dessertsData} />;
+        return dessertsData;
       case "Soda Drinks":
-        return <MenuPizzaCard category={sodaDrinks} />;
+        return sodaDrinksData;
       case "Special Offers":
-        return <MenuPizzaCard category={specialOffers} />;
+        return specialOffersData;
       default:
-        return null;
+        return [];
     }
   };
 
-  console.log(activeCategory);
+  const handleChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const filteredItems = getMenuItems().filter((item) => item.name.toLowerCase().includes(searchInput.toLowerCase()));
+
+  console.log(filteredItems);
 
   return (
     <CustomBox>
       <LeftBox>
-        <TextField id="filled-search" label="Search field" type="search" variant="filled" />
-        <List className={classes.list}>
+        <TextField
+          onChange={handleChange}
+          value={searchInput}
+          id="filled-search"
+          label="Search field"
+          type="search"
+          variant="filled"
+        />
+        <List>
           <ListItem
             className={`${classes.listItem} ${activeCategory === "All" ? classes.active : ""}`}
             onClick={() => handleCategoryClick("All")}
@@ -197,7 +208,13 @@ const MenuContent = () => {
           </ListItem>
         </List>
       </LeftBox>
-      <CustomSmallBox>{getMenuItems()}</CustomSmallBox>
+      <CustomSmallBox>
+        {Array.isArray(filteredItems) ? (
+          filteredItems.map((item, index) => <MenuPizzaCard key={index} category={[item]} />)
+        ) : (
+          <p>No items found.</p>
+        )}
+      </CustomSmallBox>
     </CustomBox>
   );
 };
