@@ -1,12 +1,5 @@
 import { TextField } from "@mui/material";
-import React, { useState } from "react";
-import classicPizzasData from "../../data/classicPizzasData";
-import dessertsData from "../../data/dessertsData";
-import sodaDrinks from "../../data/sodaDrinksData";
-import pastaDishes from "../../data/pastaDishesData";
-import specialOffers from "../../data/specialOffersData";
-import specialtyPizzas from "../../data/specialtyPizzasData";
-import vegetarianPizza from "../../data/vegetarianPizza";
+import React from "react";
 
 const MenuSearchBar = ({ searchInput, handleChange }) => {
   return (

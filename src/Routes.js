@@ -6,6 +6,7 @@ import { Header } from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Register from "./pages/Register";
 import SingIn from "./components/register/SingIn";
+import Cart from "./pages/Cart";
 
 const RoutesComponent = () => {
   return (
@@ -15,6 +16,7 @@ const RoutesComponent = () => {
         <Route index path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/signin" element={<SingIn />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
       <Footer />
     </>

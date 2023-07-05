@@ -1,20 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import StarIcon from "@mui/icons-material/Star";
 import AttachMoneyTwoToneIcon from "@mui/icons-material/AttachMoneyTwoTone";
 
 const BoxStyle = styled(Box)(() => ({
+  height: "350px",
   position: "relative",
   display: "flex",
   flexDirection: "column",
+  paddingTop: "30px",
   alignItems: "center",
   flexShrink: "1",
   flexBasis: "240px",
   boxShadow: "0px 1px 50px -20px rgba(0,0,0,1)",
   borderRadius: "50px",
   width: "24%",
-  padding: "30px 70px 100px 70px",
+  textAlign: "center",
   "&:hover": {
     boxShadow: "0px 1px 50px -20px rgba(231, 91, 30, 1)",
   },
@@ -27,25 +29,19 @@ const AddBtn = styled(Button)(() => ({
   borderRadius: "0 0 50px 0",
   background: "#e75b1e",
   padding: "3px 30px",
-  fontSize: "45px",
+  fontSize: "40px",
 
   "&:hover": {
     background: "#983d16",
   },
 }));
 
-export default function MenuPizzaCard({ category }) {
+export default function MenuPizzaCard({ category, handleAddItem }) {
   return (
     <>
       {category.map((pizza, index) => (
         <BoxStyle key={index}>
-          <Typography
-            fontSize={"25px"}
-            letterSpacing={"2px"}
-            fontWeight={"700"}
-            color={"black"}
-            fontFamily={"Italiana, serif"}
-          >
+          <Typography fontSize={"22px"} fontWeight={"700"} color={"black"} fontFamily={"Italiana, serif"}>
             {pizza.name}
           </Typography>
           <img src={pizza.image} style={{ width: "auto", height: "200px" }} alt="Pizza" />
@@ -59,7 +55,7 @@ export default function MenuPizzaCard({ category }) {
               <h1>{pizza.price}</h1>
             </Box>
           </Box>
-          <AddBtn variant="contained" color="primary">
+          <AddBtn variant="contained" color="primary" onClick={() => handleAddItem(pizza)}>
             +
           </AddBtn>
         </BoxStyle>

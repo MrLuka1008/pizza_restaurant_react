@@ -35,10 +35,8 @@ const NavLoginIcon = () => {
         const response = await fetch(API_URL);
         const data = await response.json();
 
-        console.log("Response data:", data);
-
         const user = data.find((account) => account.id === localStorage.getItem("user_id"));
-        console.log("User:", user);
+
         if (user) {
           setUserName(user.name);
         }

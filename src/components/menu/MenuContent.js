@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, List, TextField, ListItem } from "@mui/material";
 import styled from "@emotion/styled";
 
@@ -120,7 +120,21 @@ const MenuContent = () => {
 
   const filteredItems = getMenuItems().filter((item) => item.name.toLowerCase().includes(searchInput.toLowerCase()));
 
-  console.log(filteredItems);
+  ///
+  const [cartMenu, setCartMenu] = useState(() => {
+    const savedCartMenu = localStorage.getItem("cartMenu");
+    return savedCartMenu ? JSON.parse(savedCartMenu) : [];
+  });
+
+  const handleAddItem = (pizza) => {
+    setCartMenu((prevMenu) => [...prevMenu, pizza.name]);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("cartMenu", JSON.stringify(cartMenu));
+  }, [cartMenu]);
+
+  //
 
   return (
     <CustomBox>
@@ -210,7 +224,9 @@ const MenuContent = () => {
       </LeftBox>
       <CustomSmallBox>
         {Array.isArray(filteredItems) ? (
-          filteredItems.map((item, index) => <MenuPizzaCard key={index} category={[item]} />)
+          filteredItems.map((item, index) => (
+            <MenuPizzaCard key={index} category={[item]} handleAddItem={handleAddItem} />
+          ))
         ) : (
           <p>No items found.</p>
         )}

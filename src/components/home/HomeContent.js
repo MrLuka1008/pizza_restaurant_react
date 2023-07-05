@@ -5,14 +5,16 @@ import "./homeContentStyle.css";
 import { Button } from "@mui/material";
 import styled from "@emotion/styled";
 import TopPizzaCard from "../cards/TopPizzaCard";
+import { Link } from "react-router-dom";
 // import { Padding } from "@mui/icons-material";
 
-const MainBtn = styled(Button)(() => ({
+const MainBtn = styled(Link)(() => ({
   color: "#fff",
+  fontSize: "20px",
   background: "#e75b1e",
-  padding: "10px 15px",
+  padding: "20px 30px",
   borderRadius: "30px",
-  fontSize: "16px",
+  fontFamily: "poppins",
   marginLeft: "50px",
   "&:hover": {
     background: "#af3b09",
@@ -40,17 +42,8 @@ const HomeContent = () => {
               <h2 style={{ fontSize: "90px", fontWeight: "800", marginBottom: "50px" }}>
                 It`s not just Pizza, It`s an experience
               </h2>
-              <MainBtn>VIew Menu</MainBtn>
-              <MainBtn
-                style={{
-                  background: "white",
-                  color: "#e75b1e",
-                  marginLeft: "50px",
-                  fontWeight: "600",
-                }}
-              >
-                Book A Table
-              </MainBtn>
+              <MainBtn to={"/menu"}>View Menu</MainBtn>
+              <MainBtn> Book A Table</MainBtn>
             </div>
 
             <div className="RightContent">

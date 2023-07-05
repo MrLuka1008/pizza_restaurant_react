@@ -28,7 +28,7 @@ export const Header = () => {
         </li>
         {isUserLogginIn && (
           <li>
-            <Link to="/card" className="NavLinks">
+            <Link to="/cart" className="NavLinks">
               Cart
             </Link>
           </li>

@@ -26,9 +26,6 @@ const LoginIn = () => {
     const email = formData.get("gmail");
     const password = formData.get("password");
 
-    console.log(email);
-    console.log(password);
-
     try {
       const response = await fetch(API_URL);
       if (!response.ok) {
