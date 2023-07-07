@@ -52,7 +52,7 @@ export default function MenuPizzaCard({ category, handleAddItem }) {
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <AttachMoneyTwoToneIcon sx={{ fontSize: "30px" }} />
-              <h1>{pizza.price}</h1>
+              <h1>{pizza.sizes.m.price}</h1>
             </Box>
           </Box>
           <AddBtn variant="contained" color="primary" onClick={() => handleAddItem(pizza)}>

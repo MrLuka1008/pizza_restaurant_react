@@ -9,7 +9,11 @@ const specialtyPizzas = [
     category: "Specialty Pizzas",
     name: "Meat Lovers",
     image: MeatLovers,
-    price: 16,
+    sizes: {
+      s: { price: 14 },
+      m: { price: 18 },
+      l: { price: 22 },
+    },
     rate: 4.5,
   },
   {
@@ -17,7 +21,11 @@ const specialtyPizzas = [
     category: "Specialty Pizzas",
     name: "BBQ Bacon Chicken",
     image: BBQBaconChicken,
-    price: 15,
+    sizes: {
+      s: { price: 13 },
+      m: { price: 16 },
+      l: { price: 19 },
+    },
     rate: 4,
   },
   {
@@ -25,7 +33,11 @@ const specialtyPizzas = [
     category: "Specialty Pizzas",
     name: "Buffalo Chicken",
     image: BuffaloChicken,
-    price: 14,
+    sizes: {
+      s: { price: 12 },
+      m: { price: 15 },
+      l: { price: 18 },
+    },
     rate: 4,
   },
   {
@@ -33,7 +45,11 @@ const specialtyPizzas = [
     category: "Specialty Pizzas",
     name: "Supreme Deluxe",
     image: SupremeDeluxe,
-    price: 16,
+    sizes: {
+      s: { price: 14 },
+      m: { price: 18 },
+      l: { price: 22 },
+    },
     rate: 4.5,
   },
 ];

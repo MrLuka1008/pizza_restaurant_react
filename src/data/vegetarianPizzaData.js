@@ -9,7 +9,11 @@ const vegetarianPizzas = [
     category: "Vegetarian Pizzas",
     name: "Mushroom and Olive",
     image: MushroomandOlive,
-    price: 13,
+    sizes: {
+      s: { price: 11 },
+      m: { price: 14 },
+      l: { price: 17 },
+    },
     rate: 4.5,
   },
   {
@@ -17,7 +21,11 @@ const vegetarianPizzas = [
     category: "Vegetarian Pizzas",
     name: "Margherita with Fresh Tomatoes",
     image: MargheritawithFreshTomatoes,
-    price: 12,
+    sizes: {
+      s: { price: 10 },
+      m: { price: 13 },
+      l: { price: 16 },
+    },
     rate: 4,
   },
   {
@@ -25,7 +33,11 @@ const vegetarianPizzas = [
     category: "Vegetarian Pizzas",
     name: "Spinach and Feta",
     image: spinachandfeta,
-    price: 14,
+    sizes: {
+      s: { price: 12 },
+      m: { price: 15 },
+      l: { price: 18 },
+    },
     rate: 4.5,
   },
   {
@@ -33,7 +45,11 @@ const vegetarianPizzas = [
     category: "Vegetarian Pizzas",
     name: "Artichoke and Red Pepper",
     image: ArtichokeandRedPepper,
-    price: 14,
+    sizes: {
+      s: { price: 12 },
+      m: { price: 15 },
+      l: { price: 18 },
+    },
     rate: 4,
   },
 ];

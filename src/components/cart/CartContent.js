@@ -17,7 +17,7 @@ const CartContent = () => {
     <CustomBox>
       <CartHead />
       <CartItem />
-      <CartCalculator />
+      {/* <CartCalculator /> */}
     </CustomBox>
   );
 };

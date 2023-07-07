@@ -10,7 +10,11 @@ const classicPizzas = [
     category: "Classic Pizzas",
     image: pepperoni,
     name: "Pepperoni",
-    price: 14,
+    sizes: {
+      s: { price: 10 },
+      m: { price: 14 },
+      l: { price: 18 },
+    },
     rate: 5,
   },
   {
@@ -18,7 +22,11 @@ const classicPizzas = [
     category: "Classic Pizzas",
     name: "Margherita",
     image: margherita,
-    price: 12,
+    sizes: {
+      s: { price: 8 },
+      m: { price: 12 },
+      l: { price: 16 },
+    },
     rate: 4,
   },
   {
@@ -26,7 +34,11 @@ const classicPizzas = [
     category: "Classic Pizzas",
     name: "Hawaiian",
     image: hawaiian,
-    price: 15,
+    sizes: {
+      s: { price: 11 },
+      m: { price: 15 },
+      l: { price: 19 },
+    },
     rate: 4.5,
   },
   {
@@ -34,7 +46,11 @@ const classicPizzas = [
     category: "Classic Pizzas",
     name: "Supreme",
     image: supreme,
-    price: 16,
+    sizes: {
+      s: { price: 12 },
+      m: { price: 16 },
+      l: { price: 20 },
+    },
     rate: 4.5,
   },
   {
@@ -42,7 +58,11 @@ const classicPizzas = [
     category: "Classic Pizzas",
     name: "BBQ Chicken",
     image: bbqChicken,
-    price: 15,
+    sizes: {
+      s: { price: 11 },
+      m: { price: 15 },
+      l: { price: 19 },
+    },
     rate: 4,
   },
 ];

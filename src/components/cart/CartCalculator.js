@@ -19,7 +19,7 @@ const CustomButton = styled(Button)(() => ({
   fontSize: "16px",
 }));
 
-const CartCalculator = () => {
+const CartCalculator = ({ totalPrice }) => {
   return (
     <Box
       sx={{
@@ -39,13 +39,13 @@ const CartCalculator = () => {
           <CustomTypography>Discount 00$</CustomTypography>
         </CustomBox>
         <CustomBox>
-          <CustomTypography>Delivery 20$</CustomTypography>
+          <CustomTypography>Delivery ${20}</CustomTypography>
         </CustomBox>
         <CustomBox>
-          <CustomTypography>Subtotal 110$</CustomTypography>
+          <CustomTypography>Subtotal ${totalPrice}</CustomTypography>
         </CustomBox>
         <CustomBox>
-          <CustomTypography>Total 130$</CustomTypography>
+          <CustomTypography>Total ${totalPrice + 20}</CustomTypography>
         </CustomBox>
       </Box>
 

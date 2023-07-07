@@ -10,7 +10,11 @@ const pastaDishes = [
     category: "Pasta Dishes",
     name: "Spaghetti Bolognese",
     image: SpaghettiBolognese,
-    price: 12,
+    sizes: {
+      s: { price: 12 },
+      m: { price: 16 },
+      l: { price: 20 },
+    },
     rate: 4.5,
   },
   {
@@ -18,7 +22,11 @@ const pastaDishes = [
     category: "Pasta Dishes",
     name: "Fettuccine Alfredo",
     image: FettuccineAlfredo,
-    price: 11,
+    sizes: {
+      s: { price: 11 },
+      m: { price: 15 },
+      l: { price: 19 },
+    },
     rate: 4,
   },
   {
@@ -26,7 +34,11 @@ const pastaDishes = [
     category: "Pasta Dishes",
     name: "Chicken Parmesan",
     image: ChickenParmesan,
-    price: 14,
+    sizes: {
+      s: { price: 14 },
+      m: { price: 18 },
+      l: { price: 22 },
+    },
     rate: 4,
   },
   {
@@ -34,7 +46,11 @@ const pastaDishes = [
     category: "Pasta Dishes",
     name: "Penne Arrabiata",
     image: PenneArrabiata,
-    price: 13,
+    sizes: {
+      s: { price: 13 },
+      m: { price: 17 },
+      l: { price: 21 },
+    },
     rate: 4.5,
   },
   {
@@ -42,7 +58,11 @@ const pastaDishes = [
     category: "Pasta Dishes",
     name: "Lasagna",
     image: Lasagna,
-    price: 15,
+    sizes: {
+      s: { price: 15 },
+      m: { price: 19 },
+      l: { price: 23 },
+    },
     rate: 4.5,
   },
 ];

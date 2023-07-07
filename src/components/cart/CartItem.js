@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, ToggleButtonGroup, ToggleButton, TextField, IconButton, useMediaQuery } from "@mui/material";
-// import pepperoni from "../../assets/images/pepperoni.png";
 import CloseIcon from "@mui/icons-material/Close";
 import classicPizzasData from "../../data/classicPizzasData";
 import dessertsData from "../../data/dessertsData";
@@ -9,12 +8,15 @@ import pastaDishesData from "../../data/pastaDishesData";
 import specialOffersData from "../../data/specialOffersData";
 import specialtyPizzasData from "../../data/specialtyPizzasData";
 import vegetarianPizzaData from "../../data/vegetarianPizzaData";
+import CartCalculator from "./CartCalculator";
 
 const CartItem = () => {
-  const [pizzaSize, setPizzaSize] = useState("M");
+  const [pizzaSize, setPizzaSize] = useState("m");
   const [quantity, setQuantity] = useState(1);
   const isScreenWidth678 = useMediaQuery("(max-width: 678px)");
   const [cartMenu, setCartMenu] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  // const [current, setCurrent] = useState("l");
 
   const handleSizeChange = (event, newPizzaSize) => {
     if (newPizzaSize !== null) {
@@ -41,47 +43,35 @@ const CartItem = () => {
     ];
   };
 
+  const savedCartMenu = JSON.parse(localStorage.getItem("cartMenu")) || [];
+
   useEffect(() => {
-    const savedCartMenu = JSON.parse(localStorage.getItem("cartMenu"));
     const filteredItems = getMenuItems().filter((item) => savedCartMenu.includes(item.name));
-    if (filteredItems) {
+    if (filteredItems.length > 0) {
+      const totalPrice = filteredItems.reduce((acc, item) => acc + item.sizes[pizzaSize].price, 0);
       setCartMenu(filteredItems);
+      setTotalPrice(totalPrice);
     }
-  }, []);
+  }, [pizzaSize]);
 
-  // const inCartItems = JSON.parse(localStorage.getItem("cartMenu")) || [];
-
-  // console.log("filteredItems", filteredItems);
-
-  // const handleRemoveClick = (itemToRemove) => {
-  //   const updatedCartItems = inCartItems.filter((itemName) => itemName !== itemToRemove.name);
-  //   // console.log("itemToRemove", itemToRemove);
-  //   // console.log("inCartItems", inCartItems);
-  //   localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
-  //   console.log("new items", updatedCartItems);
-
-  //   // Set the updated cart items to local storage or update state as needed
-  // };
   const handleRemoveClick = (itemToRemove) => {
+    const test = savedCartMenu.filter((item) => item !== itemToRemove.name);
     const updatedCartItems = cartMenu.filter((item) => item.name !== itemToRemove.name);
 
-    // Update the cart items in local storage
-    localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
+    setTotalPrice(() => totalPrice - itemToRemove.price);
+
+    localStorage.setItem("cartMenu", JSON.stringify(test));
 
     // Update the cartMenu state
     setCartMenu(updatedCartItems);
   };
-
-  //
-
-  //
 
   return (
     <>
       {cartMenu.length > 0 ? (
         cartMenu.map((item) => (
           <Box
-            // key={item}
+            key={item.name}
             sx={{
               display: "flex",
               width: "100%",
@@ -112,13 +102,13 @@ const CartItem = () => {
               <Typography>{item.category}</Typography>
             </Box>
             <ToggleButtonGroup value={pizzaSize} exclusive onChange={handleSizeChange} aria-label="Pizza Size">
-              <ToggleButton value="S" aria-label="Small">
+              <ToggleButton value="s" aria-label="Small">
                 S
               </ToggleButton>
-              <ToggleButton value="M" aria-label="Medium">
+              <ToggleButton value="m" aria-label="Medium">
                 M
               </ToggleButton>
-              <ToggleButton value="X" aria-label="Extra Large">
+              <ToggleButton value="l" aria-label="Extra Large">
                 L
               </ToggleButton>
             </ToggleButtonGroup>
@@ -130,7 +120,7 @@ const CartItem = () => {
               inputProps={{ min: 1, max: 20 }}
             />
 
-            <Typography>${item.price}</Typography>
+            <Typography>${item.sizes && item.sizes[pizzaSize] && item.sizes[pizzaSize].price}</Typography>
 
             <IconButton onClick={() => handleRemoveClick(item)}>
               <CloseIcon />
@@ -140,6 +130,8 @@ const CartItem = () => {
       ) : (
         <p>No items found in the cart.</p>
       )}
+
+      <CartCalculator totalPrice={totalPrice} />
     </>
   );
 };

@@ -8,7 +8,11 @@ const specialOffers = [
     category: "Special Offers",
     name: "Combo Deal: Pizza + Drink",
     image: PizzaAndDrink,
-    price: 18,
+    sizes: {
+      s: { price: 15 },
+      m: { price: 19 },
+      l: { price: 23 },
+    },
     rate: 4.5,
   },
   {
@@ -16,7 +20,11 @@ const specialOffers = [
     category: "Special Offers",
     name: "Family Feast: Large Pizza + Wings",
     image: PizzaAndWings,
-    price: 25,
+    sizes: {
+      s: { price: 20 },
+      m: { price: 25 },
+      l: { price: 30 },
+    },
     rate: 4.5,
   },
   {
@@ -24,7 +32,11 @@ const specialOffers = [
     category: "Special Offers",
     name: "Lunch Special: Personal Pizza + Salad",
     image: PersonalPizzaAndSalad,
-    price: 12,
+    sizes: {
+      s: { price: 10 },
+      m: { price: 12 },
+      l: { price: 14 },
+    },
     rate: 4,
   },
 ];

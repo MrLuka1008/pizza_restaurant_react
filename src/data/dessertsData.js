@@ -10,7 +10,11 @@ const desserts = [
     category: "Desserts",
     name: "Chocolate Brownie",
     image: ChocolateBrownie,
-    price: 7,
+    sizes: {
+      s: { price: 12 },
+      m: { price: 16 },
+      l: { price: 20 },
+    },
     rate: 4.5,
   },
   {
@@ -18,7 +22,11 @@ const desserts = [
     category: "Desserts",
     name: "Cheesecake",
     image: Cheesecake,
-    price: 6,
+    sizes: {
+      s: { price: 10 },
+      m: { price: 14 },
+      l: { price: 18 },
+    },
     rate: 4,
   },
   {
@@ -26,7 +34,11 @@ const desserts = [
     category: "Desserts",
     name: "Tiramisu",
     image: Tiramisu,
-    price: 8,
+    sizes: {
+      s: { price: 8 },
+      m: { price: 12 },
+      l: { price: 16 },
+    },
     rate: 4.5,
   },
   {
@@ -34,7 +46,11 @@ const desserts = [
     category: "Desserts",
     name: "Cannoli",
     image: Cannoli,
-    price: 7,
+    sizes: {
+      s: { price: 10 },
+      m: { price: 14 },
+      l: { price: 18 },
+    },
     rate: 4,
   },
   {
@@ -42,7 +58,11 @@ const desserts = [
     category: "Desserts",
     name: "Ice Cream Sundae",
     image: IceCreamSundae,
-    price: 7,
+    sizes: {
+      s: { price: 10 },
+      m: { price: 14 },
+      l: { price: 18 },
+    },
     rate: 4.5,
   },
 ];

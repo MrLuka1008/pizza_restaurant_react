@@ -10,35 +10,55 @@ const sodaDrinks = [
     category: "Soda Drinks",
     image: Cola,
     name: "Cola",
-    price: 2.5,
+    sizes: {
+      s: { price: 2.5 },
+      m: { price: 3.5 },
+      l: { price: 4.5 },
+    },
   },
   {
     id: 2,
     category: "Soda Drinks",
     name: "Lemon Lime",
     image: LemonLime,
-    price: 2.5,
+    sizes: {
+      s: { price: 2.5 },
+      m: { price: 3.5 },
+      l: { price: 4.5 },
+    },
   },
   {
     id: 3,
     category: "Soda Drinks",
     name: "Ginger Ale",
     image: GingerAle,
-    price: 2.5,
+    sizes: {
+      s: { price: 2.5 },
+      m: { price: 3.5 },
+      l: { price: 4.5 },
+    },
   },
   {
     id: 4,
     category: "Soda Drinks",
     name: "Orange Soda",
     image: OrangeSoda,
-    price: 2.5,
+    sizes: {
+      s: { price: 2.5 },
+      m: { price: 3.5 },
+      l: { price: 4.5 },
+    },
   },
   {
     id: 5,
     category: "Soda Drinks",
     name: "Root Beer",
     image: RootBeer,
-    price: 2.5,
+    sizes: {
+      s: { price: 2.5 },
+      m: { price: 3.5 },
+      l: { price: 4.5 },
+    },
   },
 ];
 
