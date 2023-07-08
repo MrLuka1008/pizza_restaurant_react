@@ -18,11 +18,38 @@ const CartItem = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   // const [current, setCurrent] = useState("l");
 
-  const handleSizeChange = (event, newPizzaSize) => {
-    if (newPizzaSize !== null) {
-      setPizzaSize(newPizzaSize);
+  // const handleSizeChange = (event, newPizzaSize) => {
+  //   if (newPizzaSize !== null) {
+  //     setPizzaSize(newPizzaSize);
+  //   }
+  // };
+
+  const savedCartMenu = JSON.parse(localStorage.getItem("cartMenu")) || [];
+
+  //
+  const handleSizeChange = (event, newPizzaSize, itemName) => {
+    if (newPizzaSize) {
+      const updatedCartItems = savedCartMenu.map((item) => {
+        if (item.name === itemName) {
+          return { ...item, size: newPizzaSize };
+        }
+        return item;
+      });
+
+      console.log("save cart", savedCartMenu);
+      console.log("my test", updatedCartItems);
+
+      // setPizzaSize(`${newPizzaSize}`);
+      // const totalPrice = updatedCartItems.reduce((acc, item) => acc + item.price, 0);
+
+      localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
+
+      // setCartMenu(updatedCartItems);
+      // setTotalPrice(totalPrice);
     }
   };
+
+  //
 
   const handleQuantityChange = (event) => {
     const newQuantity = parseInt(event.target.value, 10);
@@ -43,22 +70,28 @@ const CartItem = () => {
     ];
   };
 
-  const savedCartMenu = JSON.parse(localStorage.getItem("cartMenu")) || [];
-
   useEffect(() => {
-    const filteredItems = getMenuItems().filter((item) => savedCartMenu.includes(item.name));
+    const filteredItems = getMenuItems().filter((item) => {
+      return savedCartMenu.some((cartItem) => cartItem.name === item.name);
+    });
     if (filteredItems.length > 0) {
-      const totalPrice = filteredItems.reduce((acc, item) => acc + item.sizes[pizzaSize].price, 0);
+      const totalPrice = filteredItems.reduce((acc, item) => {
+        const cartItem = savedCartMenu.find((cartItem) => cartItem.name === item.name);
+        if (cartItem && item.sizes && item.sizes[cartItem.size]) {
+          return acc + item.sizes[cartItem.size].price;
+        }
+        return acc;
+      }, 0);
       setCartMenu(filteredItems);
       setTotalPrice(totalPrice);
     }
-  }, [pizzaSize]);
+  }, []);
 
   const handleRemoveClick = (itemToRemove) => {
-    const test = savedCartMenu.filter((item) => item !== itemToRemove.name);
+    const test = savedCartMenu.filter((item) => item.name !== itemToRemove.name);
     const updatedCartItems = cartMenu.filter((item) => item.name !== itemToRemove.name);
 
-    setTotalPrice(() => totalPrice - itemToRemove.price);
+    setTotalPrice(totalPrice - itemToRemove.price);
 
     localStorage.setItem("cartMenu", JSON.stringify(test));
 
@@ -101,7 +134,25 @@ const CartItem = () => {
               <Typography sx={{ fontSize: "20px" }}>{item.name}</Typography>
               <Typography>{item.category}</Typography>
             </Box>
-            <ToggleButtonGroup value={pizzaSize} exclusive onChange={handleSizeChange} aria-label="Pizza Size">
+            <ToggleButtonGroup
+              value={item.size}
+              exclusive
+              onChange={(event, newSize) => handleSizeChange(event, newSize, item.name)}
+              aria-label="Pizza Size"
+            >
+              {Object.keys(item.sizes).map((size) => (
+                <ToggleButton
+                  key={size}
+                  value={size}
+                  aria-label={size.toUpperCase()}
+                  sx={{ fontWeight: size === item.size ? "bold" : "normal" }}
+                >
+                  {size.toUpperCase()} - ${item.sizes[size].price}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+
+            {/* <ToggleButtonGroup value={pizzaSize} exclusive onChange={handleSizeChange} aria-label="Pizza Size">
               <ToggleButton value="s" aria-label="Small">
                 S
               </ToggleButton>
@@ -111,7 +162,7 @@ const CartItem = () => {
               <ToggleButton value="l" aria-label="Extra Large">
                 L
               </ToggleButton>
-            </ToggleButtonGroup>
+            </ToggleButtonGroup> */}
             <TextField
               variant="outlined"
               type="number"

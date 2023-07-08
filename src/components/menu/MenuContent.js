@@ -127,7 +127,9 @@ const MenuContent = () => {
   });
 
   const handleAddItem = (pizza) => {
-    setCartMenu((prevMenu) => [...prevMenu, pizza.name]);
+    const updatedCartMenu = [...cartMenu, { name: pizza.name, size: "l" }];
+    localStorage.setItem("cartMenu", JSON.stringify(updatedCartMenu));
+    setCartMenu(updatedCartMenu);
   };
 
   useEffect(() => {
