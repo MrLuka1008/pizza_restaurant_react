@@ -11,53 +11,74 @@ import vegetarianPizzaData from "../../data/vegetarianPizzaData";
 import CartCalculator from "./CartCalculator";
 
 const CartItem = () => {
-  const [pizzaSize, setPizzaSize] = useState("m");
-  const [quantity, setQuantity] = useState(1);
+  const [pizzaSizes, setPizzaSizes] = useState({});
+  // const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState({});
   const isScreenWidth678 = useMediaQuery("(max-width: 678px)");
   const [cartMenu, setCartMenu] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  // const [current, setCurrent] = useState("l");
+  const [savedCartMenu, setSavedCartMenu] = useState(() => JSON.parse(localStorage.getItem("cartMenu")) || []);
 
-  // const handleSizeChange = (event, newPizzaSize) => {
-  //   if (newPizzaSize !== null) {
-  //     setPizzaSize(newPizzaSize);
-  //   }
-  // };
+  useEffect(() => {
+    const updatedCartMenu = JSON.parse(localStorage.getItem("cartMenu")) || [];
 
-  const savedCartMenu = JSON.parse(localStorage.getItem("cartMenu")) || [];
+    // Set the initial pizzaSizes state with default size "m"
+    const initialPizzaSizes = updatedCartMenu.reduce((sizes, item) => {
+      sizes[item.name] = item.size;
+      return sizes;
+    }, {});
+    setPizzaSizes(initialPizzaSizes);
+    setSavedCartMenu(updatedCartMenu);
+  }, []);
 
-  //
   const handleSizeChange = (event, newPizzaSize, itemName) => {
     if (newPizzaSize) {
+      setPizzaSizes((prevSizes) => ({
+        ...prevSizes,
+        [itemName]: newPizzaSize,
+      }));
+
       const updatedCartItems = savedCartMenu.map((item) => {
+        console.log(item);
         if (item.name === itemName) {
           return { ...item, size: newPizzaSize };
         }
         return item;
       });
 
-      console.log("save cart", savedCartMenu);
-      console.log("my test", updatedCartItems);
+      localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
+      setSavedCartMenu(updatedCartItems);
+    }
+  };
 
-      // setPizzaSize(`${newPizzaSize}`);
-      // const totalPrice = updatedCartItems.reduce((acc, item) => acc + item.price, 0);
+  const handleQuantityChange = (event, newQuantity, itemName) => {
+    if (!isNaN(newQuantity)) {
+      setQuantity((prevQuantity) => ({
+        ...prevQuantity,
+        [itemName]: newQuantity,
+      }));
+
+      const updatedCartItems = savedCartMenu.map((item) => {
+        if (item.name === itemName) {
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
 
       localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
+      setSavedCartMenu(updatedCartItems);
 
-      // setCartMenu(updatedCartItems);
-      // setTotalPrice(totalPrice);
+      // Calculate the total price
+      const totalPrice = updatedCartItems.reduce((acc, item) => {
+        if (item.sizes && item.sizes[item.size]) {
+          return acc + item.sizes[item.size].price * item.quantity;
+        }
+        return acc;
+      }, 0);
+      setTotalPrice(totalPrice);
     }
   };
 
-  //
-
-  const handleQuantityChange = (event) => {
-    const newQuantity = parseInt(event.target.value, 10);
-
-    if (!isNaN(newQuantity)) {
-      setQuantity(newQuantity);
-    }
-  };
   const getMenuItems = () => {
     return [
       ...classicPizzasData,
@@ -78,25 +99,34 @@ const CartItem = () => {
       const totalPrice = filteredItems.reduce((acc, item) => {
         const cartItem = savedCartMenu.find((cartItem) => cartItem.name === item.name);
         if (cartItem && item.sizes && item.sizes[cartItem.size]) {
-          return acc + item.sizes[cartItem.size].price;
+          return acc + item.sizes[cartItem.size].price * cartItem.quantity;
         }
         return acc;
       }, 0);
       setCartMenu(filteredItems);
       setTotalPrice(totalPrice);
     }
-  }, []);
+  }, [savedCartMenu, quantity]);
 
   const handleRemoveClick = (itemToRemove) => {
-    const test = savedCartMenu.filter((item) => item.name !== itemToRemove.name);
-    const updatedCartItems = cartMenu.filter((item) => item.name !== itemToRemove.name);
+    const updatedCartItems = savedCartMenu.filter((item) => item.name !== itemToRemove.name);
 
-    setTotalPrice(totalPrice - itemToRemove.price);
+    // Calculate the new total price after removing the item
+    const newTotalPrice = updatedCartItems.reduce((acc, item) => {
+      const size = pizzaSizes[item.name];
+      if (item.sizes && item.sizes[size]) {
+        return acc + item.sizes[size].price;
+      }
+      return acc;
+    }, 0);
 
-    localStorage.setItem("cartMenu", JSON.stringify(test));
+    localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
 
-    // Update the cartMenu state
-    setCartMenu(updatedCartItems);
+    if (updatedCartItems.length === 0) {
+      setCartMenu([]);
+    }
+    setSavedCartMenu(updatedCartItems);
+    setTotalPrice(newTotalPrice);
   };
 
   return (
@@ -140,38 +170,43 @@ const CartItem = () => {
               onChange={(event, newSize) => handleSizeChange(event, newSize, item.name)}
               aria-label="Pizza Size"
             >
-              {Object.keys(item.sizes).map((size) => (
-                <ToggleButton
-                  key={size}
-                  value={size}
-                  aria-label={size.toUpperCase()}
-                  sx={{ fontWeight: size === item.size ? "bold" : "normal" }}
-                >
-                  {size.toUpperCase()} - ${item.sizes[size].price}
-                </ToggleButton>
-              ))}
+              {Object.keys(item.sizes).map((size) =>
+                item.sizes[pizzaSizes[item.name]] ? (
+                  <ToggleButton
+                    key={size}
+                    value={size}
+                    aria-label={size.toUpperCase()}
+                    sx={{
+                      // fontWeight: size === item.size ? "bold" : "normal",
+                      color: size === pizzaSizes[item.name] ? "#e75b1e" : "inherit",
+                    }}
+                  >
+                    {size.toUpperCase()} - ${item.sizes[size].price}
+                  </ToggleButton>
+                ) : (
+                  <ToggleButton
+                    key={size}
+                    value={size}
+                    aria-label={size.toUpperCase()}
+                    sx={{ fontWeight: size === item.size ? "bold" : "normal" }}
+                  >
+                    {size.toUpperCase()} - ${item.sizes[size].price}
+                  </ToggleButton>
+                )
+              )}
             </ToggleButtonGroup>
 
-            {/* <ToggleButtonGroup value={pizzaSize} exclusive onChange={handleSizeChange} aria-label="Pizza Size">
-              <ToggleButton value="s" aria-label="Small">
-                S
-              </ToggleButton>
-              <ToggleButton value="m" aria-label="Medium">
-                M
-              </ToggleButton>
-              <ToggleButton value="l" aria-label="Extra Large">
-                L
-              </ToggleButton>
-            </ToggleButtonGroup> */}
             <TextField
               variant="outlined"
               type="number"
-              value={quantity}
-              onChange={handleQuantityChange}
+              value={quantity[item.name] || 1}
+              onChange={(event) => handleQuantityChange(event, event.target.value, item.name)}
               inputProps={{ min: 1, max: 20 }}
             />
 
-            <Typography>${item.sizes && item.sizes[pizzaSize] && item.sizes[pizzaSize].price}</Typography>
+            <Typography>
+              ${item.sizes[pizzaSizes[item.name]] ? item.sizes[pizzaSizes[item.name]].price * quantity[item.name] : ""}
+            </Typography>
 
             <IconButton onClick={() => handleRemoveClick(item)}>
               <CloseIcon />

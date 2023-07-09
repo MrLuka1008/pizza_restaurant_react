@@ -127,7 +127,7 @@ const MenuContent = () => {
   });
 
   const handleAddItem = (pizza) => {
-    const updatedCartMenu = [...cartMenu, { name: pizza.name, size: "l" }];
+    const updatedCartMenu = [...cartMenu, { name: pizza.name, size: "m", quantity: 1 }];
     localStorage.setItem("cartMenu", JSON.stringify(updatedCartMenu));
     setCartMenu(updatedCartMenu);
   };
