@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, ToggleButtonGroup, ToggleButton, TextField, IconButton, useMediaQuery } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import classicPizzasData from "../../data/classicPizzasData";
 import dessertsData from "../../data/dessertsData";
 import sodaDrinksData from "../../data/sodaDrinksData";
@@ -9,10 +8,13 @@ import specialOffersData from "../../data/specialOffersData";
 import specialtyPizzasData from "../../data/specialtyPizzasData";
 import vegetarianPizzaData from "../../data/vegetarianPizzaData";
 import CartCalculator from "./CartCalculator";
+import NoCartFound from "./NoCartFound";
+import ChangeSizeBtn from "./ChangeSizeBtn";
+import QuantityChange from "./QuantityChange";
+import RemoveClick from "./RemoveClick";
 
 const CartItem = () => {
   const [pizzaSizes, setPizzaSizes] = useState({});
-  // const [quantity, setQuantity] = useState(1);
   const [quantity, setQuantity] = useState({});
   const isScreenWidth678 = useMediaQuery("(max-width: 678px)");
   const [cartMenu, setCartMenu] = useState([]);
@@ -27,57 +29,16 @@ const CartItem = () => {
       sizes[item.name] = item.size;
       return sizes;
     }, {});
+
+    const initialQuantity = updatedCartMenu.reduce((quantities, item) => {
+      quantities[item.name] = item.quantity || 1;
+      return quantities;
+    }, {});
+
+    setQuantity(initialQuantity);
     setPizzaSizes(initialPizzaSizes);
     setSavedCartMenu(updatedCartMenu);
   }, []);
-
-  const handleSizeChange = (event, newPizzaSize, itemName) => {
-    if (newPizzaSize) {
-      setPizzaSizes((prevSizes) => ({
-        ...prevSizes,
-        [itemName]: newPizzaSize,
-      }));
-
-      const updatedCartItems = savedCartMenu.map((item) => {
-        console.log(item);
-        if (item.name === itemName) {
-          return { ...item, size: newPizzaSize };
-        }
-        return item;
-      });
-
-      localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
-      setSavedCartMenu(updatedCartItems);
-    }
-  };
-
-  const handleQuantityChange = (event, newQuantity, itemName) => {
-    if (!isNaN(newQuantity)) {
-      setQuantity((prevQuantity) => ({
-        ...prevQuantity,
-        [itemName]: newQuantity,
-      }));
-
-      const updatedCartItems = savedCartMenu.map((item) => {
-        if (item.name === itemName) {
-          return { ...item, quantity: newQuantity };
-        }
-        return item;
-      });
-
-      localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
-      setSavedCartMenu(updatedCartItems);
-
-      // Calculate the total price
-      const totalPrice = updatedCartItems.reduce((acc, item) => {
-        if (item.sizes && item.sizes[item.size]) {
-          return acc + item.sizes[item.size].price * item.quantity;
-        }
-        return acc;
-      }, 0);
-      setTotalPrice(totalPrice);
-    }
-  };
 
   const getMenuItems = () => {
     return [
@@ -108,27 +69,6 @@ const CartItem = () => {
     }
   }, [savedCartMenu, quantity]);
 
-  const handleRemoveClick = (itemToRemove) => {
-    const updatedCartItems = savedCartMenu.filter((item) => item.name !== itemToRemove.name);
-
-    // Calculate the new total price after removing the item
-    const newTotalPrice = updatedCartItems.reduce((acc, item) => {
-      const size = pizzaSizes[item.name];
-      if (item.sizes && item.sizes[size]) {
-        return acc + item.sizes[size].price;
-      }
-      return acc;
-    }, 0);
-
-    localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
-
-    if (updatedCartItems.length === 0) {
-      setCartMenu([]);
-    }
-    setSavedCartMenu(updatedCartItems);
-    setTotalPrice(newTotalPrice);
-  };
-
   return (
     <>
       {cartMenu.length > 0 ? (
@@ -154,7 +94,6 @@ const CartItem = () => {
                 alignItems: "center",
                 flexDirection: "column",
                 flexWrap: "wrap",
-
                 width: isScreenWidth678 ? "100px" : "250px",
                 justifyContent: "center",
               }}
@@ -164,57 +103,43 @@ const CartItem = () => {
               <Typography sx={{ fontSize: "20px" }}>{item.name}</Typography>
               <Typography>{item.category}</Typography>
             </Box>
-            <ToggleButtonGroup
-              value={item.size}
-              exclusive
-              onChange={(event, newSize) => handleSizeChange(event, newSize, item.name)}
-              aria-label="Pizza Size"
-            >
-              {Object.keys(item.sizes).map((size) =>
-                item.sizes[pizzaSizes[item.name]] ? (
-                  <ToggleButton
-                    key={size}
-                    value={size}
-                    aria-label={size.toUpperCase()}
-                    sx={{
-                      // fontWeight: size === item.size ? "bold" : "normal",
-                      color: size === pizzaSizes[item.name] ? "#e75b1e" : "inherit",
-                    }}
-                  >
-                    {size.toUpperCase()} - ${item.sizes[size].price}
-                  </ToggleButton>
-                ) : (
-                  <ToggleButton
-                    key={size}
-                    value={size}
-                    aria-label={size.toUpperCase()}
-                    sx={{ fontWeight: size === item.size ? "bold" : "normal" }}
-                  >
-                    {size.toUpperCase()} - ${item.sizes[size].price}
-                  </ToggleButton>
-                )
-              )}
-            </ToggleButtonGroup>
 
-            <TextField
-              variant="outlined"
-              type="number"
-              value={quantity[item.name] || 1}
-              onChange={(event) => handleQuantityChange(event, event.target.value, item.name)}
-              inputProps={{ min: 1, max: 20 }}
+            <ChangeSizeBtn
+              item={item}
+              pizzaSizes={pizzaSizes}
+              setPizzaSizes={setPizzaSizes}
+              setSavedCartMenu={setSavedCartMenu}
+              savedCartMenu={savedCartMenu}
+            />
+
+            <QuantityChange
+              item={item}
+              quantity={quantity}
+              setQuantity={setQuantity}
+              savedCartMenu={savedCartMenu}
+              setSavedCartMenu={setSavedCartMenu}
+              setTotalPrice={setTotalPrice}
             />
 
             <Typography>
-              ${item.sizes[pizzaSizes[item.name]] ? item.sizes[pizzaSizes[item.name]].price * quantity[item.name] : ""}
+              $
+              {item.sizes[pizzaSizes[item.name]]
+                ? item.sizes[pizzaSizes[item.name]].price * quantity[item.name]
+                : "jjj"}
             </Typography>
 
-            <IconButton onClick={() => handleRemoveClick(item)}>
-              <CloseIcon />
-            </IconButton>
+            <RemoveClick
+              item={item}
+              savedCartMenu={savedCartMenu}
+              pizzaSizes={pizzaSizes}
+              setCartMenu={setCartMenu}
+              setSavedCartMenu={setSavedCartMenu}
+              setTotalPrice={setPizzaSizes}
+            />
           </Box>
         ))
       ) : (
-        <p>No items found in the cart.</p>
+        <NoCartFound />
       )}
 
       <CartCalculator totalPrice={totalPrice} />
