@@ -125,7 +125,7 @@ const CartItem = () => {
               $
               {item.sizes[pizzaSizes[item.name]]
                 ? item.sizes[pizzaSizes[item.name]].price * quantity[item.name]
-                : "jjj"}
+                : "Price error change size"}
             </Typography>
 
             <RemoveClick
@@ -134,7 +134,7 @@ const CartItem = () => {
               pizzaSizes={pizzaSizes}
               setCartMenu={setCartMenu}
               setSavedCartMenu={setSavedCartMenu}
-              setTotalPrice={setPizzaSizes}
+              setTotalPrice={setTotalPrice}
             />
           </Box>
         ))
