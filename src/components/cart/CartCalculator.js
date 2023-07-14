@@ -83,7 +83,7 @@ const CartCalculator = ({ totalPrice }) => {
           <CustomTypography>Delivery ${20}</CustomTypography>
         </CustomBox>
         <CustomBox>
-          <CustomTypography>Subtotal ${totalPrice % discountpercent}</CustomTypography>
+          <CustomTypography>Subtotal ${totalPrice}</CustomTypography>
         </CustomBox>
         <CustomBox>
           <CustomTypography>Total ${totalPrice + 20}</CustomTypography>
