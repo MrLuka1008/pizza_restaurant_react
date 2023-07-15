@@ -4,6 +4,7 @@ import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
 import { Avatar, Menu, MenuItem } from "@mui/material";
 import apiRequest from "../../api/apiRequest";
+import ProFileComponent from "../profile/ProFileComponent";
 
 const CustomButton = styled(Button)(() => ({
   color: "#ffffff",
@@ -78,7 +79,9 @@ const NavLoginIcon = () => {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         transformOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <Link to="/profile">
+          <MenuItem onClick={handleClose}>Profile</MenuItem>
+        </Link>
         <MenuItem onClick={handleLogout}>Log Out</MenuItem>
       </Menu>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingCartOutlined } from "@mui/icons-material";
 import { Box, Button, TextField, Typography, styled } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -34,6 +34,7 @@ const CartCalculator = ({ totalPrice }) => {
   const API_URL = "http://localhost:3500/promoCodes";
   const [handleCode, setHandleCode] = useState("");
   const [discountpercent, setDiscountPercent] = useState(0);
+  const [newPRice, setNewPrice] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleWriteCode = (e) => {
@@ -42,24 +43,28 @@ const CartCalculator = ({ totalPrice }) => {
     setErrorMessage("");
   };
 
-  const handleDisCount = async (e) => {
+  const handleDisCount = async () => {
     const response = await fetch(API_URL);
-
     const data = await response.json();
 
     try {
-      const seatchPromoCode = data.find((item) => item.promocode === handleCode);
+      const searchedPromoCode = data.find((item) => item.promocode === handleCode);
 
-      if (seatchPromoCode != undefined) {
-        setDiscountPercent(seatchPromoCode.discount);
+      if (searchedPromoCode) {
+        setDiscountPercent(searchedPromoCode.discount);
+      } else {
+        setDiscountPercent(0);
+        setErrorMessage("Invalid Promo Code");
       }
-
-      console.log(seatchPromoCode.discount);
-      console.log(data);
     } catch {
+      setDiscountPercent(0);
       setErrorMessage("Invalid Promo Code");
     }
   };
+
+  useEffect(() => {
+    setNewPrice(totalPrice - totalPrice * (discountpercent / 100));
+  }, [totalPrice, discountpercent]);
 
   return (
     <Box
@@ -83,10 +88,10 @@ const CartCalculator = ({ totalPrice }) => {
           <CustomTypography>Delivery ${20}</CustomTypography>
         </CustomBox>
         <CustomBox>
-          <CustomTypography>Subtotal ${totalPrice}</CustomTypography>
+          <CustomTypography>Subtotal ${newPRice}</CustomTypography>
         </CustomBox>
         <CustomBox>
-          <CustomTypography>Total ${totalPrice + 20}</CustomTypography>
+          <CustomTypography>Total ${newPRice + 20}</CustomTypography>
         </CustomBox>
       </Box>
 
