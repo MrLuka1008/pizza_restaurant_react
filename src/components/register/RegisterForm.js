@@ -24,8 +24,11 @@ const RegisterForm = () => {
 
   const [formData, setFormData] = useState({
     name: "",
+    lastname: "",
     gmail: "",
     password: "",
+    city: "",
+    address: "",
     id,
     unique_id,
   });
