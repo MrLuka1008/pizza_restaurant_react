@@ -47,6 +47,8 @@ const ProFileComponent = () => {
             city: user.city,
             address: user.address,
           });
+
+          setSelectedCountry(user.city);
         }
       } catch (error) {
         console.log("Error fetching user data:", error);
@@ -61,8 +63,8 @@ const ProFileComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const putOptions = {
-      method: "PUT",
+    const patchOptions = {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -70,7 +72,8 @@ const ProFileComponent = () => {
     };
 
     try {
-      const response = await fetch(`${API_URL}/${userId}`, putOptions);
+      const response = await fetch(`${API_URL}/${userId}`, patchOptions);
+      console.log(response);
       if (response.ok) {
         console.log("Data updated successfully!");
       } else {
@@ -83,6 +86,7 @@ const ProFileComponent = () => {
 
   const handleCountryChange = (event) => {
     const country = event.target.value;
+    const { name, value } = event.target;
     setSelectedCountry(country);
 
     const shippingPrices = {
@@ -96,6 +100,11 @@ const ProFileComponent = () => {
       khashuri: 7,
       telavi: 6,
     };
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      city: country,
+    }));
 
     setShippingPrice(shippingPrices[country] || 0); // Set the shipping price for the selected country
   };
@@ -148,6 +157,7 @@ const ProFileComponent = () => {
         <Select
           value={selectedCountry}
           onChange={handleCountryChange}
+          name="city"
           label="Select City"
           inputProps={{
             name: "country",
