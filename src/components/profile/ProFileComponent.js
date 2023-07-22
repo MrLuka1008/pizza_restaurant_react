@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, TextField, Typography, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
-import apiRequest from "../../api/apiRequest";
+import ProFile from "./ProFile";
+import ProfileAddress from "./ProfileAddress";
+import { Box } from "@mui/material";
 
 const ProFileComponent = () => {
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [address, setAddress] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [shippingPrice, setShippingPrice] = useState(0);
   const API_URL = "http://localhost:3500/registerAccount";
 
   const [formData, setFormData] = useState({
@@ -48,7 +43,7 @@ const ProFileComponent = () => {
             address: user.address,
           });
 
-          setSelectedCountry(user.city);
+          // setSelectedCountry(user.city);
         }
       } catch (error) {
         console.log("Error fetching user data:", error);
@@ -84,114 +79,16 @@ const ProFileComponent = () => {
     }
   };
 
-  const handleCountryChange = (event) => {
-    const country = event.target.value;
-    const { name, value } = event.target;
-    setSelectedCountry(country);
-
-    const shippingPrices = {
-      tbilisi: 5,
-      kutaisi: 8,
-      batumi: 10,
-      rustavi: 6,
-      gori: 7,
-      zugdidi: 9,
-      poti: 10,
-      khashuri: 7,
-      telavi: 6,
-    };
-
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      city: country,
-    }));
-
-    setShippingPrice(shippingPrices[country] || 0); // Set the shipping price for the selected country
-  };
-
   return (
-    <Box
-      component="form"
-      sx={{
-        padding: "50px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "space-around",
-        gap: "20px",
-      }}
-      onSubmit={handleSubmit}
-    >
-      <InputLabel>First Name</InputLabel>
-      <TextField
-        id="first-name"
-        type="text"
-        name="name"
-        variant="outlined"
-        value={formData.name}
-        onChange={handleInputChange}
-        required
+    <Box sx={{ display: "flex", width: "100%", justifyContent: "space-around" }}>
+      <ProFile handleSubmit={handleSubmit} formData={formData} handleInputChange={handleInputChange} />
+
+      <ProfileAddress
+        handleSubmit={handleSubmit}
+        formData={formData}
+        handleInputChange={handleInputChange}
+        setFormData={setFormData}
       />
-      <InputLabel htmlFor="last-name">Last Name</InputLabel>
-      <TextField
-        id="last-name"
-        type="text"
-        name="lastname"
-        variant="outlined"
-        value={formData.lastname}
-        onChange={handleInputChange}
-        required
-      />
-      <InputLabel htmlFor="email">Email</InputLabel>
-      <TextField
-        id="email"
-        variant="outlined"
-        type="email"
-        name="gmail"
-        value={formData.gmail}
-        onChange={handleInputChange}
-        required
-      />
-      <FormControl sx={{ minWidth: 225 }}>
-        <InputLabel htmlFor="country-select">Select City</InputLabel>
-        <Select
-          value={selectedCountry}
-          onChange={handleCountryChange}
-          name="city"
-          label="Select City"
-          inputProps={{
-            name: "country",
-            id: "country-select",
-          }}
-        >
-          <MenuItem value="tbilisi">tbilisi</MenuItem>
-          <MenuItem value="kutaisi">kutaisi</MenuItem>
-          <MenuItem value="batumi">batumi</MenuItem>
-          <MenuItem value="rustavi">rustavi</MenuItem>
-          <MenuItem value="gori">gori</MenuItem>
-          <MenuItem value="zugdidi">zugdidi</MenuItem>
-          <MenuItem value="poti">poti</MenuItem>
-          <MenuItem value="khashuri">khashuri</MenuItem>
-          <MenuItem value="telavi">telavi</MenuItem>
-        </Select>
-      </FormControl>
-      <InputLabel htmlFor="address">Full Address</InputLabel>
-      <TextField
-        id="address"
-        name="address"
-        variant="outlined"
-        value={formData.address}
-        onChange={handleInputChange}
-        required
-      />
-      {selectedCountry && (
-        <Typography variant="body1">
-          Shipping Price to {selectedCountry.toUpperCase()}: ${shippingPrice}
-        </Typography>
-      )}
-      <Button type="submit" variant="contained" color="primary">
-        save and continue shopping
-      </Button>
     </Box>
   );
 };
