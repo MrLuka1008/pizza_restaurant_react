@@ -12,6 +12,7 @@ const ProFileComponent = () => {
     gmail: "",
     city: "",
     address: "",
+    password: "",
   });
 
   const handleInputChange = (event) => {

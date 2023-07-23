@@ -45,6 +45,16 @@ const ProFile = ({ handleSubmit, formData, handleInputChange }) => {
         onChange={handleInputChange}
         required
       />
+      <InputLabel htmlFor="email">New password</InputLabel>
+      <TextField
+        id="password"
+        variant="outlined"
+        type="password"
+        name="password"
+        value={formData.password}
+        onChange={handleInputChange}
+        required
+      />
       <Button type="submit" variant="contained" color="primary">
         save and continue shopping
       </Button>
