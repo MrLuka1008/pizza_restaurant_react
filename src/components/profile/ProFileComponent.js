@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProFile from "./ProFile";
 import ProfileAddress from "./ProfileAddress";
 import { Box } from "@mui/material";
+import AddressComponent from "./AddressComponent";
 
 const ProFileComponent = () => {
   const API_URL = "http://localhost:3500/registerAccount";
@@ -80,6 +81,9 @@ const ProFileComponent = () => {
     }
   };
 
+  const addressArray = Object.entries(formData.address).map(([key, value]) => ({ [key]: value }));
+
+  console.log(addressArray);
   return (
     <Box sx={{ display: "flex", width: "100%", justifyContent: "space-around" }}>
       <ProFile handleSubmit={handleSubmit} formData={formData} handleInputChange={handleInputChange} />
@@ -90,6 +94,17 @@ const ProFileComponent = () => {
         handleInputChange={handleInputChange}
         setFormData={setFormData}
       />
+
+      <div>
+        {addressArray.map((addressObj, index) => (
+          <ul key={index}>
+            <li>
+              <h2>{Object.keys(addressObj)[0]}</h2>
+              <AddressComponent address={Object.values(addressObj)[0]} />
+            </li>
+          </ul>
+        ))}
+      </div>
     </Box>
   );
 };

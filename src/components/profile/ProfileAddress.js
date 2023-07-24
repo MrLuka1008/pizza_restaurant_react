@@ -37,7 +37,7 @@ const ProfileAddress = ({ handleSubmit, formData, handleInputChange, setFormData
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-around",
+        // justifyContent: "space-around",
         gap: "20px",
       }}
       onSubmit={handleSubmit}
@@ -70,7 +70,7 @@ const ProfileAddress = ({ handleSubmit, formData, handleInputChange, setFormData
         id="address"
         name="address"
         variant="outlined"
-        value={formData.address}
+        // value={formData.address}
         onChange={handleInputChange}
         required
       />
@@ -80,7 +80,7 @@ const ProfileAddress = ({ handleSubmit, formData, handleInputChange, setFormData
         </Typography>
       )}
       <Button type="submit" variant="contained" color="primary">
-        save and continue shopping
+        Add new address
       </Button>
     </Box>
   );
