@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProFile from "./ProFile";
 import ProfileAddress from "./ProfileAddress";
-import { Box } from "@mui/material";
+import { Box, List, ListItem, Typography } from "@mui/material";
 import AddressComponent from "./AddressComponent";
 
 const ProFileComponent = () => {
@@ -22,8 +22,6 @@ const ProFileComponent = () => {
       ...prevFormData,
       [name]: value,
     }));
-
-    console.log(formData);
   };
 
   const userId = localStorage.getItem("user_id");
@@ -70,7 +68,7 @@ const ProFileComponent = () => {
 
     try {
       const response = await fetch(`${API_URL}/${userId}`, patchOptions);
-      console.log(response);
+
       if (response.ok) {
         console.log("Data updated successfully!");
       } else {
@@ -83,28 +81,39 @@ const ProFileComponent = () => {
 
   const addressArray = Object.entries(formData.address).map(([key, value]) => ({ [key]: value }));
 
-  console.log(addressArray);
   return (
-    <Box sx={{ display: "flex", width: "100%", justifyContent: "space-around" }}>
+    <Box
+      sx={{
+        display: "flex",
+        width: "100%",
+        flexWrap: "wrap",
+        justifyContent: "space-around",
+        alignItems: "center",
+        padding: "50px",
+      }}
+    >
       <ProFile handleSubmit={handleSubmit} formData={formData} handleInputChange={handleInputChange} />
 
-      <ProfileAddress
-        handleSubmit={handleSubmit}
-        formData={formData}
-        handleInputChange={handleInputChange}
-        setFormData={setFormData}
-      />
+      <ProfileAddress />
 
-      <div>
+      <Box
+        sx={{
+          background: "rgba(255, 255, 255, 0.6)",
+          borderRadius: " 16px",
+          boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+          backdropFilter: "blur(5px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+        }}
+      >
         {addressArray.map((addressObj, index) => (
-          <ul key={index}>
-            <li>
-              <h2>{Object.keys(addressObj)[0]}</h2>
+          <List key={index}>
+            <ListItem>
+              <Typography>{Object.keys(addressObj)[0].toUpperCase()}</Typography>
               <AddressComponent address={Object.values(addressObj)[0]} />
-            </li>
-          </ul>
+            </ListItem>
+          </List>
         ))}
-      </div>
+      </Box>
     </Box>
   );
 };

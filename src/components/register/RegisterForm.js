@@ -21,6 +21,7 @@ const RegisterForm = () => {
   const id = unique_id.slice(0, 8);
 
   const [fetchError, setFetchError] = useState(null);
+  console.log(fetchError);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -28,9 +29,9 @@ const RegisterForm = () => {
     gmail: "",
     password: "",
     city: "",
-    address: "",
     id,
     unique_id,
+    address: {},
   });
 
   const handleInputChange = (event) => {

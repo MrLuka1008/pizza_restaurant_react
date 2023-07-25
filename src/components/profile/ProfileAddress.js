@@ -1,34 +1,76 @@
 import React, { useState } from "react";
-import { Box, TextField, Typography, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
 
-const ProfileAddress = ({ handleSubmit, formData, handleInputChange, setFormData }) => {
+const ProfileAddress = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [shippingPrice, setShippingPrice] = useState(0);
+  const API_URL = "http://localhost:3500/registerAccount";
+  // const [phone, setPhone] = useState("");
+  // const [stateFullAddress, setStateFullAddress] = useState("");
+  // const [shippingPrice, setShippingPrice] = useState(0);
+
+  const [address, setAddress] = useState({ city: "", fullAddress: "", phone: "" });
+  const [addresses, setAddresses] = useState([]);
+  const userId = localStorage.getItem("user_id");
 
   const handleCountryChange = (event) => {
     const country = event.target.value;
     setSelectedCountry(country);
 
-    const shippingPrices = {
-      tbilisi: 5,
-      kutaisi: 8,
-      batumi: 10,
-      rustavi: 6,
-      gori: 7,
-      zugdidi: 9,
-      poti: 10,
-      khashuri: 7,
-      telavi: 6,
-    };
+    // const shippingPrices = {
+    //   tbilisi: 5,
+    //   kutaisi: 8,
+    //   batumi: 10,
+    //   rustavi: 6,
+    //   gori: 7,
+    //   zugdidi: 9,
+    //   poti: 10,
+    //   khashuri: 7,
+    //   telavi: 6,
+    // };
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
+    setAddress((prevAddress) => ({
+      ...prevAddress,
       city: country,
     }));
 
-    setShippingPrice(shippingPrices[country] || 0); // Set the shipping price for the selected country
+    // setShippingPrice(shippingPrices[country] || 0); // Set the shipping price for the selected country
   };
 
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      [name]: value,
+    }));
+  };
+
+  setAddresses((prevAddresses) => [...prevAddresses, address]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const patchOptions = {
+      method: "PATCH", // Use PATCH method to update the data
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(addresses),
+    };
+
+    try {
+      const response = await fetch(`${API_URL}/${userId}`, patchOptions);
+
+      if (response.ok) {
+        console.log("Data updated successfully!");
+      } else {
+        console.log("Failed to update data. Status:", response.status);
+      }
+    } catch (error) {
+      console.log("Error updating data:", error);
+    }
+  };
+
+  console.log(addresses);
   return (
     <Box
       component="form"
@@ -37,7 +79,6 @@ const ProfileAddress = ({ handleSubmit, formData, handleInputChange, setFormData
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        // justifyContent: "space-around",
         gap: "20px",
       }}
       onSubmit={handleSubmit}
@@ -68,17 +109,21 @@ const ProfileAddress = ({ handleSubmit, formData, handleInputChange, setFormData
       <InputLabel htmlFor="address">Full Address</InputLabel>
       <TextField
         id="address"
-        name="address"
+        name="fullAddress"
         variant="outlined"
-        // value={formData.address}
+        value={address.fullAddress}
         onChange={handleInputChange}
         required
       />
-      {selectedCountry && (
-        <Typography variant="body1">
-          Shipping Price to {selectedCountry.toUpperCase()}: ${shippingPrice}
-        </Typography>
-      )}
+      <InputLabel htmlFor="Phone">Phone</InputLabel>
+      <TextField
+        id="Phone"
+        name="phone"
+        variant="outlined"
+        value={address.phone}
+        onChange={handleInputChange}
+        required
+      />
       <Button type="submit" variant="contained" color="primary">
         Add new address
       </Button>
