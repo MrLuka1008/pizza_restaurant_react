@@ -1,16 +1,15 @@
-import React, { useState } from "react";
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Button, Alert } from "@mui/material";
 
 const ProfileAddress = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const API_URL = "http://localhost:3500/registerAccount";
-  // const [phone, setPhone] = useState("");
-  // const [stateFullAddress, setStateFullAddress] = useState("");
-  // const [shippingPrice, setShippingPrice] = useState(0);
 
   const [address, setAddress] = useState({ city: "", fullAddress: "", phone: "" });
-  const [addresses, setAddresses] = useState([]);
   const userId = localStorage.getItem("user_id");
+
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("success");
 
   const handleCountryChange = (event) => {
     const country = event.target.value;
@@ -44,33 +43,57 @@ const ProfileAddress = () => {
     }));
   };
 
-  setAddresses((prevAddresses) => [...prevAddresses, address]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const patchOptions = {
-      method: "PATCH", // Use PATCH method to update the data
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(addresses),
-    };
-
     try {
-      const response = await fetch(`${API_URL}/${userId}`, patchOptions);
+      // Fetch the existing user data from the server
+      const response = await fetch(`${API_URL}/${userId}`);
+      if (!response.ok) {
+        console.log("Failed to fetch user data. Status:", response.status);
+        return;
+      }
 
-      if (response.ok) {
-        console.log("Data updated successfully!");
+      const userData = await response.json();
+
+      if (Object.keys(userData.address).length < 4) {
+        const newAddressKey = Object.keys(userData.address).length + 1;
+        userData.address[newAddressKey] = address;
+
+        const patchOptions = {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        };
+
+        const patchResponse = await fetch(`${API_URL}/${userId}`, patchOptions);
+
+        if (patchResponse.ok) {
+          console.log("Data updated successfully!");
+          showAlert("Address added successfully!", "success");
+        } else {
+          console.log("Failed to update data. Status:", patchResponse.status);
+        }
       } else {
-        console.log("Failed to update data. Status:", response.status);
+        console.log("You already have four addresses. Cannot add a new address.");
+        showAlert("You already have four addresses. Cannot add a new address.", "error");
       }
     } catch (error) {
       console.log("Error updating data:", error);
     }
   };
 
-  console.log(addresses);
+  const showAlert = (message, severity) => {
+    setAlertMessage(message);
+    setAlertSeverity(severity);
+    setTimeout(() => {
+      setAlertMessage("");
+    }, 3000);
+  };
+
+  console.log(address);
   return (
     <Box
       component="form"
@@ -127,6 +150,11 @@ const ProfileAddress = () => {
       <Button type="submit" variant="contained" color="primary">
         Add new address
       </Button>
+      {alertMessage && (
+        <Alert severity={alertSeverity} sx={{ fontSize: "12px" }}>
+          {alertMessage}
+        </Alert>
+      )}
     </Box>
   );
 };
