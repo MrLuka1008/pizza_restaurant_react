@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProFile from "./ProFile";
 import ProfileAddress from "./ProfileAddress";
-import { Box, List, ListItem, Typography } from "@mui/material";
-import AddressComponent from "./AddressComponent";
+import { Box } from "@mui/material";
 
 const ProFileComponent = () => {
   const API_URL = "http://localhost:3500/registerAccount";
@@ -79,41 +78,20 @@ const ProFileComponent = () => {
     }
   };
 
-  const addressArray = Object.entries(formData.address).map(([key, value]) => ({ [key]: value }));
-
   return (
     <Box
       sx={{
         display: "flex",
         width: "100%",
-        flexWrap: "wrap",
-        justifyContent: "space-around",
         alignItems: "center",
+        // justifyContent: "center",
+        flexDirection: "column",
         padding: "50px",
       }}
     >
       <ProFile handleSubmit={handleSubmit} formData={formData} handleInputChange={handleInputChange} />
 
-      <ProfileAddress />
-
-      <Box
-        sx={{
-          background: "rgba(255, 255, 255, 0.6)",
-          borderRadius: " 16px",
-          boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-          backdropFilter: "blur(5px)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-        }}
-      >
-        {addressArray.map((addressObj, index) => (
-          <List key={index}>
-            <ListItem>
-              <Typography>{Object.keys(addressObj)[0].toUpperCase()}</Typography>
-              <AddressComponent address={Object.values(addressObj)[0]} />
-            </ListItem>
-          </List>
-        ))}
-      </Box>
+      <ProfileAddress formData={formData} />
     </Box>
   );
 };

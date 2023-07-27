@@ -1,15 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Button, Alert } from "@mui/material";
+import {
+  Box,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Alert,
+  Typography,
+  ListItem,
+  List,
+} from "@mui/material";
+import AddressComponent from "./AddressComponent";
 
-const ProfileAddress = () => {
+const ProfileAddress = ({ formData }) => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const API_URL = "http://localhost:3500/registerAccount";
 
   const [address, setAddress] = useState({ city: "", fullAddress: "", phone: "" });
   const userId = localStorage.getItem("user_id");
 
+  const [userAddressLength, setUserAddressLength] = useState(0);
+
   const [alertMessage, setAlertMessage] = useState("");
   const [alertSeverity, setAlertSeverity] = useState("success");
+
+  const [addressList, setAddressList] = useState([]);
 
   const handleCountryChange = (event) => {
     const country = event.target.value;
@@ -55,10 +72,13 @@ const ProfileAddress = () => {
       }
 
       const userData = await response.json();
+      setUserAddressLength(Object.keys(userData.address).length);
 
       if (Object.keys(userData.address).length < 4) {
         const newAddressKey = Object.keys(userData.address).length + 1;
         userData.address[newAddressKey] = address;
+
+        setAddressList((prevAddressList) => [...prevAddressList, address]);
 
         const patchOptions = {
           method: "PATCH",
@@ -83,7 +103,10 @@ const ProfileAddress = () => {
     } catch (error) {
       console.log("Error updating data:", error);
     }
+
+    setAddress({ city: "", fullAddress: "", phone: "" });
   };
+  console.log("userAddressLength", userAddressLength);
 
   const showAlert = (message, severity) => {
     setAlertMessage(message);
@@ -93,68 +116,110 @@ const ProfileAddress = () => {
     }, 3000);
   };
 
-  console.log(address);
+  useEffect(() => {
+    // Fetch the user data from the server and set the address list
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${API_URL}/${userId}`);
+        if (!response.ok) {
+          console.log("Failed to fetch user data. Status:", response.status);
+          return;
+        }
+
+        const userData = await response.json();
+
+        setAddressList(Object.values(userData.address));
+      } catch (error) {
+        console.log("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
+  // const addressArray = Object.entries(formData.address).map(([key, value]) => ({ [key]: value }));
+
   return (
     <Box
       component="form"
       sx={{
         padding: "50px",
         display: "flex",
-        flexDirection: "column",
         alignItems: "center",
         gap: "20px",
       }}
       onSubmit={handleSubmit}
     >
-      <FormControl sx={{ minWidth: 225 }}>
-        <InputLabel htmlFor="country-select">Select City</InputLabel>
-        <Select
-          value={selectedCountry}
-          onChange={handleCountryChange}
-          name="city"
-          label="Select City"
-          inputProps={{
-            name: "country",
-            id: "country-select",
-          }}
-        >
-          <MenuItem value="tbilisi">tbilisi</MenuItem>
-          <MenuItem value="kutaisi">kutaisi</MenuItem>
-          <MenuItem value="batumi">batumi</MenuItem>
-          <MenuItem value="rustavi">rustavi</MenuItem>
-          <MenuItem value="gori">gori</MenuItem>
-          <MenuItem value="zugdidi">zugdidi</MenuItem>
-          <MenuItem value="poti">poti</MenuItem>
-          <MenuItem value="khashuri">khashuri</MenuItem>
-          <MenuItem value="telavi">telavi</MenuItem>
-        </Select>
-      </FormControl>
-      <InputLabel htmlFor="address">Full Address</InputLabel>
-      <TextField
-        id="address"
-        name="fullAddress"
-        variant="outlined"
-        value={address.fullAddress}
-        onChange={handleInputChange}
-        required
-      />
-      <InputLabel htmlFor="Phone">Phone</InputLabel>
-      <TextField
-        id="Phone"
-        name="phone"
-        variant="outlined"
-        value={address.phone}
-        onChange={handleInputChange}
-        required
-      />
-      <Button type="submit" variant="contained" color="primary">
-        Add new address
-      </Button>
-      {alertMessage && (
-        <Alert severity={alertSeverity} sx={{ fontSize: "12px" }}>
-          {alertMessage}
-        </Alert>
-      )}
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <FormControl sx={{ minWidth: 225 }}>
+          <InputLabel htmlFor="country-select">Select City</InputLabel>
+          <Select
+            value={selectedCountry}
+            onChange={handleCountryChange}
+            name="city"
+            label="Select City"
+            inputProps={{
+              name: "country",
+              id: "country-select",
+            }}
+          >
+            <MenuItem value="tbilisi">tbilisi</MenuItem>
+            <MenuItem value="kutaisi">kutaisi</MenuItem>
+            <MenuItem value="batumi">batumi</MenuItem>
+            <MenuItem value="rustavi">rustavi</MenuItem>
+            <MenuItem value="gori">gori</MenuItem>
+            <MenuItem value="zugdidi">zugdidi</MenuItem>
+            <MenuItem value="poti">poti</MenuItem>
+            <MenuItem value="khashuri">khashuri</MenuItem>
+            <MenuItem value="telavi">telavi</MenuItem>
+          </Select>
+        </FormControl>
+        <InputLabel htmlFor="address">Full Address</InputLabel>
+        <TextField
+          id="address"
+          name="fullAddress"
+          variant="outlined"
+          value={address.fullAddress}
+          onChange={handleInputChange}
+          required
+        />
+        <InputLabel htmlFor="Phone">Phone</InputLabel>
+        <TextField
+          id="Phone"
+          name="phone"
+          variant="outlined"
+          value={address.phone}
+          onChange={handleInputChange}
+          required
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Add new address
+        </Button>
+        {alertMessage && (
+          <Alert severity={alertSeverity} sx={{ fontSize: "12px" }}>
+            {alertMessage}
+          </Alert>
+        )}
+      </Box>
+
+      <Box
+        sx={{
+          background: "rgba(255, 255, 255, 0.6)",
+          borderRadius: " 16px",
+          boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+          backdropFilter: "blur(5px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+        }}
+      >
+        {addressList.map((addressItem, index) => (
+          <List key={index} sx={{ display: "flex" }}>
+            <ListItem sx={{ display: "flex" }}>
+              <Typography>Address {index + 1}:</Typography>
+              <AddressComponent address={addressItem} />
+            </ListItem>
+          </List>
+        ))}
+      </Box>
     </Box>
   );
 };
