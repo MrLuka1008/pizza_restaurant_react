@@ -13,6 +13,7 @@ import {
   List,
 } from "@mui/material";
 import AddressComponent from "./AddressComponent";
+import SubmitBtn from "../buttons/SubmitBtn";
 
 const ProfileAddress = ({ formData }) => {
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -143,14 +144,46 @@ const ProfileAddress = ({ formData }) => {
     <Box
       component="form"
       sx={{
-        padding: "50px",
         display: "flex",
-        alignItems: "center",
-        gap: "20px",
+        // alignItems: "center",
+        justifyContent: "space-around",
+        // background: "rgba(255, 255, 255, 0.6)",
+        borderRadius: " 0px 0px 16px 16px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(5px)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
+        width: "80%",
+        padding: "100px",
+        // background: "blue",
       }}
       onSubmit={handleSubmit}
     >
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{
+          display: "flex",
+          width: "70%",
+          flexWrap: "wrap",
+        }}
+      >
+        {addressList.map((addressItem, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              borderBottom: "1px solid black",
+              flexWrap: "wrap",
+              width: "50%",
+            }}
+          >
+            <Box>
+              <Typography>Address {index + 1}:</Typography>
+              <AddressComponent address={addressItem} />
+            </Box>
+          </Box>
+        ))}
+      </Box>
+      <Box sx={{ display: "flex", flexDirection: "column", width: "30%" }}>
         <FormControl sx={{ minWidth: 225 }}>
           <InputLabel htmlFor="country-select">Select City</InputLabel>
           <Select
@@ -192,33 +225,13 @@ const ProfileAddress = ({ formData }) => {
           onChange={handleInputChange}
           required
         />
-        <Button type="submit" variant="contained" color="primary">
-          Add new address
-        </Button>
+
+        <SubmitBtn text={"Add new address"} />
         {alertMessage && (
           <Alert severity={alertSeverity} sx={{ fontSize: "12px" }}>
             {alertMessage}
           </Alert>
         )}
-      </Box>
-
-      <Box
-        sx={{
-          background: "rgba(255, 255, 255, 0.6)",
-          borderRadius: " 16px",
-          boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-          backdropFilter: "blur(5px)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-        }}
-      >
-        {addressList.map((addressItem, index) => (
-          <List key={index} sx={{ display: "flex" }}>
-            <ListItem sx={{ display: "flex" }}>
-              <Typography>Address {index + 1}:</Typography>
-              <AddressComponent address={addressItem} />
-            </ListItem>
-          </List>
-        ))}
       </Box>
     </Box>
   );

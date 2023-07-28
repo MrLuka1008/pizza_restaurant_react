@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, TextField, InputLabel, Typography } from "@mui/material";
-import logo from "../../assets/images/logo.svg";
+import miniLogo from "../../assets/images/miniLogo.png";
 import SubmitBtn from "../buttons/SubmitBtn";
 import { ArrowDownward } from "@mui/icons-material";
 
@@ -13,6 +13,7 @@ const ProFile = ({ handleSubmit, formData, handleInputChange }) => {
         justifyContent: "space-around",
         // background: "rgba(255, 255, 255, 0.6)",
         borderRadius: " 16px",
+        borderRadius: "16px 16px 0px 0px ",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(5px)",
         border: "1px solid rgba(255, 255, 255, 0.3)",
@@ -80,14 +81,24 @@ const ProFile = ({ handleSubmit, formData, handleInputChange }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "space-around",
           width: "50%",
           background: "#e75b1e",
           borderRadius: " 16px",
+          textAlign: "center",
         }}
       >
-        <img style={{ width: "200px" }} alt="logo" src={logo}></img>
-        <Typography sx={{ fontSize: "20px" }}>Please fill out your profile and addresses carefully</Typography>
+        <img style={{ width: "200px" }} alt="logo" src={miniLogo}></img>
+        <Typography
+          sx={{
+            fontSize: "30px",
+            color: "white",
+            fontWeight: "700",
+          }}
+        >
+          Please fill out your <br /> profile and addresses carefully <br />
+          <ArrowDownward sx={{ fontSize: "30px" }} />
+        </Typography>
       </Box>
     </Box>
   );

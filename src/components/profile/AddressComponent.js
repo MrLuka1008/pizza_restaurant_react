@@ -5,7 +5,7 @@ const AddressComponent = ({ address }) => {
   const { city, fullAddress, phone } = address;
 
   return (
-    <Box sx={{ padding: "10px", width: "100px" }}>
+    <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Typography>🏙️ City: {city}</Typography>
       <Typography>🏠 Full Address: {fullAddress}</Typography>
       <Typography>📞 Phone: {phone}</Typography>
