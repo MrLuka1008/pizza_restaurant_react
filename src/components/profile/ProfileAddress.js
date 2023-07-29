@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
-  Alert,
-  Typography,
-  ListItem,
-  List,
-} from "@mui/material";
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Alert, Typography } from "@mui/material";
 import AddressComponent from "./AddressComponent";
 import SubmitBtn from "../buttons/SubmitBtn";
 
@@ -138,6 +126,13 @@ const ProfileAddress = ({ formData }) => {
     fetchUserData();
   }, [userId]);
 
+  const deleteAddress = () => {
+    console.log("delete");
+  };
+
+  const editAddress = () => {
+    console.log("editAddress");
+  };
   // const addressArray = Object.entries(formData.address).map(([key, value]) => ({ [key]: value }));
 
   return (
@@ -145,16 +140,13 @@ const ProfileAddress = ({ formData }) => {
       component="form"
       sx={{
         display: "flex",
-        // alignItems: "center",
         justifyContent: "space-around",
-        // background: "rgba(255, 255, 255, 0.6)",
         borderRadius: " 0px 0px 16px 16px",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(5px)",
         border: "1px solid rgba(255, 255, 255, 0.3)",
         width: "80%",
         padding: "100px",
-        // background: "blue",
       }}
       onSubmit={handleSubmit}
     >
@@ -178,7 +170,7 @@ const ProfileAddress = ({ formData }) => {
           >
             <Box>
               <Typography>Address {index + 1}:</Typography>
-              <AddressComponent address={addressItem} />
+              <AddressComponent deleteAddress={deleteAddress} address={addressItem} editAddress={editAddress} />
             </Box>
           </Box>
         ))}

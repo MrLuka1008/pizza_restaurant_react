@@ -1,7 +1,8 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
+import OnClickBtn from "../buttons/OnClickBtn";
 
-const AddressComponent = ({ address }) => {
+const AddressComponent = ({ address, deleteAddress, editAddress }) => {
   const { city, fullAddress, phone } = address;
 
   return (
@@ -10,8 +11,8 @@ const AddressComponent = ({ address }) => {
       <Typography>🏠 Full Address: {fullAddress}</Typography>
       <Typography>📞 Phone: {phone}</Typography>
 
-      <Button>✏️ Edit</Button>
-      <Button>🗑️ Delete</Button>
+      <OnClickBtn text={"✏️ Edit"} functionName={editAddress} />
+      <OnClickBtn text={"🗑️ Delete"} functionName={deleteAddress} />
     </Box>
   );
 };
