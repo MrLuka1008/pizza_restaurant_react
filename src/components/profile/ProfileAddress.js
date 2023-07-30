@@ -17,6 +17,8 @@ const ProfileAddress = ({ formData }) => {
 
   const [addressList, setAddressList] = useState([]);
 
+  // const [editAddressIndex, setEditAddressIndex] = useState(null);
+
   const handleCountryChange = (event) => {
     const country = event.target.value;
     setSelectedCountry(country);
@@ -126,8 +128,40 @@ const ProfileAddress = ({ formData }) => {
     fetchUserData();
   }, [userId]);
 
-  const deleteAddress = () => {
-    console.log("delete");
+  const deleteAddress = async (addressIndex) => {
+    try {
+      const response = await fetch(`${API_URL}/${userId}`);
+      if (!response.ok) {
+        console.log("Failed to fetch user data. Status:", response.status);
+        return;
+      }
+
+      const userData = await response.json();
+
+      const updatedAddressList = addressList.filter((_, index) => index !== addressIndex);
+
+      userData.address = Object.fromEntries(updatedAddressList.map((address, index) => [index + 1, address]));
+
+      const patchOptions = {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      };
+
+      const patchResponse = await fetch(`${API_URL}/${userId}`, patchOptions);
+
+      if (patchResponse.ok) {
+        console.log("Data updated successfully!");
+        setAddressList(updatedAddressList);
+        showAlert("Address deleted successfully!", "success");
+      } else {
+        console.log("Failed to update data. Status:", patchResponse.status);
+      }
+    } catch (error) {
+      console.log("Error deleting address:", error);
+    }
   };
 
   const editAddress = () => {
@@ -170,7 +204,12 @@ const ProfileAddress = ({ formData }) => {
           >
             <Box>
               <Typography>Address {index + 1}:</Typography>
-              <AddressComponent deleteAddress={deleteAddress} address={addressItem} editAddress={editAddress} />
+              {/* <AddressComponent deleteAddress={deleteAddress} address={addressItem} editAddress={editAddress} /> */}
+              <AddressComponent
+                deleteAddress={() => deleteAddress(index)} // Pass deleteAddress function with the index
+                address={addressItem}
+                editAddress={() => editAddress(index)}
+              />
             </Box>
           </Box>
         ))}
