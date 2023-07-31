@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Alert, Typography } from "@mui/material";
+import { Box, InputLabel, Alert, Typography } from "@mui/material";
 import AddressComponent from "./AddressComponent";
 import SubmitBtn from "../buttons/SubmitBtn";
+import SelectCity from "./SelectCity";
+import MyTextField from "./MyTextField";
 
 const ProfileAddress = ({ formData }) => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const API_URL = "http://localhost:3500/registerAccount";
-
   const [address, setAddress] = useState({ city: "", fullAddress: "", phone: "" });
   const userId = localStorage.getItem("user_id");
-
   const [userAddressLength, setUserAddressLength] = useState(0);
-
   const [alertMessage, setAlertMessage] = useState("");
   const [alertSeverity, setAlertSeverity] = useState("success");
-
   const [addressList, setAddressList] = useState([]);
-
-  // const [editAddressIndex, setEditAddressIndex] = useState(null);
 
   const handleCountryChange = (event) => {
     const country = event.target.value;
@@ -108,7 +104,6 @@ const ProfileAddress = ({ formData }) => {
   };
 
   useEffect(() => {
-    // Fetch the user data from the server and set the address list
     const fetchUserData = async () => {
       try {
         const response = await fetch(`${API_URL}/${userId}`);
@@ -167,7 +162,6 @@ const ProfileAddress = ({ formData }) => {
   const editAddress = () => {
     console.log("editAddress");
   };
-  // const addressArray = Object.entries(formData.address).map(([key, value]) => ({ [key]: value }));
 
   return (
     <Box
@@ -176,7 +170,6 @@ const ProfileAddress = ({ formData }) => {
         display: "flex",
         padding: "100px",
         flexWrap: "wrap",
-        // flexBasis: "500px",
         alignItems: "center",
         width: "100%",
       }}
@@ -192,47 +185,11 @@ const ProfileAddress = ({ formData }) => {
           gap: "20px",
         }}
       >
-        <FormControl sx={{ minWidth: 225 }}>
-          <InputLabel htmlFor="country-select">Select City</InputLabel>
-          <Select
-            value={selectedCountry}
-            onChange={handleCountryChange}
-            name="city"
-            label="Select City"
-            inputProps={{
-              name: "country",
-              id: "country-select",
-            }}
-          >
-            <MenuItem value="tbilisi">tbilisi</MenuItem>
-            <MenuItem value="kutaisi">kutaisi</MenuItem>
-            <MenuItem value="batumi">batumi</MenuItem>
-            <MenuItem value="rustavi">rustavi</MenuItem>
-            <MenuItem value="gori">gori</MenuItem>
-            <MenuItem value="zugdidi">zugdidi</MenuItem>
-            <MenuItem value="poti">poti</MenuItem>
-            <MenuItem value="khashuri">khashuri</MenuItem>
-            <MenuItem value="telavi">telavi</MenuItem>
-          </Select>
-        </FormControl>
+        <SelectCity selectedCountry={selectedCountry} handleCountryChange={handleCountryChange} />
         <InputLabel htmlFor="address">Full Address</InputLabel>
-        <TextField
-          id="address"
-          name="fullAddress"
-          variant="outlined"
-          value={address.fullAddress}
-          onChange={handleInputChange}
-          required
-        />
+        <MyTextField value={address.fullAddress} handleInputChange={handleInputChange} name={"fullAddress"} />
         <InputLabel htmlFor="Phone">Phone</InputLabel>
-        <TextField
-          id="Phone"
-          name="phone"
-          variant="outlined"
-          value={address.phone}
-          onChange={handleInputChange}
-          required
-        />
+        <MyTextField value={address.phone} handleInputChange={handleInputChange} name={"phone"} />
 
         <SubmitBtn text={"Add new address"} />
         {alertMessage && (
@@ -247,7 +204,6 @@ const ProfileAddress = ({ formData }) => {
           display: "flex",
           width: "50%",
           flexWrap: "wrap",
-          // height: "100vh",
           gap: "20px",
           justifyContent: "center",
           alignItems: "center",

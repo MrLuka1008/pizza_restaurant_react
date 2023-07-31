@@ -22,7 +22,6 @@ const ProFile = ({ handleSubmit, formData, handleInputChange }) => {
           alignItems: "center",
           justifyContent: "space-around",
           gap: "10px",
-          // padding: "0px",
           width: "50%",
         }}
         onSubmit={handleSubmit}
