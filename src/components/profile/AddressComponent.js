@@ -10,13 +10,17 @@ const AddressComponent = ({ address, deleteAddress, editAddress }) => {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", border: "1px solid black", height: "200px" }}>
-      <Typography>🏙️ City: {city}</Typography>
+    <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+      <Box width={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
+        <Typography>🏙️ City: {city}</Typography>
+        <Typography>📞 Phone: {phone}</Typography>
+      </Box>
       <Typography>🏠 Full Address: {fullAddress}</Typography>
-      <Typography>📞 Phone: {phone}</Typography>
 
-      <OnClickBtn text={"✏️ Edit"} functionName={editAddress} />
-      <OnClickBtn text={"🗑️ Delete"} functionName={handleDelete} />
+      <Box sx={{ display: "flex", width: "100%", justifyContent: "flex-end" }}>
+        <OnClickBtn text={"✏️ Edit"} functionName={editAddress} />
+        <OnClickBtn text={"🗑️ Delete"} functionName={handleDelete} />
+      </Box>
     </Box>
   );
 };

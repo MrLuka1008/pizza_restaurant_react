@@ -174,47 +174,24 @@ const ProfileAddress = ({ formData }) => {
       component="form"
       sx={{
         display: "flex",
-        justifyContent: "space-around",
-        borderRadius: " 0px 0px 16px 16px",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-        backdropFilter: "blur(5px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
-        width: "80%",
         padding: "100px",
+        flexWrap: "wrap",
+        // flexBasis: "500px",
+        alignItems: "center",
+        width: "100%",
       }}
       onSubmit={handleSubmit}
     >
       <Box
         sx={{
+          flex: "1 1 300px",
           display: "flex",
-          width: "70%",
-          flexWrap: "wrap",
+          flexDirection: "column",
+          width: "50%",
+          alignItems: "center",
+          gap: "20px",
         }}
       >
-        {addressList.map((addressItem, index) => (
-          <Box
-            key={index}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              borderBottom: "1px solid black",
-              flexWrap: "wrap",
-              width: "50%",
-            }}
-          >
-            <Box>
-              <Typography>Address {index + 1}:</Typography>
-              {/* <AddressComponent deleteAddress={deleteAddress} address={addressItem} editAddress={editAddress} /> */}
-              <AddressComponent
-                deleteAddress={() => deleteAddress(index)} // Pass deleteAddress function with the index
-                address={addressItem}
-                editAddress={() => editAddress(index)}
-              />
-            </Box>
-          </Box>
-        ))}
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "column", width: "30%" }}>
         <FormControl sx={{ minWidth: 225 }}>
           <InputLabel htmlFor="country-select">Select City</InputLabel>
           <Select
@@ -263,6 +240,50 @@ const ProfileAddress = ({ formData }) => {
             {alertMessage}
           </Alert>
         )}
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          width: "50%",
+          flexWrap: "wrap",
+          // height: "100vh",
+          gap: "20px",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "auto",
+        }}
+      >
+        {addressList.map((addressItem, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              minWidth: "500px",
+              alignItems: "center",
+              flexShrink: "1",
+            }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "30px",
+                boxShadow: "0px 1px 60px -30px rgba(0,0,0,1)",
+              }}
+            >
+              <Typography>Address {index + 1}:</Typography>
+              <AddressComponent
+                deleteAddress={() => deleteAddress(index)} // Pass deleteAddress function with the index
+                address={addressItem}
+                editAddress={() => editAddress(index)}
+              />
+            </Box>
+          </Box>
+        ))}
       </Box>
     </Box>
   );

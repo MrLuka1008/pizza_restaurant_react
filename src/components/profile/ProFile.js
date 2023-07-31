@@ -9,16 +9,9 @@ const ProFile = ({ handleSubmit, formData, handleInputChange }) => {
     <Box
       sx={{
         display: "flex",
-        // alignItems: "center",
         justifyContent: "space-around",
-        // background: "rgba(255, 255, 255, 0.6)",
-        borderRadius: " 16px",
-        borderRadius: "16px 16px 0px 0px ",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-        backdropFilter: "blur(5px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
-        width: "80%",
-        // background: "blue",
+        width: "100%",
+        padding: "50px",
       }}
     >
       <Box
@@ -28,8 +21,8 @@ const ProFile = ({ handleSubmit, formData, handleInputChange }) => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-around",
-          gap: "20px",
-          padding: "50px",
+          gap: "10px",
+          // padding: "0px",
           width: "50%",
         }}
         onSubmit={handleSubmit}
@@ -88,7 +81,7 @@ const ProFile = ({ handleSubmit, formData, handleInputChange }) => {
           textAlign: "center",
         }}
       >
-        <img style={{ width: "200px" }} alt="logo" src={miniLogo}></img>
+        <img style={{ width: "150px" }} alt="logo" src={miniLogo}></img>
         <Typography
           sx={{
             fontSize: "30px",

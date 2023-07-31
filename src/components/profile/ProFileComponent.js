@@ -81,17 +81,28 @@ const ProFileComponent = () => {
   return (
     <Box
       sx={{
+        // padding: "50px",
         display: "flex",
-        width: "100%",
         alignItems: "center",
-        // justifyContent: "center",
         flexDirection: "column",
-        padding: "50px",
       }}
     >
-      <ProFile handleSubmit={handleSubmit} formData={formData} handleInputChange={handleInputChange} />
+      <Box
+        sx={{
+          display: "flex",
+          width: "80%",
+          alignItems: "center",
+          flexDirection: "column",
+          borderRadius: "16px",
+          boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+          backdropFilter: "blur(5px)",
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+        }}
+      >
+        <ProFile handleSubmit={handleSubmit} formData={formData} handleInputChange={handleInputChange} />
 
-      <ProfileAddress formData={formData} />
+        <ProfileAddress formData={formData} />
+      </Box>
     </Box>
   );
 };
