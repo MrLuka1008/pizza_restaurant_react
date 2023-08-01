@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
-import { Avatar, Menu, MenuItem } from "@mui/material";
-import apiRequest from "../../api/apiRequest";
-import ProFileComponent from "../profile/ProFileComponent";
+import { Avatar, Menu } from "@mui/material";
+import MyMenuItem from "./MyMenuItem";
 
 const CustomButton = styled(Button)(() => ({
   color: "#ffffff",
@@ -60,7 +59,7 @@ const NavLoginIcon = () => {
   const handleLogout = () => {
     localStorage.removeItem("user_id");
     handleClose();
-    window.location.reload();
+    window.location.href = "/";
   };
 
   return (
@@ -78,11 +77,15 @@ const NavLoginIcon = () => {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         transformOrigin={{ vertical: "top", horizontal: "center" }}
+        sx={{ padding: "20px" }}
       >
         <Link to="/profile">
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MyMenuItem myFuntion={handleClose} text={"Profile"} />
         </Link>
-        <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+
+        <Link>
+          <MyMenuItem myFuntion={handleLogout} text={" Log Out"} />
+        </Link>
       </Menu>
     </div>
   );

@@ -1,8 +1,9 @@
 import React from "react";
-import { Box, TextField, InputLabel, Typography } from "@mui/material";
+import { Box, InputLabel, Typography } from "@mui/material";
 import miniLogo from "../../assets/images/miniLogo.png";
 import SubmitBtn from "../buttons/SubmitBtn";
 import { ArrowDownward } from "@mui/icons-material";
+import MyTextField from "./MyTextField";
 
 const ProFile = ({ handleSubmit, formData, handleInputChange }) => {
   return (
@@ -27,45 +28,16 @@ const ProFile = ({ handleSubmit, formData, handleInputChange }) => {
         onSubmit={handleSubmit}
       >
         <InputLabel>First Name</InputLabel>
-        <TextField
-          id="first-name"
-          type="text"
-          name="name"
-          variant="outlined"
-          value={formData.name}
-          onChange={handleInputChange}
-          required
-        />
+        <MyTextField value={formData.name} handleInputChange={handleInputChange} name={"name"} />
+
         <InputLabel htmlFor="last-name">Last Name</InputLabel>
-        <TextField
-          id="last-name"
-          type="text"
-          name="lastname"
-          variant="outlined"
-          value={formData.lastname}
-          onChange={handleInputChange}
-          required
-        />
+        <MyTextField value={formData.lastname} handleInputChange={handleInputChange} name={"lastname"} />
+
         <InputLabel htmlFor="email">Email</InputLabel>
-        <TextField
-          id="email"
-          variant="outlined"
-          type="email"
-          name="gmail"
-          value={formData.gmail}
-          onChange={handleInputChange}
-          disabled
-          required
-        />
+        <MyTextField value={formData.gmail} handleInputChange={handleInputChange} name={"gmail"} disabled={true} />
+
         <InputLabel htmlFor="email">New password</InputLabel>
-        <TextField
-          id="password"
-          variant="outlined"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
+        <MyTextField value={formData.password} handleInputChange={handleInputChange} name={"password"} />
         <SubmitBtn text={"save and continue shopping"} />
       </Box>
       <Box

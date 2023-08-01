@@ -81,7 +81,6 @@ const ProFileComponent = () => {
   return (
     <Box
       sx={{
-        // padding: "50px",
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
