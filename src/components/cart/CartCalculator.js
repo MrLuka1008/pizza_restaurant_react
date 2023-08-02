@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCartOutlined } from "@mui/icons-material";
 import { Box, Button, TextField, Typography, styled } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import apiRequest from "../../api/apiRequest";
 
 const CustomBox = styled(Box)(() => ({
   border: "1px solid black",
@@ -15,12 +15,14 @@ const CustomTypography = styled(Typography)(() => ({
   fontSize: "20px",
 }));
 
-const CustomButton = styled(Button)(() => ({
+const CustomButton = styled(
+  Button,
+  Link
+)(() => ({
   padding: "10px 15px",
   width: "70%",
   fontSize: "16px",
   border: "2px solid #black",
-  color: "black",
   background: "white",
   color: "#e75b1e",
   "&:hover": {
@@ -36,6 +38,7 @@ const CartCalculator = ({ totalPrice }) => {
   const [discountpercent, setDiscountPercent] = useState(0);
   const [newPRice, setNewPrice] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleWriteCode = (e) => {
     setHandleCode(e.target.value);
@@ -65,6 +68,11 @@ const CartCalculator = ({ totalPrice }) => {
   useEffect(() => {
     setNewPrice(totalPrice - totalPrice * (discountpercent / 100));
   }, [totalPrice, discountpercent]);
+
+  const handleContinueShopping = () => {
+    window.scrollTo(0, 0);
+    navigate("/menu");
+  };
 
   return (
     <Box
@@ -132,8 +140,11 @@ const CartCalculator = ({ totalPrice }) => {
           <CustomButton variant="contained" endIcon={<ShoppingCartOutlined />}>
             Checkout
           </CustomButton>
-          <CustomButton variant="contained" endIcon={<ArrowForwardIcon />}>
-            Continue Shopping
+          <CustomButton to={"/menu"} onClick={handleContinueShopping}>
+            <Typography variant="button" sx={{ display: "flex" }}>
+              Continue Shopping
+              <ArrowForwardIcon />
+            </Typography>
           </CustomButton>
         </Box>
       </Box>
