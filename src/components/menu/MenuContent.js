@@ -81,6 +81,7 @@ const MenuContent = () => {
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
+    window.scrollTo(0, 200);
   };
 
   const getMenuItems = () => {

@@ -8,6 +8,7 @@ import Footer from "./components/Footer/Footer";
 import SingIn from "./components/register/SingIn";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
+import BookingTabe from "./pages/BookingTabe";
 
 const RoutesComponent = () => {
   return (
@@ -19,6 +20,7 @@ const RoutesComponent = () => {
         <Route path="/signin" element={<SingIn />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/BookingTable" element={<BookingTabe />} />
       </Routes>
       <Footer />
     </>

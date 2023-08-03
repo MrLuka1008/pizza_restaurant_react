@@ -43,7 +43,7 @@ const HomeContent = () => {
                 It`s not just Pizza, It`s an experience
               </h2>
               <MainBtn to={"/menu"}>View Menu</MainBtn>
-              <MainBtn> Book A Table</MainBtn>
+              <MainBtn to={"/BookingTable"}> Book A Table</MainBtn>
             </div>
 
             <div className="RightContent">
