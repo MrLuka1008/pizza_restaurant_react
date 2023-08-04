@@ -1,17 +1,33 @@
-import { Box, Typography, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useState } from "react";
+import { Box, Typography, FormControl, InputLabel, MenuItem, Select, TextField, Button } from "@mui/material";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
 
 const MainBookingTable = () => {
-  const [selectedDay, setSelectedDay] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedPeople, setSelectedPeople] = useState(1);
+  const [selectedTime, setSelectedTime] = useState(""); // Use a string to store the time
 
-  // Handlers for changing the selected day, month, and time
-  const handleDayChange = (event) => {
-    setSelectedDay(event.target.value);
+  // Handler for changing the date
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
-  const handleMonthChange = (event) => {
-    setSelectedMonth(event.target.value);
+  // Handlers for changing the time
+  const handleTimeChange = (event) => {
+    setSelectedTime(event.target.value);
+  };
+
+  const handlePeopleChange = (event) => {
+    // Ensure the selected value stays within the range of 1 to 20
+    let value = event.target.value;
+    if (value < 1) {
+      value = 1;
+    } else if (value > 20) {
+      value = 20;
+    }
+    setSelectedPeople(value);
   };
 
   // Your data arrays for days and months (example)
@@ -32,27 +48,64 @@ const MainBookingTable = () => {
   ];
 
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: "80%",
+        margin: "auto",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "50px",
+      }}
+    >
       <Typography>SELECT DATE AND TIME FOR YOUR RESERVATION</Typography>
 
       <Box>
-        <Box>
+        <Box sx={{ width: "500px", display: "flex", gap: "30px" }}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Choose Date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  variant="outlined"
+                  placeholder="MM/DD/YYYY"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              )}
+              inputFormat="MM/dd/yyyy" // Customize the date format as needed
+              openTo="day"
+              views={["day", "month", "year"]}
+            />
+          </LocalizationProvider>
+
+          <TextField
+            label="Time"
+            type="time"
+            value={selectedTime}
+            onChange={handleTimeChange}
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 300,
+            }}
+          />
+
           <FormControl fullWidth>
-            <InputLabel>Day</InputLabel>
-            <Select value={selectedDay} onChange={handleDayChange}>
-              {days.map((day) => (
-                <MenuItem key={day} value={day}>
-                  {day}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel>Month</InputLabel>
-            <Select value={selectedMonth} onChange={handleMonthChange}>
-              {months.map((month) => (
-                <MenuItem key={month} value={month}>
-                  {month}
+            <InputLabel>People</InputLabel>
+            <Select value={selectedPeople} onChange={handlePeopleChange}>
+              {Array.from({ length: 20 }, (_, index) => index + 1).map((num) => (
+                <MenuItem key={num} value={num}>
+                  {num}
                 </MenuItem>
               ))}
             </Select>
