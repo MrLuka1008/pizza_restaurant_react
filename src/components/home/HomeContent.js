@@ -2,7 +2,6 @@ import React from "react";
 import videoFile from "../../assets/video/pizzavideo.mp4";
 import pizzaimg from "../../assets/images/pizza.png";
 import "./homeContentStyle.css";
-import { Button } from "@mui/material";
 import styled from "@emotion/styled";
 import TopPizzaCard from "../cards/TopPizzaCard";
 import { Link } from "react-router-dom";

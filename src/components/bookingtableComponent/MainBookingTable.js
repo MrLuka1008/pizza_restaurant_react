@@ -1,51 +1,30 @@
 import React, { useState } from "react";
-import { Box, Typography, FormControl, InputLabel, MenuItem, Select, TextField, Button } from "@mui/material";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
+import { Box, Typography, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+//////
+import dayjs from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { StaticTimePicker } from "@mui/x-date-pickers/StaticTimePicker";
+import BookingTableImg from "../../assets/images/bookingTable.png";
 
 const MainBookingTable = () => {
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedPeople, setSelectedPeople] = useState(1);
-  const [selectedTime, setSelectedTime] = useState(""); // Use a string to store the time
+  const [selectedTable, setSelectedTable] = useState(null);
 
   // Handler for changing the date
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
 
-  // Handlers for changing the time
-  const handleTimeChange = (event) => {
-    setSelectedTime(event.target.value);
-  };
-
-  const handlePeopleChange = (event) => {
-    // Ensure the selected value stays within the range of 1 to 20
+  const handleTableChange = (event) => {
     let value = event.target.value;
-    if (value < 1) {
-      value = 1;
-    } else if (value > 20) {
-      value = 20;
+    if (value > 14) {
+      value = 14;
     }
-    setSelectedPeople(value);
+    setSelectedTable(value);
   };
-
-  // Your data arrays for days and months (example)
-  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
 
   return (
     <Box
@@ -54,64 +33,62 @@ const MainBookingTable = () => {
         flexDirection: "column",
         width: "80%",
         margin: "auto",
-        justifyContent: "center",
+        justifyContent: "space-around",
         alignItems: "center",
-        gap: "50px",
+        gap: "10px",
+        padding: "100px",
       }}
     >
-      <Typography>SELECT DATE AND TIME FOR YOUR RESERVATION</Typography>
+      <Typography sx={{ fontSize: "24px" }}>SELECT DATE AND TIME FOR YOUR RESERVATION</Typography>
 
-      <Box>
-        <Box sx={{ width: "500px", display: "flex", gap: "30px" }}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Choose Date"
-              value={selectedDate}
-              onChange={handleDateChange}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="MM/DD/YYYY"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              )}
-              inputFormat="MM/dd/yyyy" // Customize the date format as needed
-              openTo="day"
-              views={["day", "month", "year"]}
-            />
+      <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
+        <Box sx={{ width: "350px" }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DateCalendar", "DateCalendar", "DateCalendar"]}>
+              <DateCalendar views={["day"]} />
+            </DemoContainer>
           </LocalizationProvider>
-
-          <TextField
-            label="Time"
-            type="time"
-            value={selectedTime}
-            onChange={handleTimeChange}
-            fullWidth
-            variant="outlined"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 300,
-            }}
-          />
-
-          <FormControl fullWidth>
-            <InputLabel>People</InputLabel>
-            <Select value={selectedPeople} onChange={handlePeopleChange}>
-              {Array.from({ length: 20 }, (_, index) => index + 1).map((num) => (
-                <MenuItem key={num} value={num}>
-                  {num}
-                </MenuItem>
-              ))}
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            width: "50%",
+            flexDirection: "column",
+            gap: "30px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <FormControl sx={{ width: "300px" }}>
+            <InputLabel>Table</InputLabel>
+            <Select value={selectedTable} onChange={handleTableChange}>
+              <MenuItem value={0}>I will call and And so I booked it</MenuItem>
+              <MenuItem value={14}>Free Space</MenuItem>
+              <MenuItem value={1}>Table 1, People 4</MenuItem>
+              <MenuItem value={2}>Table 2, People 4</MenuItem>
+              <MenuItem value={3}>Table 3, People 4</MenuItem>
+              <MenuItem value={4}>Table 4, People 4</MenuItem>
+              <MenuItem value={5}>Table 5, People 7</MenuItem>
+              <MenuItem value={6}>Table 6, People 7</MenuItem>
+              <MenuItem value={7}>Table 7, People 6</MenuItem>
+              <MenuItem value={8}>Table 8, People 6</MenuItem>
+              <MenuItem value={9}>Table 9, People 6</MenuItem>
+              <MenuItem value={10}>Table 10, People 6</MenuItem>
+              <MenuItem value={11}>Table 11, People 6</MenuItem>
+              <MenuItem value={12}>Table 11, People 8</MenuItem>
+              <MenuItem value={13}>Table 11, People 8</MenuItem>
             </Select>
           </FormControl>
+
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["TimePicker", "MobileTimePicker", "DesktopTimePicker", "StaticTimePicker"]}>
+              <StaticTimePicker defaultValue={dayjs("2022-04-17T15:30")} />
+            </DemoContainer>
+          </LocalizationProvider>
         </Box>
       </Box>
+
+      <img src={BookingTableImg} />
     </Box>
   );
 };
