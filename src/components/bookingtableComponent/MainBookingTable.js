@@ -3,20 +3,22 @@ import { Box, Typography, FormControl, InputLabel, MenuItem, Select } from "@mui
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-//////
 import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { StaticTimePicker } from "@mui/x-date-pickers/StaticTimePicker";
 import BookingTableImg from "../../assets/images/bookingTable.png";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import SubmitBtn from "../buttons/SubmitBtn";
+import { Link } from "react-router-dom";
 
 const MainBookingTable = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  // const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTable, setSelectedTable] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(dayjs("2022-04-17T15:30"));
 
   // Handler for changing the date
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+  // const handleDateChange = (date) => {
+  //   setSelectedDate(date);
+  // };
 
   const handleTableChange = (event) => {
     let value = event.target.value;
@@ -24,6 +26,10 @@ const MainBookingTable = () => {
       value = 14;
     }
     setSelectedTable(value);
+  };
+
+  const handleTimeChange = (newTime) => {
+    setSelectedTime(newTime);
   };
 
   return (
@@ -81,14 +87,18 @@ const MainBookingTable = () => {
           </FormControl>
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["TimePicker", "MobileTimePicker", "DesktopTimePicker", "StaticTimePicker"]}>
-              <StaticTimePicker defaultValue={dayjs("2022-04-17T15:30")} />
+            <DemoContainer components={["TimePicker"]}>
+              <TimePicker label="Time" views={["hours"]} value={selectedTime} onChange={handleTimeChange} />
             </DemoContainer>
           </LocalizationProvider>
+
+          <Link to={"/menu"}>
+            <SubmitBtn text={"Save and Continue"} />
+          </Link>
         </Box>
       </Box>
 
-      <img src={BookingTableImg} />
+      <img src={BookingTableImg} alt="Tableimg" />
     </Box>
   );
 };
