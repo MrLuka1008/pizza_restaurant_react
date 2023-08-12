@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ReactComponent as Logo } from "../../assets/images/logo.svg";
 import { Link, useLocation } from "react-router-dom";
 import NavLoginIcon from "../LoginAndRegister/NavLoginIcon";
+import { Badge } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { setCartsLength } from "../../features/counter";
 
 export const Header = () => {
+  const cartsLength = useSelector((state) => state.cartsLength);
+
+  const dispatch = useDispatch();
+
   const isUserLogginIn = !!localStorage.getItem("user_id"); // Convert to a boolean
   const location = useLocation();
+  const [countCartItems, setCountCartItems] = useState(0);
+
+  useEffect(() => {
+    const cartMenu = localStorage.getItem("cartMenu");
+    if (cartMenu) {
+      const parsedCartMenu = JSON.parse(cartMenu);
+      setCountCartItems(parsedCartMenu.length);
+    }
+  }, []); // Empty dependency array to run the effect only once
+  console.log(countCartItems);
 
   let links = [
     { path: "/", name: "Home" },
@@ -24,6 +41,8 @@ export const Header = () => {
   const activeLinkStyles = {
     borderBottom: "2px solid #e75b1e",
   };
+
+  dispatch(setCartsLength());
 
   return (
     <div
@@ -52,6 +71,8 @@ export const Header = () => {
             </Link>
           </li>
         ))}
+
+        <Badge badgeContent={cartsLength.value} color="primary"></Badge>
       </nav>
 
       <NavLoginIcon />

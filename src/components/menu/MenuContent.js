@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, List, TextField, ListItem } from "@mui/material";
+import { Box, List, TextField, ListItem, Button } from "@mui/material";
 import styled from "@emotion/styled";
 
 import { makeStyles } from "@mui/styles";
@@ -11,6 +11,8 @@ import pastaDishesData from "../../data/pastaDishesData";
 import specialOffersData from "../../data/specialOffersData";
 import specialtyPizzasData from "../../data/specialtyPizzasData";
 import vegetarianPizzaData from "../../data/vegetarianPizzaData";
+import { useSelector, useDispatch } from "react-redux";
+import { setCartsLength } from "../../features/counter";
 
 const CustomBox = styled(Box)(() => ({
   width: "100%",
@@ -79,6 +81,13 @@ const MenuContent = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchInput, setSearchInput] = useState("");
 
+  // test
+  const cartsLength = useSelector((state) => state.cartsLength);
+  const dispatch = useDispatch();
+
+  console.log("cartsLength", cartsLength);
+  // end test
+
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
     window.scrollTo(0, 200);
@@ -135,9 +144,9 @@ const MenuContent = () => {
 
   useEffect(() => {
     localStorage.setItem("cartMenu", JSON.stringify(cartMenu));
+    // dispatch(increment(cartMenu.length));
+    dispatch(setCartsLength());
   }, [cartMenu]);
-
-  //
 
   return (
     <CustomBox>

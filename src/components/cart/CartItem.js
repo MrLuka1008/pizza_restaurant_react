@@ -12,6 +12,8 @@ import NoCartFound from "./NoCartFound";
 import ChangeSizeBtn from "./ChangeSizeBtn";
 import QuantityChange from "./QuantityChange";
 import RemoveClick from "./RemoveClick";
+import { setCartsLength } from "../../features/counter";
+import { useDispatch } from "react-redux";
 
 const CartItem = () => {
   const [pizzaSizes, setPizzaSizes] = useState({});
@@ -20,6 +22,7 @@ const CartItem = () => {
   const [cartMenu, setCartMenu] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [savedCartMenu, setSavedCartMenu] = useState(() => JSON.parse(localStorage.getItem("cartMenu")) || []);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const updatedCartMenu = JSON.parse(localStorage.getItem("cartMenu")) || [];
@@ -67,6 +70,8 @@ const CartItem = () => {
       setCartMenu(filteredItems);
       setTotalPrice(totalPrice);
     }
+
+    dispatch(setCartsLength());
   }, [savedCartMenu, quantity]);
 
   return (
