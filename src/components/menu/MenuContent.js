@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Box, List, TextField, ListItem, Button } from "@mui/material";
+import { Box, List, TextField, ListItem } from "@mui/material";
 import styled from "@emotion/styled";
-
 import { makeStyles } from "@mui/styles";
 import MenuPizzaCard from "../cards/MenuPizzaCard";
 import classicPizzasData from "../../data/classicPizzasData";
@@ -11,8 +10,9 @@ import pastaDishesData from "../../data/pastaDishesData";
 import specialOffersData from "../../data/specialOffersData";
 import specialtyPizzasData from "../../data/specialtyPizzasData";
 import vegetarianPizzaData from "../../data/vegetarianPizzaData";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCartsLength } from "../../features/counter";
+import MaxQuantityDialog from "./MaxQuantityDialog";
 
 const CustomBox = styled(Box)(() => ({
   width: "100%",
@@ -76,17 +76,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const categories = [
+  { label: "All", emoji: "🌍" },
+  { label: "Classic Pizzas", emoji: "🍕" },
+  { label: "Vegetarian Pizzas", emoji: "🥦" },
+  { label: "Specialty Pizzas", emoji: "✨" },
+  { label: "Pasta Dishes", emoji: "🍝" },
+  { label: "Desserts", emoji: "🍰" },
+  { label: "Soda Drinks", emoji: "🥤" },
+  { label: "Special Offers", emoji: "🔥" },
+];
+
 const MenuContent = () => {
   const classes = useStyles();
-  const [activeCategory, setActiveCategory] = useState("All");
   const [searchInput, setSearchInput] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  // test
-  const cartsLength = useSelector((state) => state.cartsLength);
   const dispatch = useDispatch();
 
-  console.log("cartsLength", cartsLength);
-  // end test
+  const [maxQuantityReached, setMaxQuantityReached] = useState(false);
+
+  const handleCloseDialog = () => {
+    setMaxQuantityReached(false);
+  };
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
@@ -130,23 +142,34 @@ const MenuContent = () => {
 
   const filteredItems = getMenuItems().filter((item) => item.name.toLowerCase().includes(searchInput.toLowerCase()));
 
-  ///
   const [cartMenu, setCartMenu] = useState(() => {
     const savedCartMenu = localStorage.getItem("cartMenu");
     return savedCartMenu ? JSON.parse(savedCartMenu) : [];
   });
 
   const handleAddItem = (pizza) => {
-    const updatedCartMenu = [...cartMenu, { name: pizza.name, size: "m", quantity: 1 }];
-    localStorage.setItem("cartMenu", JSON.stringify(updatedCartMenu));
-    setCartMenu(updatedCartMenu);
+    const existingItemIndex = cartMenu.findIndex((item) => item.name === pizza.name);
+
+    if (existingItemIndex !== -1) {
+      const updatedCartMenu = [...cartMenu];
+      if (updatedCartMenu[existingItemIndex].quantity < 20) {
+        updatedCartMenu[existingItemIndex].quantity += 1;
+        localStorage.setItem("cartMenu", JSON.stringify(updatedCartMenu));
+        setCartMenu(updatedCartMenu);
+      } else {
+        setMaxQuantityReached(true);
+      }
+    } else {
+      const updatedCartMenu = [...cartMenu, { name: pizza.name, size: "m", quantity: 1 }];
+      localStorage.setItem("cartMenu", JSON.stringify(updatedCartMenu));
+      setCartMenu(updatedCartMenu);
+    }
   };
 
   useEffect(() => {
     localStorage.setItem("cartMenu", JSON.stringify(cartMenu));
-    // dispatch(increment(cartMenu.length));
     dispatch(setCartsLength());
-  }, [cartMenu]);
+  }, [cartMenu, dispatch]);
 
   return (
     <CustomBox>
@@ -160,80 +183,21 @@ const MenuContent = () => {
           variant="filled"
         />
         <List>
-          <ListItem
-            className={`${classes.listItem} ${activeCategory === "All" ? classes.active : ""}`}
-            onClick={() => handleCategoryClick("All")}
-          >
-            <span role="img" aria-label="Pizza Slice" className={classes.emoji}>
-              🌍
-            </span>
-            All
-          </ListItem>
-          <ListItem
-            className={`${classes.listItem} ${activeCategory === "Classic Pizzas" ? classes.active : ""}`}
-            onClick={() => handleCategoryClick("Classic Pizzas")}
-          >
-            <span role="img" aria-label="Pizza Slice" className={classes.emoji}>
-              🍕
-            </span>
-            Classic Pizzas
-          </ListItem>
-          <ListItem
-            className={`${classes.listItem} ${activeCategory === "Vegetarian Pizzas" ? classes.active : ""}`}
-            onClick={() => handleCategoryClick("Vegetarian Pizzas")}
-          >
-            <span role="img" aria-label="Broccoli" className={classes.emoji}>
-              🥦
-            </span>
-            Vegetarian Pizzas
-          </ListItem>
-          <ListItem
-            className={`${classes.listItem} ${activeCategory === "Specialty Pizzas" ? classes.active : ""}`}
-            onClick={() => handleCategoryClick("Specialty Pizzas")}
-          >
-            <span role="img" aria-label="Sparkles" className={classes.emoji}>
-              ✨
-            </span>
-            Specialty Pizzas
-          </ListItem>
-          <ListItem
-            className={`${classes.listItem} ${activeCategory === "Pasta Dishes" ? classes.active : ""}`}
-            onClick={() => handleCategoryClick("Pasta Dishes")}
-          >
-            <span role="img" aria-label="Pasta" className={classes.emoji}>
-              🍝
-            </span>
-            Pasta Dishes
-          </ListItem>
-          <ListItem
-            className={`${classes.listItem} ${activeCategory === "Desserts" ? classes.active : ""}`}
-            onClick={() => handleCategoryClick("Desserts")}
-          >
-            <span role="img" aria-label="Cake" className={classes.emoji}>
-              🍰
-            </span>
-            Desserts
-          </ListItem>
-          <ListItem
-            className={`${classes.listItem} ${activeCategory === "Soda Drinks" ? classes.active : ""}`}
-            onClick={() => handleCategoryClick("Soda Drinks")}
-          >
-            <span role="img" aria-label="Soda" className={classes.emoji}>
-              🥤
-            </span>
-            Soda Drinks
-          </ListItem>
-          <ListItem
-            className={`${classes.listItem} ${activeCategory === "Special Offers" ? classes.active : ""}`}
-            onClick={() => handleCategoryClick("Special Offers")}
-          >
-            <span role="img" aria-label="Fire" className={classes.emoji}>
-              🔥
-            </span>
-            Special Offers
-          </ListItem>
+          {categories.map((category) => (
+            <ListItem
+              key={category.label}
+              className={`${classes.listItem} ${activeCategory === category.label ? classes.active : ""}`}
+              onClick={() => handleCategoryClick(category.label)}
+            >
+              <span role="img" aria-label={category.label} className={classes.emoji}>
+                {category.emoji}
+              </span>
+              {category.label}
+            </ListItem>
+          ))}
         </List>
       </LeftBox>
+      <MaxQuantityDialog maxQuantityReached={maxQuantityReached} handleCloseDialog={handleCloseDialog} />
       <CustomSmallBox>
         {Array.isArray(filteredItems) ? (
           filteredItems.map((item, index) => (

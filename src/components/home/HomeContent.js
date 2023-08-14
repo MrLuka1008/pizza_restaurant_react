@@ -5,6 +5,7 @@ import "./homeContentStyle.css";
 import styled from "@emotion/styled";
 import TopPizzaCard from "../cards/TopPizzaCard";
 import { Link } from "react-router-dom";
+// import { Box } from "@mui/material";
 // import { Padding } from "@mui/icons-material";
 
 const MainBtn = styled(Link)(() => ({
@@ -48,6 +49,11 @@ const HomeContent = () => {
             <div className="RightContent">
               <img src={pizzaimg} alt="pizzaimg" style={{ width: "auto", height: "300px" }}></img>
             </div>
+
+            {/* 
+            <Box sx={{ width: "100%", maxWidth: "900px" }} className="RightContent">
+              <img src={pizzaimg} alt="Tableimg" style={{ width: "100%", height: "auto" }} />
+            </Box> */}
           </div>
 
           <h1 style={{ margin: "30px auto" }}>Week Pizza</h1>

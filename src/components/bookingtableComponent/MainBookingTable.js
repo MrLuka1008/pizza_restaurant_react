@@ -1,35 +1,96 @@
 import React, { useState } from "react";
-import { Box, Typography, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { Box, Typography } from "@mui/material";
 import BookingTableImg from "../../assets/images/bookingTable.png";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import SubmitBtn from "../buttons/SubmitBtn";
-import { Link } from "react-router-dom";
+import TableChoose from "./TableChoose";
+import TimeChoose from "./TimeChoose";
+import DayChoose from "./DayChoose";
+import apiRequest from "../../api/apiRequest";
+import { useNavigate } from "react-router-dom";
+
+const options = [
+  { value: 25, label: "Choose Time" },
+  { value: 0, label: "I will call" },
+  { value: 9, label: "09:00" },
+  { value: 10, label: "10:00" },
+  { value: 11, label: "11:00" },
+  { value: 12, label: "12:00" },
+  { value: 13, label: "13:00" },
+  { value: 14, label: "14:00" },
+  { value: 15, label: "15:00" },
+  { value: 16, label: "16:00" },
+  { value: 17, label: "17:00" },
+  { value: 18, label: "18:00" },
+  { value: 19, label: "19:00" },
+  { value: 20, label: "20:00" },
+  { value: 21, label: "21:00" },
+  { value: 22, label: "22:00" },
+  { value: 23, label: "23:00" },
+  { value: 24, label: "24:00" },
+];
 
 const MainBookingTable = () => {
-  // const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTable, setSelectedTable] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(dayjs("2022-04-17T15:30"));
+  const API_URL = "http://localhost:3500/bookingtable";
+  const [allInfoBookingTable, setAllInfoBookingTable] = useState({
+    CalendarDate: [],
+    TableValue: "",
+    TimeValue: options[0],
+  });
 
-  // Handler for changing the date
-  // const handleDateChange = (date) => {
-  //   setSelectedDate(date);
-  // };
+  const navigate = useNavigate();
 
-  const handleTableChange = (event) => {
-    let value = event.target.value;
-    if (value > 14) {
-      value = 14;
-    }
-    setSelectedTable(value);
+  const handleDateChange = (newDate) => {
+    const newDay = newDate.$D;
+    const newMonth = newDate.$M + 1;
+    const newYear = newDate.$y;
+
+    setAllInfoBookingTable((prevInfo) => ({
+      ...prevInfo,
+      CalendarDate: [newDay, newMonth, newYear],
+    }));
   };
 
-  const handleTimeChange = (newTime) => {
-    setSelectedTime(newTime);
+  const handleTableChange = (event) => {
+    const value = event.target.value;
+    setAllInfoBookingTable((prevInfo) => ({
+      ...prevInfo,
+      TableValue: value,
+    }));
+  };
+
+  const handleTimeChange = (event) => {
+    const value = event.target.value;
+    const selectedOption = options.find((option) => option.value === value);
+
+    setAllInfoBookingTable((prevInfo) => ({
+      ...prevInfo,
+      TimeValue: selectedOption,
+    }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const userId = localStorage.getItem("user_id");
+
+    setAllInfoBookingTable((prevInfo) => ({
+      ...prevInfo,
+      user: userId,
+    }));
+
+    const patchOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(allInfoBookingTable),
+    };
+
+    apiRequest(API_URL, patchOptions);
+
+    navigate("/menu");
+    console.log(allInfoBookingTable);
+    console.log("userId", userId);
   };
 
   return (
@@ -43,18 +104,21 @@ const MainBookingTable = () => {
         alignItems: "center",
         gap: "10px",
         padding: "100px",
+        background: "rgba(255, 255, 255, 0.6)",
+        borderRadius: " 16px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(5px)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
       }}
     >
-      <Typography sx={{ fontSize: "24px" }}>SELECT DATE AND TIME FOR YOUR RESERVATION</Typography>
+      <Typography sx={{ fontSize: "24px", textAlign: "center" }}>SELECT DATE AND TIME FOR YOUR RESERVATION</Typography>
 
-      <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}>
-        <Box sx={{ width: "350px" }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DateCalendar", "DateCalendar", "DateCalendar"]}>
-              <DateCalendar views={["day"]} />
-            </DemoContainer>
-          </LocalizationProvider>
-        </Box>
+      <form
+        onSubmit={handleSubmit}
+        style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}
+      >
+        <DayChoose handleDateChange={handleDateChange} />
+
         <Box
           sx={{
             display: "flex",
@@ -65,40 +129,17 @@ const MainBookingTable = () => {
             justifyContent: "center",
           }}
         >
-          <FormControl sx={{ width: "300px" }}>
-            <InputLabel>Table</InputLabel>
-            <Select value={selectedTable} onChange={handleTableChange}>
-              <MenuItem value={0}>I will call and And so I booked it</MenuItem>
-              <MenuItem value={14}>Free Space</MenuItem>
-              <MenuItem value={1}>Table 1, People 4</MenuItem>
-              <MenuItem value={2}>Table 2, People 4</MenuItem>
-              <MenuItem value={3}>Table 3, People 4</MenuItem>
-              <MenuItem value={4}>Table 4, People 4</MenuItem>
-              <MenuItem value={5}>Table 5, People 7</MenuItem>
-              <MenuItem value={6}>Table 6, People 7</MenuItem>
-              <MenuItem value={7}>Table 7, People 6</MenuItem>
-              <MenuItem value={8}>Table 8, People 6</MenuItem>
-              <MenuItem value={9}>Table 9, People 6</MenuItem>
-              <MenuItem value={10}>Table 10, People 6</MenuItem>
-              <MenuItem value={11}>Table 11, People 6</MenuItem>
-              <MenuItem value={12}>Table 11, People 8</MenuItem>
-              <MenuItem value={13}>Table 11, People 8</MenuItem>
-            </Select>
-          </FormControl>
+          <TableChoose allInfoBookingTable={allInfoBookingTable} handleTableChange={handleTableChange} />
 
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["TimePicker"]}>
-              <TimePicker label="Time" views={["hours"]} value={selectedTime} onChange={handleTimeChange} />
-            </DemoContainer>
-          </LocalizationProvider>
+          <TimeChoose allInfoBookingTable={allInfoBookingTable} handleTimeChange={handleTimeChange} options={options} />
 
-          <Link to={"/menu"}>
-            <SubmitBtn text={"Save and Continue"} />
-          </Link>
+          <SubmitBtn text={"Save and Continue"} />
         </Box>
-      </Box>
+      </form>
 
-      <img src={BookingTableImg} alt="Tableimg" />
+      <Box sx={{ width: "100%", maxWidth: "900px" }}>
+        <img src={BookingTableImg} alt="Tableimg" style={{ width: "100%", height: "auto" }} />
+      </Box>
     </Box>
   );
 };

@@ -22,7 +22,6 @@ export const Header = () => {
       setCountCartItems(parsedCartMenu.length);
     }
   }, []); // Empty dependency array to run the effect only once
-  console.log(countCartItems);
 
   let links = [
     { path: "/", name: "Home" },
