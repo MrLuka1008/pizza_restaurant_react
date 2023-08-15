@@ -12,27 +12,12 @@ video {
   object-fit: cover;
 }
 
-.content {
-  display: flex;
-  flex-direction: column;
-  background: #1f1f1fc3;
-  width: 100%;
-  position: relative;
-  z-index: 1;
-  padding: 20px;
-  color: #1f1f1f;
-}
-
 .mainContent {
   background: #ffffff;
   padding: 50px;
   display: flex;
   margin: auto;
   /* background: #af3b09; */
-}
-
-.leftContent {
-  width: 60%;
 }
 
 .RightContent {

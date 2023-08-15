@@ -44,9 +44,9 @@ const LeftBox = styled(Box)(() => ({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  height: "100vh",
+  height: "105vh",
   padding: "20px",
-  width: "30%",
+  maxWidth: "250px",
   borderRadius: "16px",
   boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
   backdropFilter: "blur(5px)",
@@ -107,7 +107,7 @@ const MenuContent = () => {
 
   const getMenuItems = () => {
     switch (activeCategory) {
-      case "All":
+      case "all":
         return [
           ...classicPizzasData,
           ...vegetarianPizzaData,
@@ -132,11 +132,20 @@ const MenuContent = () => {
       case "Special Offers":
         return specialOffersData;
       default:
-        return [];
+        return [
+          ...classicPizzasData,
+          ...vegetarianPizzaData,
+          ...specialtyPizzasData,
+          ...pastaDishesData,
+          ...dessertsData,
+          ...sodaDrinksData,
+          ...specialOffersData,
+        ];
     }
   };
 
   const handleChange = (e) => {
+    setActiveCategory("All");
     setSearchInput(e.target.value);
   };
 
@@ -171,6 +180,12 @@ const MenuContent = () => {
     dispatch(setCartsLength());
   }, [cartMenu, dispatch]);
 
+  if (filteredItems.length === 0) {
+    console.log("Array is empty");
+  } else {
+    console.log("Array is not empty");
+  }
+
   return (
     <CustomBox>
       <LeftBox>
@@ -199,12 +214,14 @@ const MenuContent = () => {
       </LeftBox>
       <MaxQuantityDialog maxQuantityReached={maxQuantityReached} handleCloseDialog={handleCloseDialog} />
       <CustomSmallBox>
-        {Array.isArray(filteredItems) ? (
+        {filteredItems.length !== 0 ? (
           filteredItems.map((item, index) => (
             <MenuPizzaCard key={index} category={[item]} handleAddItem={handleAddItem} />
           ))
         ) : (
-          <p>No items found.</p>
+          <Box>
+            <p style={{ fontSize: "30px" }}>No items found.</p>
+          </Box>
         )}
       </CustomSmallBox>
     </CustomBox>

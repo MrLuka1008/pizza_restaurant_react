@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import StarIcon from "@mui/icons-material/Star";
@@ -45,12 +45,12 @@ export default function MenuPizzaCard({ category, handleAddItem }) {
             {pizza.name}
           </Typography>
           <img src={pizza.image} style={{ width: "auto", height: "200px" }} alt="Pizza" />
-          <Box sx={{ position: "absolute", left: "15px", bottom: "10px" }}>
+          <Box sx={{ position: "absolute", left: "15px", bottom: "10px", display: "flex" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <StarIcon sx={{ fill: "#e75b1e", fontSize: "35px" }} />
               <h1>{pizza.star}</h1>
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
               <AttachMoneyTwoToneIcon sx={{ fontSize: "30px" }} />
               <h1>{pizza.sizes.m.price}</h1>
             </Box>

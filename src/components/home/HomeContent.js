@@ -5,6 +5,7 @@ import "./homeContentStyle.css";
 import styled from "@emotion/styled";
 import TopPizzaCard from "../cards/TopPizzaCard";
 import { Link } from "react-router-dom";
+import { Box, useMediaQuery } from "@mui/material";
 // import { Box } from "@mui/material";
 // import { Padding } from "@mui/icons-material";
 
@@ -22,12 +23,26 @@ const MainBtn = styled(Link)(() => ({
 }));
 
 const HomeContent = () => {
+  const isMobile = useMediaQuery(`(max-width: 768px)`);
+  const isLeptop = useMediaQuery(`(max-width: 1025px)`);
   return (
     <div className="home">
-      <video autoPlay loop muted>
+      <video autoPlay loop muted style={{ display: isMobile ? "none" : "block" }}>
         <source src={videoFile} type="video/mp4" />
       </video>
-      <div className="content">
+      <div
+        // className="content"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          background: "#1f1f1fc3",
+          width: "100%",
+          position: "relative",
+          zIndex: "1",
+          padding: isMobile ? "0" : "50px",
+          color: "#1f1f1f",
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -37,24 +52,46 @@ const HomeContent = () => {
             alignItems: "center",
           }}
         >
-          <div className="mainContent">
-            <div className="leftContent">
-              <h2 style={{ fontSize: "90px", fontWeight: "800", marginBottom: "50px" }}>
+          <Box
+            sx={{
+              background: "#ffffff",
+              padding: "50px",
+              display: "flex",
+              margin: "auto",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Box sx={{ width: "60%" }}>
+              <h2
+                style={{
+                  fontSize: isMobile ? "70px" : "90px",
+                  // fontSize: "90px",
+                  textAlign: "center",
+                  fontWeight: "800",
+                  marginBottom: "50px",
+                }}
+              >
                 It`s not just Pizza, It`s an experience
               </h2>
-              <MainBtn to={"/menu"}>View Menu</MainBtn>
-              <MainBtn to={"/BookingTable"}> Book A Table</MainBtn>
-            </div>
 
-            <div className="RightContent">
-              <img src={pizzaimg} alt="pizzaimg" style={{ width: "auto", height: "300px" }}></img>
-            </div>
-
-            {/* 
-            <Box sx={{ width: "100%", maxWidth: "900px" }} className="RightContent">
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <MainBtn to={"/menu"}>View Menu</MainBtn>
+                <MainBtn to={"/BookingTable"}> Book A Table</MainBtn>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                width: "100%",
+                maxWidth: "900px",
+                display: isLeptop ? "none" : "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <img src={pizzaimg} alt="Tableimg" style={{ width: "100%", height: "auto" }} />
-            </Box> */}
-          </div>
+            </Box>
+          </Box>
 
           <h1 style={{ margin: "30px auto" }}>Week Pizza</h1>
           <div
