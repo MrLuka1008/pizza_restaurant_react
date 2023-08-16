@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { ReactComponent as Logo } from "../../assets/images/logo.svg";
-import { Link, useLocation } from "react-router-dom";
-import NavLoginIcon from "../LoginAndRegister/NavLoginIcon";
-import { Badge, Box, IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { Box, Drawer, useMediaQuery } from "@mui/material";
+import { useDispatch } from "react-redux";
 import { setCartsLength } from "../../features/counter";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import classNames from "classnames";
-// import { useMediaQuery } from "react-responsive";
+import Container from "@mui/material/Container";
+import CloseIcon from "@mui/icons-material/Close";
+import NavLinks from "./NavLinks";
 
 export const Header = () => {
-  const cartsLength = useSelector((state) => state.cartsLength);
   const isMobile = useMediaQuery(`(max-width: 768px)`);
-
   const dispatch = useDispatch();
-
-  const isUserLogginIn = !!localStorage.getItem("user_id"); // Convert to a boolean
-  const location = useLocation();
+  const [open, setState] = useState(false);
   const [countCartItems, setCountCartItems] = useState(0);
+  const isUserLogginIn = !!localStorage.getItem("user_id"); // Convert to a boolean
+
+  dispatch(setCartsLength());
+
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+      return;
+    }
+    setState(open);
+  };
 
   useEffect(() => {
     const cartMenu = localStorage.getItem("cartMenu");
@@ -25,37 +32,7 @@ export const Header = () => {
       const parsedCartMenu = JSON.parse(cartMenu);
       setCountCartItems(parsedCartMenu.length);
     }
-  }, []); // Empty dependency array to run the effect only once
-
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  let links = [
-    { path: "/", name: "Home" },
-    { path: "/menu", name: "Menu" },
-    { path: "/createpizza", name: "CreatePizza" },
-  ];
-
-  if (isUserLogginIn) {
-    links.push({ path: "/cart", name: "Cart" });
-  }
-
-  const liStyles = {
-    marginLeft: "20px",
-  };
-
-  const activeLinkStyles = {
-    borderBottom: "2px solid #e75b1e",
-  };
-
-  dispatch(setCartsLength());
+  }, []);
 
   const mobileContainerStyles = {
     background: "#1f1f1f",
@@ -78,33 +55,41 @@ export const Header = () => {
     <div style={isMobile ? mobileContainerStyles : nonMobileContainerStyles}>
       <Logo style={{ width: "200px", height: "100px", margin: isMobile ? "auto" : "0" }} />
       {isMobile ? (
-        <IconButton aria-controls="hamburger-menu" aria-haspopup="true" onClick={handleClick}>
-          <MenuIcon sx={{ fill: "#e75b1e", fontSize: "48px" }} />
-        </IconButton>
+        <Container sx={{ position: "absolute" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              // color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer(true)}
+              sx={{ position: "absolute", right: "20px" }}
+            >
+              <MenuIcon sx={{ fill: "#e75b1e", fontSize: "48px" }} />
+            </IconButton>
+
+            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+              <Box
+                sx={{
+                  p: "35px",
+                  height: 1,
+                  backgroundColor: "#1f1f1f",
+                  alignItems: "center",
+                  gap: "20px",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <IconButton sx={{ mb: 5 }}>
+                  <CloseIcon onClick={toggleDrawer(false)} sx={{ fill: "#e75b1e", fontSize: "48px" }} />
+                </IconButton>
+
+                <NavLinks flexDirectioncolumn="column" justifyContent="space-around" />
+              </Box>
+            </Drawer>
+          </Toolbar>
+        </Container>
       ) : (
-        <>
-          <nav style={{ display: "flex", flex: "auto", justifyContent: "center" }}>
-            {links.map((link) => (
-              <li key={link.path} style={{ ...liStyles, ...(location.pathname === link.path && activeLinkStyles) }}>
-                <Link
-                  to={link.path}
-                  style={{
-                    color: "#e75b1e",
-                    fontSize: " 20px",
-                    letterSpacing: "2px",
-                    fontWeight: "600",
-                  }}
-                >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
-
-            <Badge badgeContent={cartsLength.value} color="primary"></Badge>
-          </nav>
-
-          <NavLoginIcon />
-        </>
+        <NavLinks justifyContent="center" />
       )}
     </div>
   );

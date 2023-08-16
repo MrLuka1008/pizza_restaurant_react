@@ -10,13 +10,14 @@ import { Box, useMediaQuery } from "@mui/material";
 // import { Padding } from "@mui/icons-material";
 
 const MainBtn = styled(Link)(() => ({
+  textAlign: "center",
   color: "#fff",
-  fontSize: "20px",
+  fontSize: "16px",
   background: "#e75b1e",
-  padding: "20px 30px",
+  padding: "20px",
   borderRadius: "30px",
   fontFamily: "poppins",
-  marginLeft: "50px",
+  minWidth: "150px",
   "&:hover": {
     background: "#af3b09",
   },
@@ -31,7 +32,6 @@ const HomeContent = () => {
         <source src={videoFile} type="video/mp4" />
       </video>
       <div
-        // className="content"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -62,11 +62,10 @@ const HomeContent = () => {
               justifyContent: "center",
             }}
           >
-            <Box sx={{ width: "60%" }}>
+            <Box sx={{ width: "60%", display: "flex", flexDirection: "column", alignItems: "center" }}>
               <h2
                 style={{
                   fontSize: isMobile ? "70px" : "90px",
-                  // fontSize: "90px",
                   textAlign: "center",
                   fontWeight: "800",
                   marginBottom: "50px",
@@ -75,15 +74,15 @@ const HomeContent = () => {
                 It`s not just Pizza, It`s an experience
               </h2>
 
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
                 <MainBtn to={"/menu"}>View Menu</MainBtn>
                 <MainBtn to={"/BookingTable"}> Book A Table</MainBtn>
               </Box>
             </Box>
             <Box
               sx={{
-                width: "100%",
-                maxWidth: "900px",
+                width: "70%",
+                maxWidth: "800px",
                 display: isLeptop ? "none" : "flex",
                 alignItems: "center",
                 justifyContent: "center",
