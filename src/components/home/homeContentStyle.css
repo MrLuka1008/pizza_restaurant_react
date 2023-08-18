@@ -11,27 +11,3 @@ video {
   height: 100%;
   object-fit: cover;
 }
-
-.mainContent {
-  background: #ffffff;
-  padding: 50px;
-  display: flex;
-  margin: auto;
-  /* background: #af3b09; */
-}
-
-.RightContent {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50%;
-}
-
-.topPizzaCards {
-  display: flex;
-  width: 100%;
-  margin: auto;
-  padding: 100px;
-  align-items: center;
-  justify-content: space-between;
-}

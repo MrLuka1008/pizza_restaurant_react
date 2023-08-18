@@ -27,7 +27,7 @@ const CustomSmallBox = styled(Box)(() => ({
   flexWrap: "wrap",
   justifyContent: "center",
   alignItems: "center",
-  width: "70%",
+  width: "90%",
   gap: "30px",
   padding: "50px",
   background: "rgba(255, 255, 255, 0.6)",
@@ -56,7 +56,7 @@ const LeftBox = styled(Box)(() => ({
 const useStyles = makeStyles((theme) => ({
   listItem: {
     marginTop: "20px",
-    fontSize: "22px",
+    fontSize: "20px",
     fontWeight: "700",
     cursor: "pointer",
   },

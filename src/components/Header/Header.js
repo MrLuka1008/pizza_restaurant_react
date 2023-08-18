@@ -15,7 +15,6 @@ export const Header = () => {
   const dispatch = useDispatch();
   const [open, setState] = useState(false);
   const [countCartItems, setCountCartItems] = useState(0);
-  const isUserLogginIn = !!localStorage.getItem("user_id"); // Convert to a boolean
 
   dispatch(setCartsLength());
 
