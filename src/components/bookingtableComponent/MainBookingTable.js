@@ -31,10 +31,12 @@ const options = [
 
 const MainBookingTable = () => {
   const API_URL = "http://localhost:3500/bookingtable";
+  const userId = localStorage.getItem("user_id");
   const [allInfoBookingTable, setAllInfoBookingTable] = useState({
     CalendarDate: [],
     TableValue: "",
     TimeValue: options[0],
+    userId: "",
   });
 
   const navigate = useNavigate();
@@ -47,6 +49,7 @@ const MainBookingTable = () => {
     setAllInfoBookingTable((prevInfo) => ({
       ...prevInfo,
       CalendarDate: [newDay, newMonth, newYear],
+      userId: userId,
     }));
   };
 
@@ -71,12 +74,10 @@ const MainBookingTable = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const userId = localStorage.getItem("user_id");
-
-    setAllInfoBookingTable((prevInfo) => ({
-      ...prevInfo,
-      user: userId,
-    }));
+    // setAllInfoBookingTable((prevInfo) => ({
+    //   ...prevInfo,
+    //   user: userId,
+    // }));
 
     const patchOptions = {
       method: "POST",

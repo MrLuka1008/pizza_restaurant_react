@@ -1,7 +1,7 @@
 import React from "react";
 import { ReactComponent as Logo } from "../../assets/images/logo.svg";
 import "./footer.css";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -71,7 +71,7 @@ const Footer = () => {
         </StyledDiv>
       </div>
 
-      <div style={{ paddingTop: "30px" }}>
+      <Box style={{ paddingTop: "30px" }}>
         <StyledIconButtone>
           <FacebookIcon />
         </StyledIconButtone>
@@ -84,9 +84,9 @@ const Footer = () => {
         <StyledIconButtone>
           <TwitterIcon />
         </StyledIconButtone>
-      </div>
+      </Box>
 
-      <div style={{ color: "#fff" }}>&copy; {new Date().getFullYear()} LittleCaesars</div>
+      <Box sx={{ color: "#fff", padding: "30px" }}>&copy; {new Date().getFullYear()} LittleCaesars</Box>
     </div>
   );
 };

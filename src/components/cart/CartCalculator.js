@@ -23,8 +23,8 @@ const CustomButton = styled(
   width: "70%",
   fontSize: "16px",
   border: "2px solid #black",
-  background: "white",
-  color: "#e75b1e",
+  background: "#e75b1e",
+  color: "#fff",
   "&:hover": {
     color: "white",
     background: "#e75b1e",
@@ -137,10 +137,14 @@ const CartCalculator = ({ totalPrice }) => {
             gap: "15px",
           }}
         >
-          <CustomButton variant="contained" endIcon={<ShoppingCartOutlined />}>
-            Checkout
-          </CustomButton>
-          <CustomButton to={"/menu"} onClick={handleContinueShopping}>
+          <Link to={"/checkout"}>
+            <Typography variant="button" sx={{ display: "flex" }}>
+              Checkout
+              <ShoppingCartOutlined />
+            </Typography>
+          </Link>
+
+          <CustomButton onClick={handleContinueShopping} sx={{ background: "#fff", color: "#e75b1e" }}>
             <Typography variant="button" sx={{ display: "flex" }}>
               Continue Shopping
               <ArrowForwardIcon />

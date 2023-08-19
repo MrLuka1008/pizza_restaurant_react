@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import HomeTopPizza from "./HomeTopPizza";
 import WhoWeAre from "./WhoWeAre";
+import Reviews from "./Reviews/Reviews";
 
 const MainBtn = styled(Link)(() => ({
   textAlign: "center",
@@ -27,7 +28,7 @@ const HomeContent = () => {
   const isLeptop = useMediaQuery(`(max-width: 1025px)`);
   return (
     <Box>
-      <div className="home">
+      {/* <div className="home">
         <video autoPlay loop muted style={{ display: isMobile ? "none" : "block" }}>
           <source src={videoFile} type="video/mp4" />
         </video>
@@ -42,62 +43,64 @@ const HomeContent = () => {
             color: "#1f1f1f",
             width: "100%",
           }}
+        > */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          background: "#fff",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            background: "#ffffff",
+            padding: "50px",
+            display: "flex",
+            margin: "auto",
+            alignContent: "center",
+            justifyContent: "center",
+          }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              background: "white",
-              alignItems: "center",
-            }}
-          >
-            <Box
-              sx={{
-                background: "#ffffff",
-                padding: "50px",
-                display: "flex",
-                margin: "auto",
-                alignContent: "center",
-                justifyContent: "center",
+          <Box sx={{ width: "60%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <h2
+              style={{
+                fontSize: isMobile ? "70px" : "90px",
+                textAlign: "center",
+                fontWeight: "800",
+                marginBottom: "50px",
+                fontFamily: "Poppins",
               }}
             >
-              <Box sx={{ width: "60%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <h2
-                  style={{
-                    fontSize: isMobile ? "70px" : "90px",
-                    textAlign: "center",
-                    fontWeight: "800",
-                    marginBottom: "50px",
-                  }}
-                >
-                  It`s not just Pizza, It`s an experience
-                </h2>
+              It`s not just Pizza, It`s an experience
+            </h2>
 
-                <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
-                  <MainBtn to={"/menu"}>View Menu</MainBtn>
-                  <MainBtn to={"/BookingTable"}> Book A Table</MainBtn>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  width: "70%",
-                  maxWidth: "800px",
-                  display: isLeptop ? "none" : "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <img src={pizzaimg} alt="Tableimg" style={{ width: "100%", height: "auto" }} />
-              </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
+              <MainBtn to={"/menu"}>View Menu</MainBtn>
+              <MainBtn to={"/BookingTable"}> Book A Table</MainBtn>
             </Box>
-            <Typography style={{ marginBottom: "50px", textAlign: "center", fontSize: "40px", fontFamily: "Poppins" }}>
-              Week Pizza
-            </Typography>
-          </div>
-        </div>
+          </Box>
+          <Box
+            sx={{
+              width: "70%",
+              maxWidth: "800px",
+              display: isLeptop ? "none" : "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <img src={pizzaimg} alt="Tableimg" style={{ width: "100%", height: "auto" }} />
+          </Box>
+        </Box>
+        <Typography style={{ marginBottom: "50px", textAlign: "center", fontSize: "40px", fontFamily: "Poppins" }}>
+          Week Pizza
+        </Typography>
       </div>
+      {/* </div>
+      </div> */}
       <HomeTopPizza />
       <WhoWeAre />
+      <Reviews />
     </Box>
   );
 };

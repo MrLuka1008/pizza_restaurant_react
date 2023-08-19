@@ -27,7 +27,6 @@ const MyCarousel = (props) => {
           key={index}
           sx={{
             width: "100%",
-
             margin: "auto",
             background: "red",
             display: "flex",
@@ -43,7 +42,11 @@ const MyCarousel = (props) => {
               height: "100%",
             }}
           >
-            <img src={pizza.image} style={{ maxWidth: "100%", maxHeight: "100%" }} alt="Pizza" />
+            <img
+              src={pizza.image}
+              style={{ maxWidth: "100%", height: isMobile ? "50vh" : "100%", objectFit: "cover" }}
+              alt="Pizza"
+            />
           </Box>
         </Box>
       ))}
