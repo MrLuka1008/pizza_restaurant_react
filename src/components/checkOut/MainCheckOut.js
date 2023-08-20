@@ -1,36 +1,61 @@
-import { CheckBox } from "@mui/icons-material";
-import { Box, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+// import { CheckBox } from "@mui/icons-material";
+import { Box, Checkbox, FormControlLabel } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import apiRequest from "../../api/apiRequest";
+// import apiRequest from "../../api/apiRequest";
+import DeliveryComp from "./DeliveryComp";
+import PickupComp from "./PickupComp";
+import InPizzeriaComp from "./InPizzeriaComp";
 
 const MainCheckOut = () => {
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState("option1");
+  const [userAddress, setUserAddress] = useState([]);
+  const [infoBookingTable, setInfoBookingTable] = useState([]);
 
   const userId = localStorage.getItem("user_id");
-  const API_URL = `http://localhost:3500/registerAccount/${userId}`;
-
-  //   const listItems = await restestponse.json();
-  //   const response = apiRequest(API_URL);
 
   useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await fetch(API_URL);
-        const userinfo = await response.json();
+    const fetchUserAddress = async () => {
+      if (selectedValue === "option1") {
+        try {
+          const API_URL = `http://localhost:3500/registerAccount/${userId}`;
+          const response = await fetch(API_URL);
+          const userinfo = await response.json();
 
-        console.log(userinfo);
-      } catch (err) {}
+          setUserAddress(userinfo.address);
+        } catch (err) {
+          console.error("Error fetching user data:", err);
+        }
+      }
     };
 
-    fetchItems();
-  }, []);
+    fetchUserAddress();
+  }, [selectedValue, userId]);
+
+  useEffect(() => {
+    const fetchBookingTableInfo = async () => {
+      if (selectedValue === "option3") {
+        try {
+          const API_URL = `http://localhost:3500/bookingtable/${userId}`;
+          const response = await fetch(API_URL);
+          const bookingData = await response.json();
+
+          setInfoBookingTable(bookingData);
+        } catch (err) {
+          console.error("Error fetching booking table data:", err);
+        }
+      }
+    };
+
+    fetchBookingTableInfo();
+  }, [selectedValue, userId]);
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
+
   return (
     <Box>
-      <FormGroup sx={{ width: "400px" }}>
+      <Box sx={{ width: "400px", display: "flex" }}>
         <FormControlLabel
           control={<Checkbox checked={selectedValue === "option1"} onChange={handleChange} value="option1" />}
           label="Delivery"
@@ -43,7 +68,11 @@ const MainCheckOut = () => {
           control={<Checkbox checked={selectedValue === "option3"} onChange={handleChange} value="option3" />}
           label="in pizzeria"
         />
-      </FormGroup>
+      </Box>
+
+      {selectedValue === "option1" && <DeliveryComp userAddress={userAddress} />}
+      {selectedValue === "option2" && <PickupComp />}
+      {selectedValue === "option3" && <InPizzeriaComp infoBookingTable={infoBookingTable} />}
     </Box>
   );
 };

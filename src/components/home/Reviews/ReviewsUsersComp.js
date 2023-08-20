@@ -44,8 +44,8 @@ const ReviewsUsersComp = () => {
         flexDirection: isMobile ? "column" : "row",
       }}
     >
-      {ReviewsUsers.map((user) => (
-        <Box sx={{ width: isMobile ? "100%" : "400px" }}>
+      {ReviewsUsers.map((user, index) => (
+        <Box sx={{ width: isMobile ? "100%" : "400px" }} key={index}>
           <Typography sx={{ fontSize: isMobile ? "16px" : "22px", marginBottom: "10px" }}>
             {user.name.toLocaleUpperCase()}
           </Typography>

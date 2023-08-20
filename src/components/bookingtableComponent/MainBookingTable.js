@@ -36,7 +36,7 @@ const MainBookingTable = () => {
     CalendarDate: [],
     TableValue: "",
     TimeValue: options[0],
-    userId: "",
+    id: "",
   });
 
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const MainBookingTable = () => {
     setAllInfoBookingTable((prevInfo) => ({
       ...prevInfo,
       CalendarDate: [newDay, newMonth, newYear],
-      userId: userId,
+      id: userId,
     }));
   };
 
@@ -73,11 +73,6 @@ const MainBookingTable = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // setAllInfoBookingTable((prevInfo) => ({
-    //   ...prevInfo,
-    //   user: userId,
-    // }));
 
     const patchOptions = {
       method: "POST",
