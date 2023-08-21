@@ -1,18 +1,24 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const InPizzeriaComp = ({ infoBookingTable }) => {
   return (
     <Box>
       {infoBookingTable && infoBookingTable.CalendarDate ? (
-        <div>
-          <p>Date: {infoBookingTable.CalendarDate.join("/")}</p>
-          <p>Table Value: {infoBookingTable.TableValue}</p>
-          <p>Time Value: {infoBookingTable.TimeValue.label}</p>
-          <p>ID: {infoBookingTable.id}</p>
-        </div>
+        <Box>
+          <Typography>Date: {infoBookingTable.CalendarDate.join("/")}</Typography>
+          <Typography>Table Value: {infoBookingTable.TableValue}</Typography>
+          <Typography>Time Value: {infoBookingTable.TimeValue.label}</Typography>
+          <Typography>ID: {infoBookingTable.id}</Typography>
+          <Link to={"/BookingTable"}>Edit</Link>
+        </Box>
       ) : (
-        <p>Loading booking information...</p>
+        <Box>
+          <Typography>U have not Booking Table</Typography>
+
+          <Link to={"/BookingTable"}>Booking now</Link>
+        </Box>
       )}
     </Box>
   );

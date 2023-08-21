@@ -16,10 +16,25 @@ const cartsLengthSlice = createSlice({
   },
 });
 
+const priceSlice = createSlice({
+  name: "currentPrice",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    setCurrentPrice: (state, action) => {
+      state.value = action.payload;
+    },
+  },
+});
+
+export const { setCurrentPrice } = priceSlice.actions;
+
 export const { setCartsLength } = cartsLengthSlice.actions;
 
 export const store = configureStore({
   reducer: {
     cartsLength: cartsLengthSlice.reducer,
+    currentPrice: priceSlice.reducer,
   },
 });

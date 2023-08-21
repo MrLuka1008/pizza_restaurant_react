@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Box, InputLabel, Alert, Typography } from "@mui/material";
 import AddressComponent from "./AddressComponent";
-import SubmitBtn from "../buttons/SubmitBtn";
+import SubmitBtn from "../../buttons/SubmitBtn";
 import SelectCity from "./SelectCity";
-import MyTextField from "./MyTextField";
+import MyTextField from "../profileInfo/MyTextField";
 
-const ProfileAddress = ({ formData }) => {
+const ProfileAddress = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const API_URL = "http://localhost:3500/registerAccount";
-  const [address, setAddress] = useState({ city: "", fullAddress: "", phone: "" });
+  const [address, setAddress] = useState({ addressname: "", streetaddress: "", city: "", fullAddress: "", phone: "" });
   const userId = localStorage.getItem("user_id");
   const [userAddressLength, setUserAddressLength] = useState(0);
   const [alertMessage, setAlertMessage] = useState("");
@@ -19,24 +19,10 @@ const ProfileAddress = ({ formData }) => {
     const country = event.target.value;
     setSelectedCountry(country);
 
-    // const shippingPrices = {
-    //   tbilisi: 5,
-    //   kutaisi: 8,
-    //   batumi: 10,
-    //   rustavi: 6,
-    //   gori: 7,
-    //   zugdidi: 9,
-    //   poti: 10,
-    //   khashuri: 7,
-    //   telavi: 6,
-    // };
-
     setAddress((prevAddress) => ({
       ...prevAddress,
       city: country,
     }));
-
-    // setShippingPrice(shippingPrices[country] || 0); // Set the shipping price for the selected country
   };
 
   const handleInputChange = (event) => {
@@ -185,12 +171,33 @@ const ProfileAddress = ({ formData }) => {
           gap: "20px",
         }}
       >
-        <SelectCity selectedCountry={selectedCountry} handleCountryChange={handleCountryChange} />
-        <InputLabel htmlFor="address">Full Address</InputLabel>
-        <MyTextField value={address.fullAddress} handleInputChange={handleInputChange} name={"fullAddress"} />
-        <InputLabel htmlFor="Phone">Phone</InputLabel>
-        <MyTextField value={address.phone} handleInputChange={handleInputChange} name={"phone"} />
+        <Box>
+          <InputLabel htmlFor="Address name">Save name</InputLabel>
+          <MyTextField value={address.addressname} handleInputChange={handleInputChange} name={"addressname"} />
+          <Typography sx={{ fontSize: "12px", color: "gray", marginTop: "1px" }}>Example: My Home, Office</Typography>
+        </Box>
 
+        <Box>
+          <InputLabel htmlFor="Streetaddress">Street address</InputLabel>
+          <MyTextField value={address.streetaddress} handleInputChange={handleInputChange} name={"streetaddress"} />
+          <Typography sx={{ fontSize: "12px", color: "gray", marginTop: "1px" }}>Example: 123 Main Street</Typography>
+        </Box>
+
+        <Box>
+          <InputLabel htmlFor="address">Apt, suite, etc</InputLabel>
+          <MyTextField value={address.fullAddress} handleInputChange={handleInputChange} name={"fullAddress"} />
+          <Typography sx={{ fontSize: "12px", color: "gray", marginTop: "1px" }}>
+            Example: Apt 123, Suite B, 3rd Floor
+          </Typography>
+        </Box>
+
+        <Box>
+          <InputLabel htmlFor="Phone">Phone</InputLabel>
+          <MyTextField value={address.phone} handleInputChange={handleInputChange} name={"phone"} />
+          <Typography sx={{ fontSize: "12px", color: "gray", marginTop: "1px" }}>Example: 123-456-7890</Typography>
+        </Box>
+
+        <SelectCity selectedCountry={selectedCountry} handleCountryChange={handleCountryChange} />
         <SubmitBtn text={"Add new address"} />
         {alertMessage && (
           <Alert severity={alertSeverity} sx={{ fontSize: "12px" }}>

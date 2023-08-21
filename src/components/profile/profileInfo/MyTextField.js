@@ -4,7 +4,7 @@ import React from "react";
 const MyTextField = ({ value, handleInputChange, name, disabled }) => {
   return (
     <TextField
-      id="Phone"
+      id={value}
       name={name}
       variant="outlined"
       value={value}

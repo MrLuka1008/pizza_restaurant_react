@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import OnClickBtn from "../buttons/OnClickBtn";
+import OnClickBtn from "../../buttons/OnClickBtn";
 
 const AddressComponent = ({ address, deleteAddress, editAddress }) => {
   const { city, fullAddress, phone } = address;

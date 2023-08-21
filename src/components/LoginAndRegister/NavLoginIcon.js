@@ -79,7 +79,7 @@ const NavLoginIcon = () => {
         transformOrigin={{ vertical: "top", horizontal: "center" }}
         sx={{ padding: "20px" }}
       >
-        <Link to="/profile">
+        <Link to="/profile/userinfo">
           <MyMenuItem myFuntion={handleClose} text={"Profile"} />
         </Link>
 

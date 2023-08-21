@@ -1,17 +1,27 @@
-// import { CheckBox } from "@mui/icons-material";
-import { Box, Checkbox, FormControlLabel } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-// import apiRequest from "../../api/apiRequest";
 import DeliveryComp from "./DeliveryComp";
 import PickupComp from "./PickupComp";
 import InPizzeriaComp from "./InPizzeriaComp";
+import { useDispatch, useSelector } from "react-redux";
 
 const MainCheckOut = () => {
   const [selectedValue, setSelectedValue] = useState("option1");
+  const [paymentmethods, setPaymentmethods] = useState("option1");
   const [userAddress, setUserAddress] = useState([]);
   const [infoBookingTable, setInfoBookingTable] = useState([]);
+  const [cartMenu, setCartMenu] = useState([]);
+
+  const currentFee = useSelector((state) => state.currentPrice);
 
   const userId = localStorage.getItem("user_id");
+
+  useEffect(() => {
+    const savedMenu = localStorage.getItem("cartMenu");
+    if (savedMenu) {
+      setCartMenu(JSON.parse(savedMenu));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchUserAddress = async () => {
@@ -53,8 +63,20 @@ const MainCheckOut = () => {
     setSelectedValue(event.target.value);
   };
 
+  const handlePayMentChange = (event) => {
+    setPaymentmethods(event.target.value);
+  };
+
   return (
     <Box>
+      <Box>
+        {cartMenu.map((item, index) => (
+          <Typography key={index}>{item.name}</Typography>
+        ))}
+      </Box>
+
+      <Typography>{currentFee.value}</Typography>
+
       <Box sx={{ width: "400px", display: "flex" }}>
         <FormControlLabel
           control={<Checkbox checked={selectedValue === "option1"} onChange={handleChange} value="option1" />}
@@ -73,6 +95,19 @@ const MainCheckOut = () => {
       {selectedValue === "option1" && <DeliveryComp userAddress={userAddress} />}
       {selectedValue === "option2" && <PickupComp />}
       {selectedValue === "option3" && <InPizzeriaComp infoBookingTable={infoBookingTable} />}
+
+      <Box sx={{ width: "400px", display: "flex" }}>
+        <FormControlLabel
+          control={<Checkbox checked={paymentmethods === "option1"} onChange={handlePayMentChange} value="option1" />}
+          label="Cash"
+        />
+        <FormControlLabel
+          control={<Checkbox checked={paymentmethods === "option2"} onChange={handlePayMentChange} value="option2" />}
+          label="By Card"
+        />
+      </Box>
+
+      <Button>Place Order</Button>
     </Box>
   );
 };

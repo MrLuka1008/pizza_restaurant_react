@@ -4,20 +4,14 @@ import CartHead from "./CartHead";
 import CartItem from "./CartItem";
 import CartCalculator from "./CartCalculator";
 
-const CustomBox = styled(Box)(() => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "50px",
-}));
-
 const CartContent = () => {
   return (
-    <CustomBox>
+    <Box
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "50px" }}
+    >
       <CartHead />
       <CartItem />
-    </CustomBox>
+    </Box>
   );
 };
 

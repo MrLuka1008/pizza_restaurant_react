@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Typography } from "@mui/material";
 import BookingTableImg from "../../assets/images/bookingTable.png";
 import SubmitBtn from "../buttons/SubmitBtn";
 import TableChoose from "./TableChoose";
 import TimeChoose from "./TimeChoose";
 import DayChoose from "./DayChoose";
 import apiRequest from "../../api/apiRequest";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const options = [
   { value: 25, label: "Choose Time" },
@@ -39,7 +39,11 @@ const MainBookingTable = () => {
     id: "",
   });
 
-  const navigate = useNavigate();
+  const [bookingInfo, setBookingInfo] = useState(null);
+  const [showBookin, SetShowBookin] = useState(true);
+  const [editInd, SetEditInd] = useState(true);
+
+  // const navigate = useNavigate();
 
   const handleDateChange = (newDate) => {
     const newDay = newDate.$D;
@@ -72,7 +76,7 @@ const MainBookingTable = () => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
 
     const patchOptions = {
       method: "POST",
@@ -84,10 +88,125 @@ const MainBookingTable = () => {
 
     apiRequest(API_URL, patchOptions);
 
-    navigate("/menu");
-    console.log(allInfoBookingTable);
-    console.log("userId", userId);
+    // navigate("/menu");
+    // console.log(allInfoBookingTable);
+    // console.log("userId", userId);
   };
+
+  // const edit = async () => {
+  //   const test = await fetch(`http://localhost:3500/bookingtable/${userId}`);
+  //   SetShowBookin(true);
+  //   setAllInfoBookingTable((prevInfo) => ({
+  //     ...prevInfo,
+  //     CalendarDate: bookingInfo.CalendarDate,
+  //     TableValue: bookingInfo.TableValue,
+  //     TimeValue: bookingInfo.TimeValue.value,
+  //   }));
+
+  //   const patchOptions = {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(allInfoBookingTable),
+  //   };
+
+  //   apiRequest(test, patchOptions);
+  // };
+
+  // test
+
+  const edit = () => {
+    // Update the booking info state with fetched data
+    SetEditInd(false);
+    SetShowBookin(true);
+    const selectedOption = options.find((option) => option.value === bookingInfo.TimeValue.value);
+    setAllInfoBookingTable((prevInfo) => ({
+      ...prevInfo,
+      CalendarDate: bookingInfo.CalendarDate,
+      TableValue: bookingInfo.TableValue,
+      TimeValue: selectedOption,
+    }));
+
+    // Send the updated data to the server
+
+    // const patchResponse = await fetch(`http://localhost:3500/bookingtable/${userId}`, patchOptions);
+    // const patchData = await patchResponse.json();
+    // console.log("Updated data:", patchData);
+  };
+
+  const saveUpgradeBookingInfo = async () => {
+    try {
+      const response = await fetch(`http://localhost:3500/bookingtable/${userId}`);
+      const data = await response.json();
+
+      // Update the booking info state with fetched data
+      setAllInfoBookingTable({
+        CalendarDate: data.CalendarDate,
+        TableValue: data.TableValue,
+        TimeValue: data.TimeValue.value,
+      });
+
+      // Send the updated data to the server
+      const patchOptions = {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(allInfoBookingTable),
+      };
+
+      const patchResponse = await fetch(`http://localhost:3500/bookingtable/${userId}`, patchOptions);
+      const patchData = await patchResponse.json();
+      window.location.reload();
+
+      console.log("Updated data:", patchData);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const deleteBooking = async () => {
+    try {
+      // Send a DELETE request to delete the booking
+      const deleteResponse = await fetch(`http://localhost:3500/bookingtable/${userId}`, {
+        method: "DELETE",
+      });
+
+      // Check if the deletion was successful
+      if (deleteResponse.ok) {
+        SetShowBookin(true);
+        // Perform any necessary UI updates or navigate to a different page
+      } else {
+        console.error("Failed to delete booking");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  // end test
+  useEffect(() => {
+    const CheckedBooking = async () => {
+      try {
+        const response = await fetch(`http://localhost:3500/bookingtable/${userId}`);
+
+        if (response.status === 404) {
+          console.log("API endpoint not found.");
+          return; // Exit the function if 404
+        }
+
+        const info = await response.json();
+        SetShowBookin(false);
+        setBookingInfo(info);
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    };
+
+    CheckedBooking();
+  }, []);
+
+  console.log(bookingInfo);
 
   return (
     <Box
@@ -109,29 +228,49 @@ const MainBookingTable = () => {
     >
       <Typography sx={{ fontSize: "24px", textAlign: "center" }}>SELECT DATE AND TIME FOR YOUR RESERVATION</Typography>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}
-      >
-        <DayChoose handleDateChange={handleDateChange} />
-
-        <Box
-          sx={{
-            display: "flex",
-            width: "50%",
-            flexDirection: "column",
-            gap: "30px",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+      {showBookin ? (
+        <form
+          onSubmit={handleSubmit}
+          style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap" }}
         >
-          <TableChoose allInfoBookingTable={allInfoBookingTable} handleTableChange={handleTableChange} />
+          <DayChoose handleDateChange={handleDateChange} />
 
-          <TimeChoose allInfoBookingTable={allInfoBookingTable} handleTimeChange={handleTimeChange} options={options} />
+          <Box
+            sx={{
+              display: "flex",
+              width: "50%",
+              flexDirection: "column",
+              gap: "30px",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <TableChoose allInfoBookingTable={allInfoBookingTable} handleTableChange={handleTableChange} />
 
-          <SubmitBtn text={"Save and Continue"} />
+            <TimeChoose
+              allInfoBookingTable={allInfoBookingTable}
+              handleTimeChange={handleTimeChange}
+              options={options}
+            />
+
+            {editInd ? (
+              <SubmitBtn text={"Save and Continue"} />
+            ) : (
+              <Button onClick={saveUpgradeBookingInfo}>Save</Button>
+            )}
+          </Box>
+        </form>
+      ) : (
+        <Box>
+          <Typography>Date: {bookingInfo.CalendarDate.join("/")}</Typography>
+          <Typography>Table Value: {bookingInfo.TableValue}</Typography>
+          <Typography> Value: {bookingInfo.TimeValue.label}</Typography>
+          <Typography>ID: {bookingInfo.id}</Typography>
+          <Button onClick={edit}>Edit</Button>
+          <Button onClick={deleteBooking}>Delete</Button>
+          <Link to={"/checkout"}>Continue Checkout</Link>
         </Box>
-      </form>
+      )}
 
       <Box sx={{ width: "100%", maxWidth: "900px" }}>
         <img src={BookingTableImg} alt="Tableimg" style={{ width: "100%", height: "auto" }} />
