@@ -12,8 +12,10 @@ import NoCartFound from "./NoCartFound";
 import ChangeSizeBtn from "./ChangeSizeBtn";
 import QuantityChange from "./QuantityChange";
 import RemoveClick from "./RemoveClick";
-import { setCartsLength, setCurrentPrice } from "../../features/counter";
+import { setCartsLength } from "../../redux/features/counter";
 import { useDispatch, useSelector } from "react-redux";
+// import { setCurrentPrice } from "../../redux/features/currentPrice";
+import { setCurrentPrice, useCurrentPrice } from "../../redux";
 
 const CartItem = () => {
   const [pizzaSizes, setPizzaSizes] = useState({});
@@ -71,8 +73,6 @@ const CartItem = () => {
       setTotalPrice(totalPrice);
       dispatch(setCurrentPrice(totalPrice));
     }
-
-    dispatch(setCartsLength());
   }, [savedCartMenu, quantity]);
 
   return (

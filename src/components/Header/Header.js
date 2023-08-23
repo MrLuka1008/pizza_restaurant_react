@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ReactComponent as Logo } from "../../assets/images/logo.svg";
 import { Box, Drawer, useMediaQuery } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { setCartsLength } from "../../features/counter";
+import { useDispatch, useSelector } from "react-redux";
+import { setCartsLength } from "../../redux/features/counter";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -16,7 +16,13 @@ export const Header = () => {
   const [open, setState] = useState(false);
   const [countCartItems, setCountCartItems] = useState(0);
 
-  dispatch(setCartsLength());
+  // const cartsLength = useSelector((state) => state.cartLength.value); // Corrected state name
+
+  useEffect(() => {
+    dispatch(setCartsLength());
+  }, [dispatch]);
+
+  // console.log(cartsLength);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {

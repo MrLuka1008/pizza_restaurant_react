@@ -4,6 +4,7 @@ import DeliveryComp from "./DeliveryComp";
 import PickupComp from "./PickupComp";
 import InPizzeriaComp from "./InPizzeriaComp";
 import { useDispatch, useSelector } from "react-redux";
+import { useCurrentPrice } from "../../redux";
 
 const MainCheckOut = () => {
   const [selectedValue, setSelectedValue] = useState("option1");
@@ -12,8 +13,14 @@ const MainCheckOut = () => {
   const [infoBookingTable, setInfoBookingTable] = useState([]);
   const [cartMenu, setCartMenu] = useState([]);
 
-  const currentFee = useSelector((state) => state.currentPrice);
+  //
+  const currentPrice = useCurrentPrice();
 
+  // const currentPricetest = useSelector((state) => state.currentPrice.currentfee);
+
+  console.log("currentPrice", currentPrice);
+  // console.log("currentPricetest", currentPricetest);
+  //
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
@@ -75,7 +82,7 @@ const MainCheckOut = () => {
         ))}
       </Box>
 
-      <Typography>{currentFee.value}</Typography>
+      <Typography>{currentPrice}</Typography>
 
       <Box sx={{ width: "400px", display: "flex" }}>
         <FormControlLabel

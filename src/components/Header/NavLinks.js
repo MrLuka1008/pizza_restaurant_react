@@ -12,8 +12,9 @@ const NavLinks = ({ flexDirectioncolumn, justifyContent }) => {
   ];
 
   const isUserLoggedIn = !!localStorage.getItem("user_id");
-  const cartsLength = useSelector((state) => state.cartsLength);
   const location = useLocation();
+
+  const cartsLength = useSelector((state) => state.cartLength.value);
 
   const activeLinkStyles = {
     borderBottom: "2px solid #e75b1e",
@@ -53,7 +54,7 @@ const NavLinks = ({ flexDirectioncolumn, justifyContent }) => {
               Cart
             </Link>
             <Badge
-              badgeContent={cartsLength.value}
+              badgeContent={cartsLength}
               sx={{
                 "& .MuiBadge-badge": {
                   margin: "-20px -10px",

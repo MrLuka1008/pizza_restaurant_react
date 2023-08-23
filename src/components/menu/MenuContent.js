@@ -11,7 +11,7 @@ import specialOffersData from "../../data/specialOffersData";
 import specialtyPizzasData from "../../data/specialtyPizzasData";
 import vegetarianPizzaData from "../../data/vegetarianPizzaData";
 import { useDispatch } from "react-redux";
-import { setCartsLength } from "../../features/counter";
+import { setCartsLength } from "../../redux/features/counter";
 import MaxQuantityDialog from "./MaxQuantityDialog";
 
 const CustomBox = styled(Box)(() => ({
