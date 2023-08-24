@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ReactComponent as Logo } from "../../assets/images/logo.svg";
 import { Box, Drawer, useMediaQuery } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCartsLength } from "../../redux/features/counter";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -21,8 +21,6 @@ export const Header = () => {
   useEffect(() => {
     dispatch(setCartsLength());
   }, [dispatch]);
-
-  // console.log(cartsLength);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
@@ -72,7 +70,7 @@ export const Header = () => {
               <MenuIcon sx={{ fill: "#e75b1e", fontSize: "48px" }} />
             </IconButton>
 
-            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+            <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
               <Box
                 sx={{
                   p: "35px",
@@ -84,8 +82,8 @@ export const Header = () => {
                   flexDirection: "column",
                 }}
               >
-                <IconButton sx={{ mb: 5 }}>
-                  <CloseIcon onClick={toggleDrawer(false)} sx={{ fill: "#e75b1e", fontSize: "48px" }} />
+                <IconButton onClick={toggleDrawer(false)} sx={{ mb: 5 }} edge="end" aria-label="close drawer">
+                  <CloseIcon sx={{ fill: "#e75b1e", fontSize: "48px" }} />
                 </IconButton>
 
                 <NavLinks flexDirectioncolumn="column" justifyContent="space-around" />

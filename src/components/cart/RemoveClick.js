@@ -1,32 +1,36 @@
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { removeItemFromCart } from "../../redux/features/inCartSlice";
 
 const RemoveClick = ({ item, savedCartMenu, pizzaSizes, setCartMenu, setSavedCartMenu, setTotalPrice }) => {
-  const handleRemoveClick = (itemToRemove) => {
-    const updatedCartItems = savedCartMenu.filter((item) => item.name !== itemToRemove.name);
+  const dispatch = useDispatch();
 
-    // Calculate the new total price after removing the item
-    const newTotalPrice = updatedCartItems.reduce((acc, item) => {
-      const size = pizzaSizes[item.name];
-      if (item.sizes && item.sizes[size]) {
-        return acc + item.sizes[size].price;
-      }
-      return acc;
-    }, 0);
+  // const handleRemoveClick = (itemToRemove) => {
+  //   const updatedCartItems = savedCartMenu.filter((item) => item.name !== itemToRemove.name);
 
-    localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
+  //   // Calculate the new total price after removing the item
+  //   const newTotalPrice = updatedCartItems.reduce((acc, item) => {
+  //     const size = pizzaSizes[item.name];
+  //     if (item.sizes && item.sizes[size]) {
+  //       return acc + item.sizes[size].price;
+  //     }
+  //     return acc;
+  //   }, 0);
 
-    if (updatedCartItems.length === 0) {
-      setCartMenu([]);
-    }
+  //   localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
 
-    setSavedCartMenu(updatedCartItems);
-    setTotalPrice(newTotalPrice);
-  };
+  //   if (updatedCartItems.length === 0) {
+  //     setCartMenu([]);
+  //   }
+
+  //   setSavedCartMenu(updatedCartItems);
+  //   setTotalPrice(newTotalPrice);
+  // };
 
   return (
-    <IconButton onClick={() => handleRemoveClick(item)}>
+    <IconButton onClick={() => dispatch(removeItemFromCart(item))}>
       <CloseIcon />
     </IconButton>
   );

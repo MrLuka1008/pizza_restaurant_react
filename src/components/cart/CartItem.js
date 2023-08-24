@@ -12,38 +12,33 @@ import NoCartFound from "./NoCartFound";
 import ChangeSizeBtn from "./ChangeSizeBtn";
 import QuantityChange from "./QuantityChange";
 import RemoveClick from "./RemoveClick";
-import { setCartsLength } from "../../redux/features/counter";
-import { useDispatch, useSelector } from "react-redux";
-// import { setCurrentPrice } from "../../redux/features/currentPrice";
-import { setCurrentPrice, useCurrentPrice } from "../../redux";
+import { useDispatch } from "react-redux";
+import { setCurrentPrice, useInCart } from "../../redux";
 
 const CartItem = () => {
-  const [pizzaSizes, setPizzaSizes] = useState({});
-  const [quantity, setQuantity] = useState({});
-  const isScreenWidth678 = useMediaQuery("(max-width: 678px)");
   const [cartMenu, setCartMenu] = useState([]);
+  // const [savedCartMenu, setSavedCartMenu] = useState(() => JSON.parse(localStorage.getItem("cartMenu")) || []);
+  const savedCartMenu = useInCart();
+
+  const [pizzaSizes, setPizzaSizes] = useState({});
+
+  const isScreenWidth678 = useMediaQuery("(max-width: 678px)");
   const [totalPrice, setTotalPrice] = useState(0);
-  const [savedCartMenu, setSavedCartMenu] = useState(() => JSON.parse(localStorage.getItem("cartMenu")) || []);
   const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState({});
+
+  // console.log("cartMenu", cartMenu);
 
   useEffect(() => {
-    const updatedCartMenu = JSON.parse(localStorage.getItem("cartMenu")) || [];
-
     // Set the initial pizzaSizes state with default size "m"
-    const initialPizzaSizes = updatedCartMenu.reduce((sizes, item) => {
+    const initialPizzaSizes = savedCartMenu.reduce((sizes, item) => {
       sizes[item.name] = item.size;
       return sizes;
     }, {});
 
-    const initialQuantity = updatedCartMenu.reduce((quantities, item) => {
-      quantities[item.name] = item.quantity || 1;
-      return quantities;
-    }, {});
-
-    setQuantity(initialQuantity);
     setPizzaSizes(initialPizzaSizes);
-    setSavedCartMenu(updatedCartMenu);
-  }, []);
+    // setSavedCartMenu(updatedCartMenu);
+  }, [savedCartMenu]);
 
   const getMenuItems = () => {
     return [
@@ -56,6 +51,15 @@ const CartItem = () => {
       ...specialOffersData,
     ];
   };
+
+  useEffect(() => {
+    const initialQuantity = savedCartMenu.reduce((quantities, item) => {
+      quantities[item.name] = item.quantity || 1;
+      return quantities;
+    }, {});
+
+    setQuantity(initialQuantity);
+  }, [savedCartMenu]);
 
   useEffect(() => {
     const filteredItems = getMenuItems().filter((item) => {
@@ -73,7 +77,7 @@ const CartItem = () => {
       setTotalPrice(totalPrice);
       dispatch(setCurrentPrice(totalPrice));
     }
-  }, [savedCartMenu, quantity]);
+  }, [savedCartMenu, dispatch]);
 
   return (
     <>
@@ -113,19 +117,12 @@ const CartItem = () => {
             <ChangeSizeBtn
               item={item}
               pizzaSizes={pizzaSizes}
-              setPizzaSizes={setPizzaSizes}
-              setSavedCartMenu={setSavedCartMenu}
-              savedCartMenu={savedCartMenu}
+              // setPizzaSizes={setPizzaSizes}
+              // setSavedCartMenu={setSavedCartMenu}
+              // savedCartMenu={savedCartMenu}
             />
 
-            <QuantityChange
-              item={item}
-              quantity={quantity}
-              setQuantity={setQuantity}
-              savedCartMenu={savedCartMenu}
-              setSavedCartMenu={setSavedCartMenu}
-              setTotalPrice={setTotalPrice}
-            />
+            <QuantityChange item={item} quantity={quantity} />
 
             <Typography>
               $
@@ -136,11 +133,11 @@ const CartItem = () => {
 
             <RemoveClick
               item={item}
-              savedCartMenu={savedCartMenu}
-              pizzaSizes={pizzaSizes}
-              setCartMenu={setCartMenu}
-              setSavedCartMenu={setSavedCartMenu}
-              setTotalPrice={setTotalPrice}
+              // savedCartMenu={savedCartMenu}
+              // pizzaSizes={pizzaSizes}
+              // setCartMenu={setCartMenu}
+              // setSavedCartMenu={setSavedCartMenu}
+              // setTotalPrice={setTotalPrice}
             />
           </Box>
         ))

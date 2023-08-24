@@ -13,6 +13,7 @@ import vegetarianPizzaData from "../../data/vegetarianPizzaData";
 import { useDispatch } from "react-redux";
 import { setCartsLength } from "../../redux/features/counter";
 import MaxQuantityDialog from "./MaxQuantityDialog";
+import { addItemToCart, useInCart } from "../../redux";
 
 const CustomBox = styled(Box)(() => ({
   width: "100%",
@@ -170,10 +171,18 @@ const MenuContent = () => {
       }
     } else {
       const updatedCartMenu = [...cartMenu, { name: pizza.name, size: "m", quantity: 1 }];
+      const pizzaObj = { name: pizza.name, size: "m", quantity: 1 };
       localStorage.setItem("cartMenu", JSON.stringify(updatedCartMenu));
       setCartMenu(updatedCartMenu);
+
+      //its work good !!!
+      dispatch(addItemToCart(pizzaObj));
     }
   };
+
+  const testtest = useInCart();
+
+  // console.log("testtest", testtest);
 
   useEffect(() => {
     localStorage.setItem("cartMenu", JSON.stringify(cartMenu));
@@ -185,6 +194,10 @@ const MenuContent = () => {
   } else {
     console.log("Array is not empty");
   }
+
+  ///////////////
+
+  /////////
 
   return (
     <CustomBox>

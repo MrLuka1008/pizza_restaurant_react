@@ -1,33 +1,14 @@
 import { TextField } from "@mui/material";
 import React from "react";
+import { changeItemQuantity } from "../../redux/features/inCartSlice";
+import { useDispatch } from "react-redux";
 
-const QuantityChange = ({ item, quantity, setQuantity, savedCartMenu, setSavedCartMenu, setTotalPrice }) => {
-  const handleQuantityChange = (event, newQuantity, itemName) => {
+const QuantityChange = ({ item, quantity }) => {
+  const dispatch = useDispatch();
+
+  const handleQuantityChange = (newQuantity) => {
     if (!isNaN(newQuantity)) {
-      setQuantity((prevQuantity) => ({
-        ...prevQuantity,
-        [itemName]: newQuantity,
-      }));
-
-      const updatedCartItems = savedCartMenu.map((item) => {
-        if (item.name === itemName) {
-          // console.log(quantity[item.name]);
-          return { ...item, quantity: newQuantity };
-        }
-        return item;
-      });
-
-      localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
-      setSavedCartMenu(updatedCartItems);
-
-      // Calculate the total price
-      const totalPrice = updatedCartItems.reduce((acc, item) => {
-        if (item.sizes && item.sizes[item.size]) {
-          return acc + item.sizes[item.size].price * item.quantity;
-        }
-        return acc;
-      }, 0);
-      setTotalPrice(totalPrice);
+      dispatch(changeItemQuantity({ name: item.name, quantity: parseInt(newQuantity) }));
     }
   };
 
@@ -36,7 +17,7 @@ const QuantityChange = ({ item, quantity, setQuantity, savedCartMenu, setSavedCa
       variant="outlined"
       type="number"
       value={quantity[item.name] || 1}
-      onChange={(event) => handleQuantityChange(event, event.target.value, item.name)}
+      onChange={(event) => handleQuantityChange(event.target.value)}
       inputProps={{ min: 1, max: 20 }}
     />
   );

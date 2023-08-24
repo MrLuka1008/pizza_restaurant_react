@@ -1,24 +1,37 @@
 import React from "react";
-import { ToggleButtonGroup, ToggleButton, TextField, IconButton, useMediaQuery } from "@mui/material";
+import { ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { changeSizeItemInCart } from "../../redux/features/inCartSlice";
 
 const ChangeSizeBtn = ({ item, pizzaSizes, setPizzaSizes, setSavedCartMenu, savedCartMenu }) => {
-  const handleSizeChange = (event, newPizzaSize, itemName) => {
-    if (newPizzaSize) {
-      setPizzaSizes((prevSizes) => ({
-        ...prevSizes,
-        [itemName]: newPizzaSize,
-      }));
+  const dispatch = useDispatch();
 
-      const updatedCartItems = savedCartMenu.map((item) => {
-        console.log(item);
-        if (item.name === itemName) {
-          return { ...item, size: newPizzaSize };
-        }
-        return item;
-      });
+  // const handleSizeChange = (event, newPizzaSize, itemName) => {
+  //   if (newPizzaSize) {
+  //     setPizzaSizes((prevSizes) => ({
+  //       ...prevSizes,
+  //       [itemName]: newPizzaSize,
+  //     }));
 
-      localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
-      setSavedCartMenu(updatedCartItems);
+  //     // const updatedCartItems = savedCartMenu.map((item) => {
+  //     //   console.log(item);
+  //     //   if (item.name === itemName) {
+  //     //     return { ...item, size: newPizzaSize };
+  //     //   }
+  //     //   return item;
+  //     // });
+
+  //     localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
+  //     setSavedCartMenu(updatedCartItems);
+  //   }
+  // };
+
+  const handleSizeChange = (newSize) => {
+    if (newSize !== item.size) {
+      dispatch(changeSizeItemInCart({ name: item.name, size: newSize }));
+
+      // Assuming you have a redux action that persists the cart to localStorage
+      // You can dispatch that action here to update localStorage if needed
     }
   };
 
@@ -26,7 +39,10 @@ const ChangeSizeBtn = ({ item, pizzaSizes, setPizzaSizes, setSavedCartMenu, save
     <ToggleButtonGroup
       value={item.size}
       exclusive
-      onChange={(event, newSize) => handleSizeChange(event, newSize, item.name)}
+      // onChange={(event, newSize) => handleSizeChange(event, newSize, item.name)}
+      // onChange={(item, newSize) => dispatch(changeSizeItemInCart(item.name, newSize))}
+      // onChange={(event, newSize) => dispatch(changeSizeItemInCart({ name: event.name, size: newSize }))}
+      onChange={(event, newSize) => handleSizeChange(newSize)}
       aria-label="Pizza Size"
     >
       {Object.keys(item.sizes).map((size) =>

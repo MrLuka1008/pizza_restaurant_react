@@ -6,7 +6,7 @@ import TableChoose from "./TableChoose";
 import TimeChoose from "./TimeChoose";
 import DayChoose from "./DayChoose";
 import apiRequest from "../../api/apiRequest";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const options = [
   { value: 25, label: "Choose Time" },
@@ -87,34 +87,7 @@ const MainBookingTable = () => {
     };
 
     apiRequest(API_URL, patchOptions);
-
-    // navigate("/menu");
-    // console.log(allInfoBookingTable);
-    // console.log("userId", userId);
   };
-
-  // const edit = async () => {
-  //   const test = await fetch(`http://localhost:3500/bookingtable/${userId}`);
-  //   SetShowBookin(true);
-  //   setAllInfoBookingTable((prevInfo) => ({
-  //     ...prevInfo,
-  //     CalendarDate: bookingInfo.CalendarDate,
-  //     TableValue: bookingInfo.TableValue,
-  //     TimeValue: bookingInfo.TimeValue.value,
-  //   }));
-
-  //   const patchOptions = {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(allInfoBookingTable),
-  //   };
-
-  //   apiRequest(test, patchOptions);
-  // };
-
-  // test
 
   const edit = () => {
     // Update the booking info state with fetched data
@@ -127,12 +100,6 @@ const MainBookingTable = () => {
       TableValue: bookingInfo.TableValue,
       TimeValue: selectedOption,
     }));
-
-    // Send the updated data to the server
-
-    // const patchResponse = await fetch(`http://localhost:3500/bookingtable/${userId}`, patchOptions);
-    // const patchData = await patchResponse.json();
-    // console.log("Updated data:", patchData);
   };
 
   const saveUpgradeBookingInfo = async () => {
@@ -204,9 +171,7 @@ const MainBookingTable = () => {
     };
 
     CheckedBooking();
-  }, []);
-
-  console.log(bookingInfo);
+  }, [userId]);
 
   return (
     <Box
