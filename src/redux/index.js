@@ -9,7 +9,7 @@ import inCartSlice from "./features/inCartSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["currentPrice", "inCart"],
+  whitelist: ["currentPrice", "inCart", "cartLength"],
 };
 
 const rootReducer = combineReducers({
@@ -28,7 +28,7 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 
 export { setCartsLength } from "./features/counter";
-export { setCurrentPrice } from "./features/currentPrice"; // Corrected export
+export { setCurrentPrice } from "./features/currentPrice";
 export { addItemToCart } from "./features/inCartSlice";
 
 export const useInCart = () => useSelector((state) => state.inCart);

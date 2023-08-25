@@ -2,19 +2,16 @@ import { Badge } from "@mui/material";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import NavLoginIcon from "../LoginAndRegister/NavLoginIcon";
-import { useSelector } from "react-redux";
 
-const NavLinks = ({ flexDirectioncolumn, justifyContent }) => {
+const NavLinks = ({ flexDirectioncolumn, justifyContent, cartsLength }) => {
   let links = [
     { path: "/", name: "Home" },
     { path: "/menu", name: "Menu" },
     { path: "/createpizza", name: "CreatePizza" },
   ];
-
-  const isUserLoggedIn = !!localStorage.getItem("user_id");
   const location = useLocation();
 
-  const cartsLength = useSelector((state) => state.cartLength.value);
+  const isUserLoggedIn = !!localStorage.getItem("user_id");
 
   const activeLinkStyles = {
     borderBottom: "2px solid #e75b1e",

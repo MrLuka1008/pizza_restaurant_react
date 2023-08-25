@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, Checkbox, FormControl, FormControlLabel, MenuItem, Select, Typography } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, Typography } from "@mui/material";
 
 const DeliveryComp = ({ userAddress }) => {
   const [currentAddress, setCurrentAddress] = useState("");
@@ -14,7 +14,7 @@ const DeliveryComp = ({ userAddress }) => {
       {Object.keys(userAddress).map((key) => {
         const address = userAddress[key];
         return (
-          <Box key={key} sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+          <Box key={key} sx={{ display: "flex", flexDirection: "column", width: "20%" }}>
             <FormControlLabel
               control={
                 <Checkbox

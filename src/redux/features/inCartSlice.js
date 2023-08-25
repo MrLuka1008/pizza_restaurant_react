@@ -22,6 +22,7 @@ const inCartSlice = createSlice({
         return item;
       });
     },
+
     changeItemQuantity: (state, action) => {
       const { name, quantity: newQuantity } = action.payload;
       return state.map((item) => {

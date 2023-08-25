@@ -3,31 +3,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { removeItemFromCart } from "../../redux/features/inCartSlice";
+import { setCartsLength, useCartLength, useInCart } from "../../redux";
 
-const RemoveClick = ({ item, savedCartMenu, pizzaSizes, setCartMenu, setSavedCartMenu, setTotalPrice }) => {
+const RemoveClick = ({ item }) => {
   const dispatch = useDispatch();
-
-  // const handleRemoveClick = (itemToRemove) => {
-  //   const updatedCartItems = savedCartMenu.filter((item) => item.name !== itemToRemove.name);
-
-  //   // Calculate the new total price after removing the item
-  //   const newTotalPrice = updatedCartItems.reduce((acc, item) => {
-  //     const size = pizzaSizes[item.name];
-  //     if (item.sizes && item.sizes[size]) {
-  //       return acc + item.sizes[size].price;
-  //     }
-  //     return acc;
-  //   }, 0);
-
-  //   localStorage.setItem("cartMenu", JSON.stringify(updatedCartItems));
-
-  //   if (updatedCartItems.length === 0) {
-  //     setCartMenu([]);
-  //   }
-
-  //   setSavedCartMenu(updatedCartItems);
-  //   setTotalPrice(newTotalPrice);
-  // };
+  const inCart = useInCart();
+  dispatch(setCartsLength(inCart.length));
 
   return (
     <IconButton onClick={() => dispatch(removeItemFromCart(item))}>

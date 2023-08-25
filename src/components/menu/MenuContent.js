@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, List, TextField, ListItem } from "@mui/material";
+import React, { useState } from "react";
+import { Box, List, TextField, ListItem, useMediaQuery, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { makeStyles } from "@mui/styles";
 import MenuPizzaCard from "../cards/MenuPizzaCard";
@@ -14,28 +14,21 @@ import { useDispatch } from "react-redux";
 import { setCartsLength } from "../../redux/features/counter";
 import MaxQuantityDialog from "./MaxQuantityDialog";
 import { addItemToCart, useInCart } from "../../redux";
-
-const CustomBox = styled(Box)(() => ({
-  width: "100%",
-  display: "flex",
-  justifyContent: "center",
-  padding: "100px",
-  position: "relative",
-}));
+import { changeItemQuantity } from "../../redux/features/inCartSlice";
 
 const CustomSmallBox = styled(Box)(() => ({
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center",
   alignItems: "center",
-  width: "90%",
+  width: "100%",
   gap: "30px",
   padding: "50px",
   background: "rgba(255, 255, 255, 0.6)",
-  borderRadius: " 16px",
-  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-  backdropFilter: "blur(5px)",
-  border: "1px solid rgba(255, 255, 255, 0.3)",
+  // borderRadius: " 16px",
+  // boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+  // backdropFilter: "blur(5px)",
+  // border: "1px solid rgba(255, 255, 255, 0.3)",
 }));
 
 const LeftBox = styled(Box)(() => ({
@@ -46,18 +39,18 @@ const LeftBox = styled(Box)(() => ({
   justifyContent: "center",
   alignItems: "center",
   height: "105vh",
-  padding: "20px",
-  maxWidth: "250px",
-  borderRadius: "16px",
-  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-  backdropFilter: "blur(5px)",
-  border: "1px solid rgba(255, 255, 255, 0.3)",
+  padding: "15px",
+  maxWidth: "200px",
+  // borderRadius: "16px",
+  // boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+  // backdropFilter: "blur(5px)",
+  // border: "1px solid rgba(255, 255, 255, 0.3)",
 }));
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
     marginTop: "20px",
-    fontSize: "20px",
+    fontSize: "16px",
     fontWeight: "700",
     cursor: "pointer",
   },
@@ -92,9 +85,9 @@ const MenuContent = () => {
   const classes = useStyles();
   const [searchInput, setSearchInput] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const inCart = useInCart();
   const dispatch = useDispatch();
-
   const [maxQuantityReached, setMaxQuantityReached] = useState(false);
 
   const handleCloseDialog = () => {
@@ -152,55 +145,76 @@ const MenuContent = () => {
 
   const filteredItems = getMenuItems().filter((item) => item.name.toLowerCase().includes(searchInput.toLowerCase()));
 
-  const [cartMenu, setCartMenu] = useState(() => {
-    const savedCartMenu = localStorage.getItem("cartMenu");
-    return savedCartMenu ? JSON.parse(savedCartMenu) : [];
-  });
+  // const [cartMenu, setCartMenu] = useState(() => {
+  //   const savedCartMenu = localStorage.getItem("cartMenu");
+  //   return savedCartMenu ? JSON.parse(savedCartMenu) : [];
+  // });
 
   const handleAddItem = (pizza) => {
-    const existingItemIndex = cartMenu.findIndex((item) => item.name === pizza.name);
+    const existingItemIndex = inCart.findIndex((item) => item.name === pizza.name);
+
+    console.log("existingItemIndex", existingItemIndex);
 
     if (existingItemIndex !== -1) {
-      const updatedCartMenu = [...cartMenu];
+      const updatedCartMenu = [...inCart];
       if (updatedCartMenu[existingItemIndex].quantity < 20) {
-        updatedCartMenu[existingItemIndex].quantity += 1;
-        localStorage.setItem("cartMenu", JSON.stringify(updatedCartMenu));
-        setCartMenu(updatedCartMenu);
+        const updatedItem = {
+          ...updatedCartMenu[existingItemIndex],
+          quantity: updatedCartMenu[existingItemIndex].quantity + 1,
+        };
+
+        dispatch(changeItemQuantity({ name: pizza.name, quantity: updatedItem.quantity }));
       } else {
         setMaxQuantityReached(true);
       }
     } else {
-      const updatedCartMenu = [...cartMenu, { name: pizza.name, size: "m", quantity: 1 }];
       const pizzaObj = { name: pizza.name, size: "m", quantity: 1 };
-      localStorage.setItem("cartMenu", JSON.stringify(updatedCartMenu));
-      setCartMenu(updatedCartMenu);
-
-      //its work good !!!
       dispatch(addItemToCart(pizzaObj));
     }
   };
 
-  const testtest = useInCart();
+  // dispatch(
+  // changeItemMaxQuantity({
+  //   name: inCart[existingItemIndex].name,
+  //   quantity: (inCart[existingItemIndex].quantity += 1),
+  // });
+  // // );
+  // const testtest = useInCart();
 
   // console.log("testtest", testtest);
 
-  useEffect(() => {
-    localStorage.setItem("cartMenu", JSON.stringify(cartMenu));
-    dispatch(setCartsLength());
-  }, [cartMenu, dispatch]);
+  // useEffect(() => {
+  //   localStorage.setItem("cartMenu", JSON.stringify(cartMenu));
+  //   dispatch(setCartsLength());
+  // }, [cartMenu, dispatch]);
 
-  if (filteredItems.length === 0) {
-    console.log("Array is empty");
-  } else {
-    console.log("Array is not empty");
-  }
+  dispatch(setCartsLength(inCart.length));
+
+  // if (filteredItems.length === 0) {
+  //   console.log("Array is empty");
+  // } else {
+  //   console.log("Array is not empty");
+  // }
 
   ///////////////
 
   /////////
 
   return (
-    <CustomBox>
+    <Box
+      sx={{
+        width: "90%",
+        display: "flex",
+        justifyContent: "center",
+        padding: "50px",
+        position: "relative",
+        borderRadius: "16px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(5px)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
+        margin: "auto",
+      }}
+    >
       <LeftBox>
         <TextField
           onChange={handleChange}
@@ -217,10 +231,13 @@ const MenuContent = () => {
               className={`${classes.listItem} ${activeCategory === category.label ? classes.active : ""}`}
               onClick={() => handleCategoryClick(category.label)}
             >
-              <span role="img" aria-label={category.label} className={classes.emoji}>
-                {category.emoji}
-              </span>
-              {category.label}
+              {isMobile ? (
+                <span role="img" aria-label={category.label} className={classes.emoji}>
+                  {category.emoji}
+                </span>
+              ) : (
+                <Typography>{category.label}</Typography>
+              )}
             </ListItem>
           ))}
         </List>
@@ -237,7 +254,7 @@ const MenuContent = () => {
           </Box>
         )}
       </CustomSmallBox>
-    </CustomBox>
+    </Box>
   );
 };
 

@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ReactComponent as Logo } from "../../assets/images/logo.svg";
 import { Box, Drawer, useMediaQuery } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { setCartsLength } from "../../redux/features/counter";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import CloseIcon from "@mui/icons-material/Close";
 import NavLinks from "./NavLinks";
+import { useCartLength } from "../../redux";
 
 export const Header = () => {
   const isMobile = useMediaQuery(`(max-width: 768px)`);
-  const dispatch = useDispatch();
   const [open, setState] = useState(false);
-  const [countCartItems, setCountCartItems] = useState(0);
-
-  // const cartsLength = useSelector((state) => state.cartLength.value); // Corrected state name
-
-  useEffect(() => {
-    dispatch(setCartsLength());
-  }, [dispatch]);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
@@ -29,13 +20,7 @@ export const Header = () => {
     setState(open);
   };
 
-  useEffect(() => {
-    const cartMenu = localStorage.getItem("cartMenu");
-    if (cartMenu) {
-      const parsedCartMenu = JSON.parse(cartMenu);
-      setCountCartItems(parsedCartMenu.length);
-    }
-  }, []);
+  const cartsLength = useCartLength();
 
   const mobileContainerStyles = {
     background: "#1f1f1f",
@@ -62,7 +47,6 @@ export const Header = () => {
           <Toolbar>
             <IconButton
               edge="start"
-              // color="inherit"
               aria-label="open drawer"
               onClick={toggleDrawer(true)}
               sx={{ position: "absolute", right: "20px" }}
@@ -92,7 +76,7 @@ export const Header = () => {
           </Toolbar>
         </Container>
       ) : (
-        <NavLinks justifyContent="center" />
+        <NavLinks justifyContent="center" cartsLength={cartsLength} />
       )}
     </div>
   );

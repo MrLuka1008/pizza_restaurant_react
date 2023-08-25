@@ -1,38 +1,36 @@
 import { Box, Button, Checkbox, FormControlLabel, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DeliveryComp from "./DeliveryComp";
 import PickupComp from "./PickupComp";
 import InPizzeriaComp from "./InPizzeriaComp";
-import { useDispatch, useSelector } from "react-redux";
 import { useCurrentPrice } from "../../redux";
+import LoadItems from "./LoadItems";
 
 const MainCheckOut = () => {
-  const [selectedValue, setSelectedValue] = useState("option1");
+  // const [selectedValue, setSelectedValue] = useState("option1");
   const [paymentmethods, setPaymentmethods] = useState("option1");
   const [userAddress, setUserAddress] = useState([]);
   const [infoBookingTable, setInfoBookingTable] = useState([]);
-  const [cartMenu, setCartMenu] = useState([]);
 
-  //
+  ///////////
+  // const [active, setActive] = useState(null);
+  const [selectedValue, setSelectedValue] = useState(null);
+  const types = ["Delivery", "Pickup", "InPizzeria"];
+
+  const handleButtonClick = (type) => {
+    setSelectedValue(type);
+    console.log(selectedValue);
+  };
+
+  /////////
+
   const currentPrice = useCurrentPrice();
 
-  // const currentPricetest = useSelector((state) => state.currentPrice.currentfee);
-
-  console.log("currentPrice", currentPrice);
-  // console.log("currentPricetest", currentPricetest);
-  //
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-    const savedMenu = localStorage.getItem("cartMenu");
-    if (savedMenu) {
-      setCartMenu(JSON.parse(savedMenu));
-    }
-  }, []);
-
-  useEffect(() => {
     const fetchUserAddress = async () => {
-      if (selectedValue === "option1") {
+      if (selectedValue === "Delivery") {
         try {
           const API_URL = `http://localhost:3500/registerAccount/${userId}`;
           const response = await fetch(API_URL);
@@ -50,7 +48,7 @@ const MainCheckOut = () => {
 
   useEffect(() => {
     const fetchBookingTableInfo = async () => {
-      if (selectedValue === "option3") {
+      if (selectedValue === "InPizzeria") {
         try {
           const API_URL = `http://localhost:3500/bookingtable/${userId}`;
           const response = await fetch(API_URL);
@@ -66,55 +64,70 @@ const MainCheckOut = () => {
     fetchBookingTableInfo();
   }, [selectedValue, userId]);
 
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
-
   const handlePayMentChange = (event) => {
     setPaymentmethods(event.target.value);
   };
 
   return (
-    <Box>
-      <Box>
-        {cartMenu.map((item, index) => (
-          <Typography key={index}>{item.name}</Typography>
-        ))}
+    <Box
+      sx={{
+        display: "flex",
+        width: "90%",
+        margin: "50px auto",
+        padding: "30px",
+        borderRadius: "16px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(5px)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
+      }}
+    >
+      <Box width={{ width: "70%", borderRight: "3px solid #f4f4f4" }}>
+        <Box>
+          {types.map((type) => (
+            <Button
+              key={type}
+              sx={{
+                background: selectedValue === type ? "#e75b1e" : "#fff",
+                color: selectedValue === type ? "#fff" : "#e75b1e",
+                padding: "15px 30px",
+                fontSize: "18px",
+                fontFamily: "poppins",
+                "&:hover": {
+                  backgroundColor: "#e75b1e",
+                  color: "#fff",
+                },
+                // "&:focus": {
+                //   outline: "none",
+                //   background: "#e75b1e",
+                //   color: "#fff",
+                // },
+                border: "2px solid #f4f4f4",
+              }}
+              onClick={() => handleButtonClick(type)}
+            >
+              {type}
+            </Button>
+          ))}
+        </Box>
+
+        {selectedValue === "Delivery" && <DeliveryComp userAddress={userAddress} />}
+        {selectedValue === "Pickup" && <PickupComp />}
+        {selectedValue === "InPizzeria" && <InPizzeriaComp infoBookingTable={infoBookingTable} />}
+
+        <Box sx={{ width: "400px", display: "flex" }}>
+          <FormControlLabel
+            control={<Checkbox checked={paymentmethods === "option1"} onChange={handlePayMentChange} value="option1" />}
+            label="Cash"
+          />
+          <FormControlLabel
+            control={<Checkbox checked={paymentmethods === "option2"} onChange={handlePayMentChange} value="option2" />}
+            label="By Card"
+          />
+        </Box>
+        <Button>Place Order</Button>
+        <Typography>{currentPrice}</Typography>
       </Box>
-
-      <Typography>{currentPrice}</Typography>
-
-      <Box sx={{ width: "400px", display: "flex" }}>
-        <FormControlLabel
-          control={<Checkbox checked={selectedValue === "option1"} onChange={handleChange} value="option1" />}
-          label="Delivery"
-        />
-        <FormControlLabel
-          control={<Checkbox checked={selectedValue === "option2"} onChange={handleChange} value="option2" />}
-          label="Pickup"
-        />
-        <FormControlLabel
-          control={<Checkbox checked={selectedValue === "option3"} onChange={handleChange} value="option3" />}
-          label="in pizzeria"
-        />
-      </Box>
-
-      {selectedValue === "option1" && <DeliveryComp userAddress={userAddress} />}
-      {selectedValue === "option2" && <PickupComp />}
-      {selectedValue === "option3" && <InPizzeriaComp infoBookingTable={infoBookingTable} />}
-
-      <Box sx={{ width: "400px", display: "flex" }}>
-        <FormControlLabel
-          control={<Checkbox checked={paymentmethods === "option1"} onChange={handlePayMentChange} value="option1" />}
-          label="Cash"
-        />
-        <FormControlLabel
-          control={<Checkbox checked={paymentmethods === "option2"} onChange={handlePayMentChange} value="option2" />}
-          label="By Card"
-        />
-      </Box>
-
-      <Button>Place Order</Button>
+      <LoadItems />
     </Box>
   );
 };

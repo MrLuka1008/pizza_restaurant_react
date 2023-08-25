@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, useMediaQuery } from "@mui/material";
-import classicPizzasData from "../../data/classicPizzasData";
-import dessertsData from "../../data/dessertsData";
-import sodaDrinksData from "../../data/sodaDrinksData";
-import pastaDishesData from "../../data/pastaDishesData";
-import specialOffersData from "../../data/specialOffersData";
-import specialtyPizzasData from "../../data/specialtyPizzasData";
-import vegetarianPizzaData from "../../data/vegetarianPizzaData";
+import {
+  classicPizzasData,
+  dessertsData,
+  sodaDrinksData,
+  pastaDishesData,
+  specialOffersData,
+  specialtyPizzasData,
+  vegetarianPizzaData,
+} from "../../data";
 import CartCalculator from "./CartCalculator";
 import NoCartFound from "./NoCartFound";
 import ChangeSizeBtn from "./ChangeSizeBtn";
@@ -17,17 +19,12 @@ import { setCurrentPrice, useInCart } from "../../redux";
 
 const CartItem = () => {
   const [cartMenu, setCartMenu] = useState([]);
-  // const [savedCartMenu, setSavedCartMenu] = useState(() => JSON.parse(localStorage.getItem("cartMenu")) || []);
   const savedCartMenu = useInCart();
-
   const [pizzaSizes, setPizzaSizes] = useState({});
-
   const isScreenWidth678 = useMediaQuery("(max-width: 678px)");
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState({});
-
-  // console.log("cartMenu", cartMenu);
 
   useEffect(() => {
     // Set the initial pizzaSizes state with default size "m"
@@ -114,13 +111,7 @@ const CartItem = () => {
               <Typography>{item.category}</Typography>
             </Box>
 
-            <ChangeSizeBtn
-              item={item}
-              pizzaSizes={pizzaSizes}
-              // setPizzaSizes={setPizzaSizes}
-              // setSavedCartMenu={setSavedCartMenu}
-              // savedCartMenu={savedCartMenu}
-            />
+            <ChangeSizeBtn item={item} pizzaSizes={pizzaSizes} />
 
             <QuantityChange item={item} quantity={quantity} />
 
@@ -131,14 +122,7 @@ const CartItem = () => {
                 : "Price error change size"}
             </Typography>
 
-            <RemoveClick
-              item={item}
-              // savedCartMenu={savedCartMenu}
-              // pizzaSizes={pizzaSizes}
-              // setCartMenu={setCartMenu}
-              // setSavedCartMenu={setSavedCartMenu}
-              // setTotalPrice={setTotalPrice}
-            />
+            <RemoveClick item={item} />
           </Box>
         ))
       ) : (

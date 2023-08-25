@@ -6,12 +6,8 @@ const cartsLengthSlice = createSlice({
     value: 0,
   },
   reducers: {
-    setCartsLength: (state) => {
-      const cartItems = localStorage.getItem("cartMenu");
-      if (cartItems) {
-        const cartItemsObj = JSON.parse(cartItems);
-        state.value = Object.keys(cartItemsObj).length;
-      }
+    setCartsLength: (state, action) => {
+      state.value = action.payload;
     },
   },
 });
