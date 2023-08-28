@@ -1,21 +1,29 @@
-import { Box, Button, Checkbox, FormControlLabel, Typography } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { Box, Button, Typography, Icon } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import DeliveryComp from "./DeliveryComp";
 import PickupComp from "./PickupComp";
 import InPizzeriaComp from "./InPizzeriaComp";
 import { useCurrentPrice } from "../../redux";
 import LoadItems from "./LoadItems";
+import PayMentMethods from "./PayMentMethods";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import StorefrontIcon from "@mui/icons-material/Storefront";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
 
 const MainCheckOut = () => {
   // const [selectedValue, setSelectedValue] = useState("option1");
-  const [paymentmethods, setPaymentmethods] = useState("option1");
+
   const [userAddress, setUserAddress] = useState([]);
   const [infoBookingTable, setInfoBookingTable] = useState([]);
 
   ///////////
   // const [active, setActive] = useState(null);
-  const [selectedValue, setSelectedValue] = useState(null);
-  const types = ["Delivery", "Pickup", "InPizzeria"];
+  const [selectedValue, setSelectedValue] = useState("Delivery");
+  const types = [
+    { key: "Delivery", icon: <LocalShippingIcon /> },
+    { key: "Pickup", icon: <StorefrontIcon /> },
+    { key: "InPizzeria", icon: <RestaurantIcon /> },
+  ];
 
   const handleButtonClick = (type) => {
     setSelectedValue(type);
@@ -64,10 +72,6 @@ const MainCheckOut = () => {
     fetchBookingTableInfo();
   }, [selectedValue, userId]);
 
-  const handlePayMentChange = (event) => {
-    setPaymentmethods(event.target.value);
-  };
-
   return (
     <Box
       sx={{
@@ -81,31 +85,32 @@ const MainCheckOut = () => {
         border: "1px solid rgba(255, 255, 255, 0.3)",
       }}
     >
-      <Box width={{ width: "70%", borderRight: "3px solid #f4f4f4" }}>
-        <Box>
+      <Box
+        sx={{ width: "70%", borderRight: "3px solid #f4f4f4", display: "flex", flexDirection: "column", gap: "30px" }}
+      >
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
           {types.map((type) => (
             <Button
-              key={type}
+              key={type.key}
               sx={{
-                background: selectedValue === type ? "#e75b1e" : "#fff",
-                color: selectedValue === type ? "#fff" : "#e75b1e",
-                padding: "15px 30px",
+                background: selectedValue === type.key ? "#e75b1e" : "#fff",
+                color: selectedValue === type.key ? "#fff" : "#e75b1e",
+                height: "10vh",
+                width: "30%",
                 fontSize: "18px",
-                fontFamily: "poppins",
+                fontFamily: "Poppins",
+                letterSpacing: "2px",
+                fontWeight: "700",
                 "&:hover": {
                   backgroundColor: "#e75b1e",
                   color: "#fff",
                 },
-                // "&:focus": {
-                //   outline: "none",
-                //   background: "#e75b1e",
-                //   color: "#fff",
-                // },
                 border: "2px solid #f4f4f4",
               }}
-              onClick={() => handleButtonClick(type)}
+              onClick={() => handleButtonClick(type.key)}
             >
-              {type}
+              <Icon sx={{ fontSize: "24px", marginRight: "8px" }}>{type.icon}</Icon>
+              <Typography sx={{ fontSize: "20px", fontFamily: "Poppins" }}>{type.key}</Typography>
             </Button>
           ))}
         </Box>
@@ -114,16 +119,7 @@ const MainCheckOut = () => {
         {selectedValue === "Pickup" && <PickupComp />}
         {selectedValue === "InPizzeria" && <InPizzeriaComp infoBookingTable={infoBookingTable} />}
 
-        <Box sx={{ width: "400px", display: "flex" }}>
-          <FormControlLabel
-            control={<Checkbox checked={paymentmethods === "option1"} onChange={handlePayMentChange} value="option1" />}
-            label="Cash"
-          />
-          <FormControlLabel
-            control={<Checkbox checked={paymentmethods === "option2"} onChange={handlePayMentChange} value="option2" />}
-            label="By Card"
-          />
-        </Box>
+        <PayMentMethods />
         <Button>Place Order</Button>
         <Typography>{currentPrice}</Typography>
       </Box>

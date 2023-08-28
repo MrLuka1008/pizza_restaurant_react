@@ -10,15 +10,18 @@ const CartHead = () => {
         width: "100%",
         justifyContent: "space-around",
         alignItems: "center",
-        padding: "50px 0 50px 0",
+        padding: "20px 0 20px 0",
         background: "rgba(255, 255, 255, 0.6)",
-        borderRadius: " 16px",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-        backdropFilter: "blur(5px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
+        fontFamily: "Poppins",
       }}
     >
-      <Typography sx={{ letterSpacing: "3px", textAlign: "center", width: isScreenWidth678 ? "100px" : "300px" }}>
+      <Typography
+        sx={{
+          letterSpacing: "3px",
+          textAlign: "center",
+          width: isScreenWidth678 ? "100px" : "300px",
+        }}
+      >
         Description
       </Typography>
       <Typography sx={{ letterSpacing: "3px", paddingLeft: "30px" }}>Size</Typography>

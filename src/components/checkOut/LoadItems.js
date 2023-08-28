@@ -85,12 +85,12 @@ const LoadItems = () => {
               alt="pizza img"
             />
             <Box>
-              <Typography sx={{ fontFamily: "poppins" }}>{item.name}</Typography>
+              <Typography sx={{ fontFamily: "Poppins" }}>{item.name}</Typography>
             </Box>
 
             <Box>
-              <Typography sx={{ fontFamily: "poppins" }}>X{item.quantity}</Typography>
-              <Typography sx={{ fontFamily: "poppins" }}>
+              <Typography sx={{ fontFamily: "Poppins" }}>X{item.quantity}</Typography>
+              <Typography sx={{ fontFamily: "Poppins" }}>
                 ${item.sizes[item.currentSize].price * item.quantity}
               </Typography>
             </Box>

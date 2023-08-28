@@ -33,41 +33,13 @@ const CustomButton = styled(
 }));
 
 const CartCalculator = ({ totalPrice }) => {
-  const API_URL = "http://localhost:3500/promoCodes";
-  const [handleCode, setHandleCode] = useState("");
-  const [discountpercent, setDiscountPercent] = useState(0);
-  const [newPRice, setNewPrice] = useState(0);
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [discountpercent, setDiscountPercent] = useState(0);
+  // const [newPRice, setNewPrice] = useState(0);
   const navigate = useNavigate();
 
-  const handleWriteCode = (e) => {
-    setHandleCode(e.target.value);
-    console.log(handleCode);
-    setErrorMessage("");
-  };
-
-  const handleDisCount = async () => {
-    const response = await fetch(API_URL);
-    const data = await response.json();
-
-    try {
-      const searchedPromoCode = data.find((item) => item.promocode === handleCode);
-
-      if (searchedPromoCode) {
-        setDiscountPercent(searchedPromoCode.discount);
-      } else {
-        setDiscountPercent(0);
-        setErrorMessage("Invalid Promo Code");
-      }
-    } catch {
-      setDiscountPercent(0);
-      setErrorMessage("Invalid Promo Code");
-    }
-  };
-
-  useEffect(() => {
-    setNewPrice(totalPrice - totalPrice * (discountpercent / 100));
-  }, [totalPrice, discountpercent]);
+  // useEffect(() => {
+  //   setNewPrice(totalPrice - totalPrice * (discountpercent / 100));
+  // }, [totalPrice, discountpercent]);
 
   const handleContinueShopping = () => {
     window.scrollTo(0, 0);
@@ -90,43 +62,11 @@ const CartCalculator = ({ totalPrice }) => {
     >
       <Box sx={{ display: "flex", gap: "50px", padding: "80px", flexWrap: "wrap" }}>
         <CustomBox>
-          <CustomTypography>Discount {discountpercent}%</CustomTypography>
-        </CustomBox>
-        <CustomBox>
-          <CustomTypography>Delivery ${20}</CustomTypography>
-        </CustomBox>
-        <CustomBox>
-          <CustomTypography>Subtotal ${newPRice}</CustomTypography>
-        </CustomBox>
-        <CustomBox>
-          <CustomTypography>Total ${newPRice + 20}</CustomTypography>
+          <CustomTypography>Subtotal ${totalPrice}</CustomTypography>
         </CustomBox>
       </Box>
 
       <Box sx={{ display: "flex", width: "100%", alignItems: "center", padding: "20px" }}>
-        <Box sx={{ display: "flex", width: "70%", justifyContent: "center" }}>
-          <TextField
-            sx={{ width: "60%" }}
-            id="outlined-required"
-            label="Promo code"
-            placeholder="Please enter promo code"
-            value={handleCode}
-            onChange={handleWriteCode}
-            variant="filled"
-            error={Boolean(errorMessage)} // Set error prop based on error message
-            helperText={errorMessage} // Set helper text to display error message
-          />
-          <Button
-            variant="contained"
-            sx={{ ml: 2, background: discountpercent ? "#e75b1e" : "#e75b1e" }}
-            onClick={() => {
-              handleDisCount();
-            }}
-          >
-            Apply Discount
-          </Button>
-        </Box>
-
         <Box
           sx={{
             display: "flex",

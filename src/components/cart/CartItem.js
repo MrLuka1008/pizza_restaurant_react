@@ -89,10 +89,8 @@ const CartItem = () => {
               alignItems: "center",
               background: "rgba(255, 255, 255, 0.6)",
               borderRadius: " 16px",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(5px)",
-              border: "1px solid rgba(255, 255, 255, 0.3)",
-              padding: "25px 0 25px 0",
+              borderBottom: "2px solid #f4f4f4",
+              padding: "14px 0 14px 0",
             }}
           >
             <Box

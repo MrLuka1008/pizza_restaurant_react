@@ -1,6 +1,25 @@
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import React from "react";
 
+export const citys = [
+  {
+    city: "tbilisi",
+    price: "12",
+  },
+  {
+    city: "kutaisi",
+    price: "8",
+  },
+  {
+    city: "batumi",
+    price: "12",
+  },
+  {
+    city: "telavi",
+    price: "10",
+  },
+];
+
 const SelectCity = ({ selectedCountry, handleCountryChange }) => {
   return (
     <FormControl sx={{ minWidth: 225 }}>
@@ -15,15 +34,11 @@ const SelectCity = ({ selectedCountry, handleCountryChange }) => {
           id: "country-select",
         }}
       >
-        <MenuItem value="tbilisi">tbilisi</MenuItem>
-        <MenuItem value="kutaisi">kutaisi</MenuItem>
-        <MenuItem value="batumi">batumi</MenuItem>
-        <MenuItem value="rustavi">rustavi</MenuItem>
-        <MenuItem value="gori">gori</MenuItem>
-        <MenuItem value="zugdidi">zugdidi</MenuItem>
-        <MenuItem value="poti">poti</MenuItem>
-        <MenuItem value="khashuri">khashuri</MenuItem>
-        <MenuItem value="telavi">telavi</MenuItem>
+        {citys.map((cityObj) => (
+          <MenuItem key={cityObj.city} value={cityObj.city}>
+            {cityObj.city.toUpperCase()}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );

@@ -7,7 +7,13 @@ import CartCalculator from "./CartCalculator";
 const CartContent = () => {
   return (
     <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "50px" }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "50px",
+      }}
     >
       <CartHead />
       <CartItem />
