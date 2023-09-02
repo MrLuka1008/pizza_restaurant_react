@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setPickUpTime } from "../../redux/features/placeOrderSlice";
 
 const options = [
   { value: 25, label: "Choose Time" },
@@ -24,11 +26,13 @@ const options = [
 
 const PickupComp = () => {
   const [selectedTime, setSelectedTime] = useState(""); // State to hold the selected time
+  const dispatch = useDispatch();
 
   const handleTimeChange = (event) => {
     const value = event.target.value;
     setSelectedTime(value); // Update the selected time state
   };
+  dispatch(setPickUpTime(selectedTime));
 
   return (
     <Box>

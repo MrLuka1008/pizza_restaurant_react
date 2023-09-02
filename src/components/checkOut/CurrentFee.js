@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useCurrentPrice, useOrderInfo } from "../../redux";
-import { Box, Button, TextField, Typography, styled } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { citys } from "../profile/address/SelectCity";
 
 const CurrentFee = () => {
@@ -10,26 +10,17 @@ const CurrentFee = () => {
   const [handleCode, setHandleCode] = useState("");
   const [discountpercent, setDiscountPercent] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-  //   const navigate = useNavigate();
 
   const handleWriteCode = (e) => {
     setHandleCode(e.target.value);
-    console.log(handleCode);
     setErrorMessage("");
   };
 
   const selectedCityObj = citys.find((cityObj) => cityObj.city === infoOrder.orderAddress.city);
-  //   console.log("infoOrder", infoOrder.orderAddress.city);
-  //   console.log("selectedCityObj", selectedCityObj.price);
 
   const deliveryFee = selectedCityObj ? Number(selectedCityObj.price) : 0;
 
-  //   const subtotalPice = Number(test) + total;
-
-  //   console.log("test", test);
-  //   console.log("total", subtotalPice);
-
-  //   console.log(subtotalPice);
+  const discountpercentFee = deliveryFee + total - (deliveryFee + total) * (discountpercent / 100);
 
   const handleDisCount = async () => {
     const response = await fetch(API_URL);
@@ -51,33 +42,107 @@ const CurrentFee = () => {
   };
 
   return (
-    <Box sx={{ height: "50vh" }}>
-      {/* <Typography>Discount</Typography> */}
-      <Typography>Delivery {selectedCityObj ? selectedCityObj.price : 0}</Typography>
-      <Typography>Subtotal {total}</Typography>
-      <Typography>Total {deliveryFee + total}</Typography>
+    <Box sx={{ minHeight: "50vh", borderLeft: "2px solid #f4f4f4", padding: "15px", width: "100%" }}>
+      <Box sx={{ width: "100%" }}>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "5px",
+          }}
+        >
+          <Typography sx={{ fontSize: "18px", color: "#000", fontFamily: "Poppins" }}>Order Amount</Typography>
+          <Typography sx={{ fontSize: "20px", color: "#000", fontFamily: "Poppins" }}>{total}</Typography>
+        </Box>
+        <Box
+          sx={{
+            borderBottom: "2px dashed #000",
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "5px",
+          }}
+        >
+          <Typography sx={{ fontSize: "18px", color: "#000", fontFamily: "Poppins" }}>Delivery Fee</Typography>
+          <Typography sx={{ fontSize: "20px", color: "#000", fontFamily: "Poppins" }}>
+            {selectedCityObj ? selectedCityObj.price : 0}
+          </Typography>
+        </Box>
 
-      <Box sx={{ display: "flex", width: "70%", justifyContent: "center" }}>
-        <TextField
-          sx={{ width: "60%" }}
-          id="outlined-required"
-          label="Promo code"
-          placeholder="Please enter promo code"
-          value={handleCode}
-          onChange={handleWriteCode}
-          variant="filled"
-          error={Boolean(errorMessage)} // Set error prop based on error message
-          helperText={errorMessage} // Set helper text to display error message
-        />
+        <Box
+          sx={{
+            borderBottom: "2px dashed #000",
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "5px",
+          }}
+        >
+          <Typography>Discount</Typography>
+          <Typography>-{discountpercent && (deliveryFee + total) * (discountpercent / 100)}</Typography>
+        </Box>
+        <Box
+          sx={{
+            borderBottom: "2px dashed #000",
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            padding: "5px",
+          }}
+        >
+          <Typography sx={{ fontSize: "18px" }}>
+            {discountpercent ? discountpercentFee : deliveryFee + total}
+          </Typography>
+        </Box>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          marginTop: "20px",
+          alignItems: "center",
+          height: "7vh",
+        }}
+      >
         <Button
-          variant="contained"
-          sx={{ ml: 2, background: discountpercent ? "#e75b1e" : "#e75b1e" }}
+          sx={{
+            fontSize: "18px",
+            background: "none",
+            color: "black",
+            fontFamily: "Poppins",
+            height: "50px",
+            borderBottom: "2px solid #f4f4f4",
+
+            "&:hover": {
+              backgroundColor: "#e75b1e",
+              color: "#fff",
+            },
+          }}
           onClick={() => {
             handleDisCount();
           }}
         >
-          Apply Discount
+          Discount
         </Button>
+        <TextField
+          sx={{ width: "50%", display: "block" }}
+          id="outlined-required"
+          size="small"
+          type="text"
+          label="Promo code"
+          value={handleCode}
+          onChange={handleWriteCode}
+          variant="standard"
+          error={Boolean(errorMessage)}
+          helperText={errorMessage}
+        />
       </Box>
     </Box>
   );

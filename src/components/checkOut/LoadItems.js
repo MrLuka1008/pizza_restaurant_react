@@ -9,15 +9,18 @@ import {
   specialtyPizzasData,
   vegetarianPizzaData,
 } from "../../data";
-import { useCurrentPrice, useInCart } from "../../redux";
+import { useInCart } from "../../redux";
+import CurrentFee from "./CurrentFee";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setOrderList } from "../../redux/features/placeOrderSlice";
+import PlaceOrder from "./PlaceOrder";
 
 const LoadItems = () => {
-  // const test = useInCart();
   const [cartMenu, setCartMenu] = useState([]);
   const savedCartMenu = useInCart();
-  const totalPrice = useCurrentPrice();
 
-  console.log(cartMenu);
+  const dispatch = useDispatch();
 
   const getMenuItems = () => {
     return [
@@ -43,16 +46,17 @@ const LoadItems = () => {
     });
 
     setCartMenu(mergedItems);
-  }, []);
+
+    dispatch(setOrderList(savedCartMenu));
+  }, [dispatch, savedCartMenu]);
 
   return (
     <Box
       sx={{
-        width: "30%",
+        width: "400px",
         display: "flex",
         flexDirection: "column",
-        gap: "20px",
-        padding: "20px",
+        padding: "0 20px 0 20px",
         alignItems: "center",
       }}
     >
@@ -62,8 +66,8 @@ const LoadItems = () => {
           display: "flex",
           flexDirection: "column",
           gap: "20px",
-          padding: "30px",
-          height: "80vh",
+          padding: "10px",
+          maxHeight: "50vh",
           overflow: "auto",
           border: "2px solid #f4f4f4",
         }}
@@ -73,14 +77,14 @@ const LoadItems = () => {
             key={index}
             sx={{
               borderBottom: "2px solid #f4f4f4",
-              padding: "10px",
+              padding: "6px",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
             }}
           >
             <img
-              style={{ width: "70px", objectFit: "cover", filter: "drop-shadow(5px 0px 3px #000)" }}
+              style={{ width: "50px", objectFit: "cover", filter: "drop-shadow(5px 0px 3px #000)" }}
               src={item.image}
               alt="pizza img"
             />
@@ -97,10 +101,12 @@ const LoadItems = () => {
           </Box>
         ))}
       </Box>
-      <Box sx={{ borderTop: "3px solid #f4f4f4", display: "Flex", width: "100%", padding: "20px", gap: "50px" }}>
-        <Typography>Order Price</Typography>
-        <Typography>${totalPrice}</Typography>
-      </Box>
+      <Link to={"/cart"} style={{ color: "#e75b1e", fontSize: "16px", fontFamily: "Poppins", padding: "5px" }}>
+        Change Order
+      </Link>
+
+      <CurrentFee />
+      <PlaceOrder />
     </Box>
   );
 };

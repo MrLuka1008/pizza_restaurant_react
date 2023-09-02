@@ -3,22 +3,22 @@ import React, { useEffect, useState } from "react";
 import DeliveryComp from "./DeliveryComp";
 import PickupComp from "./PickupComp";
 import InPizzeriaComp from "./InPizzeriaComp";
-import { useCurrentPrice } from "../../redux";
 import LoadItems from "./LoadItems";
 import PayMentMethods from "./PayMentMethods";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
+import { useDispatch } from "react-redux";
+import { setOrderType, setTableBooking } from "../../redux/features/placeOrderSlice";
+import PlaceOrder from "./PlaceOrder";
+import CurrentFee from "./CurrentFee";
 
 const MainCheckOut = () => {
-  // const [selectedValue, setSelectedValue] = useState("option1");
-
+  const dispatch = useDispatch();
+  const [selectedValue, setSelectedValue] = useState("Delivery");
   const [userAddress, setUserAddress] = useState([]);
   const [infoBookingTable, setInfoBookingTable] = useState([]);
 
-  ///////////
-  // const [active, setActive] = useState(null);
-  const [selectedValue, setSelectedValue] = useState("Delivery");
   const types = [
     { key: "Delivery", icon: <LocalShippingIcon /> },
     { key: "Pickup", icon: <StorefrontIcon /> },
@@ -27,12 +27,7 @@ const MainCheckOut = () => {
 
   const handleButtonClick = (type) => {
     setSelectedValue(type);
-    console.log(selectedValue);
   };
-
-  /////////
-
-  const currentPrice = useCurrentPrice();
 
   const userId = localStorage.getItem("user_id");
 
@@ -52,7 +47,8 @@ const MainCheckOut = () => {
     };
 
     fetchUserAddress();
-  }, [selectedValue, userId]);
+    dispatch(setOrderType(selectedValue));
+  }, [selectedValue, userId, dispatch]);
 
   useEffect(() => {
     const fetchBookingTableInfo = async () => {
@@ -72,13 +68,22 @@ const MainCheckOut = () => {
     fetchBookingTableInfo();
   }, [selectedValue, userId]);
 
+  // dispatch(
+  //   setTableBooking({
+  //     date: infoBookingTable.CalendarDate,
+  //     tableValue: infoBookingTable.TableValue,
+  //     timeValue: infoBookingTable.TimeValue,
+  //   })
+  // );
+
   return (
     <Box
       sx={{
         display: "flex",
-        width: "90%",
-        margin: "50px auto",
-        padding: "30px",
+        flexWrap: "wrap",
+        width: "95%",
+        margin: "20px auto",
+        padding: "20px",
         borderRadius: "16px",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(5px)",
@@ -86,21 +91,33 @@ const MainCheckOut = () => {
       }}
     >
       <Box
-        sx={{ width: "70%", borderRight: "3px solid #f4f4f4", display: "flex", flexDirection: "column", gap: "30px" }}
+        sx={{
+          width: "400px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+
+          alignItems: "center",
+        }}
       >
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           {types.map((type) => (
             <Button
               key={type.key}
               sx={{
                 background: selectedValue === type.key ? "#e75b1e" : "#fff",
                 color: selectedValue === type.key ? "#fff" : "#e75b1e",
-                height: "10vh",
-                width: "30%",
-                fontSize: "18px",
+                height: "8vh",
+                width: "90%",
                 fontFamily: "Poppins",
-                letterSpacing: "2px",
-                fontWeight: "700",
                 "&:hover": {
                   backgroundColor: "#e75b1e",
                   color: "#fff",
@@ -109,8 +126,8 @@ const MainCheckOut = () => {
               }}
               onClick={() => handleButtonClick(type.key)}
             >
-              <Icon sx={{ fontSize: "24px", marginRight: "8px" }}>{type.icon}</Icon>
-              <Typography sx={{ fontSize: "20px", fontFamily: "Poppins" }}>{type.key}</Typography>
+              <Icon sx={{ fontSize: "22px", marginRight: "8px", display: "block" }}>{type.icon}</Icon>
+              <Typography sx={{ fontSize: "18px", fontFamily: "Poppins", display: "block" }}>{type.key}</Typography>
             </Button>
           ))}
         </Box>
@@ -118,11 +135,9 @@ const MainCheckOut = () => {
         {selectedValue === "Delivery" && <DeliveryComp userAddress={userAddress} />}
         {selectedValue === "Pickup" && <PickupComp />}
         {selectedValue === "InPizzeria" && <InPizzeriaComp infoBookingTable={infoBookingTable} />}
-
-        <PayMentMethods />
-        <Button>Place Order</Button>
-        <Typography>{currentPrice}</Typography>
       </Box>
+      <PayMentMethods />
+
       <LoadItems />
     </Box>
   );

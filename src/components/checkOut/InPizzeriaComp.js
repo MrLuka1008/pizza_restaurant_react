@@ -10,7 +10,6 @@ const InPizzeriaComp = ({ infoBookingTable }) => {
           <Typography>Date: {infoBookingTable.CalendarDate.join("/")}</Typography>
           <Typography>Table Value: {infoBookingTable.TableValue}</Typography>
           <Typography>Time Value: {infoBookingTable.TimeValue.label}</Typography>
-          <Typography>ID: {infoBookingTable.id}</Typography>
           <Link to={"/BookingTable"}>Edit</Link>
         </Box>
       ) : (
