@@ -9,6 +9,7 @@ const PickUpOrder = ({ order }) => {
       <Box>
         <Typography>cardInfo: {order.cardInfo.payMenth}</Typography>
         <Typography>Pick up time: {order.pickUpTime}</Typography>
+        <Typography>Pick up time: {order.pickUpTime}</Typography>
       </Box>
     </Box>
   );
