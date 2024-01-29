@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
-import { Avatar, Menu } from "@mui/material";
+import { Avatar, Box, Menu } from "@mui/material";
 import MyMenuItem from "./MyMenuItem";
 
 const CustomButton = styled(Button)(() => ({
@@ -63,7 +63,7 @@ const NavLoginIcon = () => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flex: "1" }}>
+    <Box style={{ display: "flex", alignItems: "center", justifyContent: "center", flex: "1" }}>
       {localStorage.getItem("user_id") ? (
         <CustomAvatar onClick={handleAvatarClick}>{userName.charAt(0).toUpperCase()}</CustomAvatar>
       ) : (
@@ -83,11 +83,15 @@ const NavLoginIcon = () => {
           <MyMenuItem myFuntion={handleClose} text={"Profile"} />
         </Link>
 
+        <Link to="/order">
+          <MyMenuItem myFuntion={handleClose} text={"Order"} />
+        </Link>
+
         <Link>
           <MyMenuItem myFuntion={handleLogout} text={" Log Out"} />
         </Link>
       </Menu>
-    </div>
+    </Box>
   );
 };
 

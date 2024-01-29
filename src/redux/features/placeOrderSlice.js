@@ -10,6 +10,7 @@ const initialState = {
     phone: "",
   },
   tableBooking: {
+    isBooking: false,
     date: "",
     tableValue: "",
     timeValue: "",
@@ -21,7 +22,7 @@ const initialState = {
     cvc: "",
   },
   OrderList: [],
-  id: "",
+  userId: "",
 };
 
 const placeOrderSlice = createSlice({
@@ -51,9 +52,8 @@ const placeOrderSlice = createSlice({
       state.OrderList = action.payload;
     },
 
-    setUserId: (state) => {
-      const nowUserId = localStorage.getItem("user_id");
-      state.id = nowUserId;
+    setUserId: (state, action) => {
+      state.userId = action.payload;
     },
 
     setOrderType: (state, action) => {
@@ -65,8 +65,9 @@ const placeOrderSlice = createSlice({
     },
 
     setTableBooking: (state, action) => {
-      const { date, tableValue, timeValue } = action.payload;
+      const { isBooking, date, tableValue, timeValue } = action.payload;
       state.tableBooking = {
+        isBooking,
         date,
         tableValue,
         timeValue,

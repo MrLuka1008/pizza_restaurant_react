@@ -1,24 +1,46 @@
 import { Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useOrderInfo } from "../../redux";
-import apiRequest from "../../api/apiRequest";
 import { useDispatch } from "react-redux";
-import { setUserId } from "../../redux/features/placeOrderSlice";
+import { clearCart } from "../../redux/features/inCartSlice";
+import { setCartsZero } from "../../redux/features/counter";
+import { useNavigate } from "react-router-dom";
 
 const PlaceOrder = () => {
   const savedOrderInfo = useOrderInfo();
   const dispatch = useDispatch();
   const [validation, setValidation] = useState(false);
   const [orderStatusMessage, setOrderAddress] = useState("");
+  const API_URL = "http://localhost:3500/placeOrder";
 
-  useEffect(() => {
-    dispatch(setUserId());
-  }, [dispatch]);
+  const navigate = useNavigate();
 
-  const API_URL = `http://localhost:3500/placeOrder`;
+  const setPlaceOrder = async () => {
+    const postOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(savedOrderInfo),
+    };
 
-  const placeOrderValidation = () => {
-    // let orderStatusMessage = "";
+    try {
+      const response = await fetch(API_URL, postOptions);
+      dispatch(setCartsZero());
+      dispatch(clearCart());
+
+      if (!response.ok) {
+        throw new Error(`Error placing order: ${response.statusText}`);
+      }
+
+      console.log("Order placed successfully!");
+    } catch (error) {
+      console.error(error.message);
+    }
+    navigate("/order");
+  };
+
+  const handlePlaceOrderValidation = () => {
     if (savedOrderInfo.orderType === "Delivery") {
       if (savedOrderInfo.orderAddress.streetaddress !== "") {
         setOrderAddress("Good");
@@ -36,49 +58,25 @@ const PlaceOrder = () => {
         setValidation(false);
       }
     } else if (savedOrderInfo.orderType === "InPizzeria") {
-      if (
-        savedOrderInfo.tableBooking.date === undefined &&
-        savedOrderInfo.tableBooking === [] &&
-        savedOrderInfo.tableBooking.date === ""
-      ) {
-        setOrderAddress("Please choose a table and time");
-        setValidation(false);
-      } else {
-        // orderStatusMessage = "Good";
+      if (savedOrderInfo.tableBooking.isBooking) {
         setOrderAddress("Good");
         setValidation(true);
-      }
-    }
-  };
-
-  const setPlaceOrder = async () => {
-    try {
-      const postOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(savedOrderInfo),
-      };
-
-      const result = await apiRequest(API_URL, postOptions);
-
-      if (result && result.error) {
-        console.error("Error placing order:", result.error);
       } else {
-        console.log("Order placed successfully!");
+        setOrderAddress("Please choose a table and time");
+        setValidation(false);
       }
-    } catch (error) {
-      console.error("Error placing order:", error.message);
     }
   };
 
-  console.log("savedOrderInfo.tableBooking.date", savedOrderInfo.tableBooking.date);
-  validation ? setPlaceOrder() : console.log(orderStatusMessage);
+  useEffect(() => {
+    if (validation) {
+      setPlaceOrder();
+    }
+  }, [validation]);
 
   return (
     <Box
-      onClick={placeOrderValidation}
+      onClick={handlePlaceOrderValidation}
       sx={{
         width: "100%",
         display: "flex",

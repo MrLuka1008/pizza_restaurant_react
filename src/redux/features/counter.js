@@ -9,9 +9,12 @@ const cartsLengthSlice = createSlice({
     setCartsLength: (state, action) => {
       state.value = action.payload;
     },
+    setCartsZero: (state) => {
+      state.value = 0;
+    },
   },
 });
 
-export const { setCartsLength } = cartsLengthSlice.actions;
+export const { setCartsLength, setCartsZero } = cartsLengthSlice.actions;
 
 export const cartLengthReducer = cartsLengthSlice.reducer;

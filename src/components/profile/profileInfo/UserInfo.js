@@ -84,8 +84,10 @@ const UserInfo = () => {
       sx={{
         display: "flex",
         justifyContent: "space-around",
+        alignItems: "center",
         width: "100%",
-        padding: "50px",
+        padding: "20px",
+        height: "100vh",
       }}
     >
       <Box
@@ -94,7 +96,8 @@ const UserInfo = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-around",
+          // justifyContent: "space-around",
+          justifyContent: "center",
           gap: "10px",
           width: "50%",
         }}
@@ -120,22 +123,13 @@ const UserInfo = () => {
           alignItems: "center",
           justifyContent: "space-around",
           width: "50%",
+          height: "50vh",
           background: "#e75b1e",
           borderRadius: " 16px",
           textAlign: "center",
         }}
       >
         <img style={{ width: "150px" }} alt="logo" src={miniLogo}></img>
-        <Typography
-          sx={{
-            fontSize: "30px",
-            color: "white",
-            fontWeight: "700",
-          }}
-        >
-          Please fill out your <br /> profile and addresses carefully <br />
-          <ArrowDownward sx={{ fontSize: "30px" }} />
-        </Typography>
       </Box>
     </Box>
   );

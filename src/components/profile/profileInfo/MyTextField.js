@@ -11,6 +11,7 @@ const MyTextField = ({ value, handleInputChange, name, disabled }) => {
       onChange={handleInputChange}
       required
       disabled={disabled}
+      size="small"
     />
   );
 };

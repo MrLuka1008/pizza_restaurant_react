@@ -8,8 +8,8 @@ const SubmitBtn = ({ text }) => {
       variant="contained"
       color="primary"
       sx={{
-        fontSize: "16px",
-        padding: "15px 15px",
+        fontSize: "14px",
+        padding: "12px 12px",
         background: "#e75b1e",
         color: "white",
         "&:hover": {

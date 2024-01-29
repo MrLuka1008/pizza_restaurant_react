@@ -9,9 +9,7 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import { useDispatch } from "react-redux";
-import { setOrderType, setTableBooking } from "../../redux/features/placeOrderSlice";
-import PlaceOrder from "./PlaceOrder";
-import CurrentFee from "./CurrentFee";
+import { setOrderType, setTableBooking, setUserId } from "../../redux/features/placeOrderSlice";
 
 const MainCheckOut = () => {
   const dispatch = useDispatch();
@@ -59,6 +57,16 @@ const MainCheckOut = () => {
           const bookingData = await response.json();
 
           setInfoBookingTable(bookingData);
+          console.log("bookingData", bookingData);
+          console.log("infoBookingTable", infoBookingTable);
+          dispatch(
+            setTableBooking({
+              isBooking: bookingData.isBooking,
+              date: bookingData.CalendarDate,
+              tableValue: bookingData.TableValue,
+              timeValue: bookingData.TimeValue,
+            })
+          );
         } catch (err) {
           console.error("Error fetching booking table data:", err);
         }
@@ -66,15 +74,9 @@ const MainCheckOut = () => {
     };
 
     fetchBookingTableInfo();
-  }, [selectedValue, userId]);
+  }, [selectedValue, userId, dispatch]);
 
-  // dispatch(
-  //   setTableBooking({
-  //     date: infoBookingTable.CalendarDate,
-  //     tableValue: infoBookingTable.TableValue,
-  //     timeValue: infoBookingTable.TimeValue,
-  //   })
-  // );
+  dispatch(setUserId(userId));
 
   return (
     <Box
@@ -88,6 +90,7 @@ const MainCheckOut = () => {
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(5px)",
         border: "1px solid rgba(255, 255, 255, 0.3)",
+        justifyContent: "space-around",
       }}
     >
       <Box

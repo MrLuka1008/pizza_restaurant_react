@@ -160,7 +160,8 @@ const ProfileAddress = () => {
       component="form"
       sx={{
         display: "flex",
-        padding: "100px",
+        padding: "20px",
+        height: "100vh",
         flexWrap: "wrap",
         alignItems: "center",
         width: "100%",
@@ -180,19 +181,19 @@ const ProfileAddress = () => {
         <Box>
           <InputLabel htmlFor="Address name">Save name</InputLabel>
           <MyTextField value={address.addressname} handleInputChange={handleInputChange} name={"addressname"} />
-          <Typography sx={{ fontSize: "12px", color: "gray", marginTop: "1px" }}>Example: My Home, Office</Typography>
+          <Typography sx={{ fontSize: "10px", color: "gray", marginTop: "1px" }}>Example: My Home, Office</Typography>
         </Box>
 
         <Box>
           <InputLabel htmlFor="Streetaddress">Street address</InputLabel>
           <MyTextField value={address.streetaddress} handleInputChange={handleInputChange} name={"streetaddress"} />
-          <Typography sx={{ fontSize: "12px", color: "gray", marginTop: "1px" }}>Example: 123 Main Street</Typography>
+          <Typography sx={{ fontSize: "10px", color: "gray", marginTop: "1px" }}>Example: 123 Main Street</Typography>
         </Box>
 
         <Box>
           <InputLabel htmlFor="address">Apt, suite, etc</InputLabel>
           <MyTextField value={address.fullAddress} handleInputChange={handleInputChange} name={"fullAddress"} />
-          <Typography sx={{ fontSize: "12px", color: "gray", marginTop: "1px" }}>
+          <Typography sx={{ fontSize: "10px", color: "gray", marginTop: "1px" }}>
             Example: Apt 123, Suite B, 3rd Floor
           </Typography>
         </Box>
@@ -200,13 +201,13 @@ const ProfileAddress = () => {
         <Box>
           <InputLabel htmlFor="Phone">Phone</InputLabel>
           <MyTextField value={address.phone} handleInputChange={handleInputChange} name={"phone"} />
-          <Typography sx={{ fontSize: "12px", color: "gray", marginTop: "1px" }}>Example: 123-456-7890</Typography>
+          <Typography sx={{ fontSize: "10px", color: "gray", marginTop: "1px" }}>Example: 123-456-7890</Typography>
         </Box>
 
         <SelectCity selectedCountry={selectedCountry} handleCountryChange={handleCountryChange} />
         <SubmitBtn text={"Add new address"} />
         {alertMessage && (
-          <Alert severity={alertSeverity} sx={{ fontSize: "12px" }}>
+          <Alert severity={alertSeverity} sx={{ fontSize: "10px" }}>
             {alertMessage}
           </Alert>
         )}
@@ -241,10 +242,12 @@ const ProfileAddress = () => {
                 flexDirection: "column",
                 alignItems: "center",
                 padding: "30px",
-                boxShadow: "0px 1px 60px -30px rgba(0,0,0,1)",
+                border: "1px solid black",
               }}
             >
-              <Typography>Address {index + 1}:</Typography>
+              <Typography>
+                Address {index + 1}: {addressItem.addressname}
+              </Typography>
               <AddressComponent
                 deleteAddress={() => deleteAddress(index)} // Pass deleteAddress function with the index
                 address={addressItem}

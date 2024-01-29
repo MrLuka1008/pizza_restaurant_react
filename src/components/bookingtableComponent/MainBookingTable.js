@@ -30,13 +30,14 @@ const options = [
 ];
 
 const MainBookingTable = () => {
-  const API_URL = "http://localhost:3500/bookingtable";
   const userId = localStorage.getItem("user_id");
+  const API_URL = `http://localhost:3500/bookingtable/${userId}`;
   const [allInfoBookingTable, setAllInfoBookingTable] = useState({
     CalendarDate: [],
     TableValue: "",
     TimeValue: options[0],
     id: "",
+    isBooking: true,
   });
 
   const [bookingInfo, setBookingInfo] = useState(null);
@@ -79,7 +80,7 @@ const MainBookingTable = () => {
     // event.preventDefault();
 
     const patchOptions = {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
@@ -135,23 +136,53 @@ const MainBookingTable = () => {
 
   const deleteBooking = async () => {
     try {
-      // Send a DELETE request to delete the booking
-      const deleteResponse = await fetch(`http://localhost:3500/bookingtable/${userId}`, {
-        method: "DELETE",
-      });
+      // Fetch the existing bookingtable data
+      const response = await fetch(`http://localhost:3500/bookingtable/${userId}`);
+      if (response.status !== 200) {
+        console.error("Failed to fetch booking data");
+        return;
+      }
 
-      // Check if the deletion was successful
-      if (deleteResponse.ok) {
-        SetShowBookin(true);
-        // Perform any necessary UI updates or navigate to a different page
+      const bookingData = await response.json();
+
+      // console.log("bookingData", bookingData.id);
+
+      // Check if the entry with the desired id exists in bookingtable
+      if (bookingData && bookingData.id === `${userId}`) {
+        // Keep only the 'id' property and set other properties to null
+        for (const key in bookingData) {
+          if (key !== "id" && key !== "isBooking") {
+            bookingData["isBooking"] = false;
+            bookingData[key] = null;
+          }
+        }
+
+        // Send a PATCH request to update the bookingtable with the modified data
+        const updateResponse = await fetch(`http://localhost:3500/bookingtable/${userId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookingData),
+        });
+
+        // Check if the update was successful
+        if (updateResponse.ok) {
+          SetShowBookin(true);
+          // Perform any necessary UI updates or navigate to a different page
+        } else {
+          console.error("Failed to update bookingtable");
+        }
       } else {
-        console.error("Failed to delete booking");
+        console.error("Booking with the specified id not found in bookingtable");
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
   // end test
+
   useEffect(() => {
     const CheckedBooking = async () => {
       try {
@@ -163,8 +194,11 @@ const MainBookingTable = () => {
         }
 
         const info = await response.json();
-        SetShowBookin(false);
-        setBookingInfo(info);
+
+        if (info.isBooking) {
+          SetShowBookin(false);
+          setBookingInfo(info);
+        }
       } catch (error) {
         console.error("An error occurred:", error);
       }

@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import BookingTabe from "./pages/BookingTabe";
 import MainCheckOut from "./components/checkOut/MainCheckOut";
+import YourOrders from "./components/orders/YourOrders";
 
 const RoutesComponent = () => {
   return (
@@ -22,6 +23,7 @@ const RoutesComponent = () => {
         <Route path="/BookingTable" element={<BookingTabe />} />
         <Route path="/checkout" element={<MainCheckOut />} />
         <Route path="/profile/*" element={<Profile />} />
+        <Route path="/order" element={<YourOrders />} />
       </Routes>
       <Footer />
     </>
